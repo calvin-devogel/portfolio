@@ -33,13 +33,13 @@ section {
 
 // 2. Interactive Boxes
 .box {
+    width: 100%;
+    flex-grow: 1;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     
     // Subtle lift effect on hover
     &:hover {
         transform: translateY(-2px);
-        // Add a smooth shadow that respects the 'is-shadowless' original intent mostly, but gives depth
-        box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
     }
 }
 
