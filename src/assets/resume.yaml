@@ -9,7 +9,7 @@ cv:
       - label: Languages
         details: TypeScript, C#, Rust, SQL, Python
       - label: Infrastructure
-        details: Docker, DigitalOcean, Azure, Terraform, Clouflare
+        details: Docker, DigitalOcean, Azure, Terraform, Cloudflare
       - label: Tools/Frameworks
         details: Angular, Node.js, PostgreSQL, CI/CD, Agile, Jira, Git
 
