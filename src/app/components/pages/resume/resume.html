@@ -5,14 +5,14 @@
             <section>
                 <div class="box is-shadowless">
                     <h2 class="title mt-5">Summary</h2>
-                    <p>{{ resumeData.cv.sections.summary }}</p>
+                    <p class="resume-item">{{ resumeData.cv.sections.summary }}</p>
                 </div>
             </section>
 
             <section class="mt-1">
                 <div class="box is-shadowless">
                     <h2 class="title is-4">Skills</h2>
-                    <div class="columns is-multiline">
+                    <div class="columns is-multiline resume-item">
                         @for (skill of resumeData.cv.sections.skills; track skill) {
                             <div class="column is-12-mobile is-6-tablet">
                                 <h5 class="subtitle is-6 mb-2"><strong>{{ skill.label }}</strong></h5>
@@ -66,8 +66,8 @@
                             <div class="level mb-1 is-align-items-start">
                                 <div class="level-left">
                                      <div>
-                                        <p class="title is-5 mb-1">{{ educationItem.institution }}</p>
-                                        <p class="subtitle is-6">{{ educationItem.degree }} in {{ educationItem.area }}</p>
+                                        <h3 class="title is-5 mb-1">{{ educationItem.institution }}</h3>
+                                        <h4 class="subtitle is-6 has-text-grey">{{ educationItem.degree }} in {{ educationItem.area }}</h4>
                                     </div>
                                 </div>
                                 <div class="level-right">
