@@ -8,5 +8,5 @@ export const routes: Routes = [
     { path: 'resume', component: Resume },
     { path: 'projects', component: Projects },
     { path: 'health_check', redirectTo: '' },
-    { path: '**', redirectTo: '' }, 
+    { path: '**', redirectTo: '', pathMatch: 'full'}, 
 ];
