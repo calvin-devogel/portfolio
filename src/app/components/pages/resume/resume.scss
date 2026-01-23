@@ -1,0 +1,93 @@
+// 1. Fade In Animation
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Apply animation to each section with a staggered delay
+section {
+    opacity: 0; // Start invisible
+    animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+
+    &:nth-child(1) { animation-delay: 0.1s; }
+    &:nth-child(2) { animation-delay: 0.2s; } // Experience
+    &:nth-child(3) { animation-delay: 0.3s; } // Education
+    &:nth-child(4) { animation-delay: 0.4s; }
+}
+
+// 2. Interactive Boxes
+.box {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    // Subtle lift effect on hover
+    &:hover {
+        transform: translateY(-2px);
+        // Add a smooth shadow that respects the 'is-shadowless' original intent mostly, but gives depth
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+    }
+}
+
+// 3. Resume Items (Jobs/Education)
+.resume-item {
+    padding: 1rem;
+    margin: 0 -1rem; // Pull out to keep alignment creating a "row" feel
+    border-radius: 8px;
+    border-left: 3px solid transparent; // Preparation for hover border
+    transition: background-color 0.2s ease, border-left-color 0.2s ease;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.02); // Very subtle grey bg
+        border-left-color: #888; // Bulma 'info' color, or use your theme color
+    }
+}
+
+// 4. Skills Tags
+.tags .tag {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    
+    &:hover {
+        transform: scale(1.1);
+        z-index: 1; // Ensure it pops over neighbors
+    }
+}
+
+// 5. Responsiveness Fixes
+@media screen and (max-width: 768px) {
+    // Ensure the date tags align left and have spacing when stacked
+    .level-left + .level-right {
+        margin-top: 0.75rem;
+        display: block; // Force block to respect margin
+        width: 100%;
+        text-align: left;
+    }
+    
+    // If the flex behavior centers them, force start
+    .level-item {
+        justify-content: flex-start;
+    }
+}
+
+// 6. Visual Divisions
+section:not(:last-child) {
+    position: relative;
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px; // Small centered line
+        height: 4px;
+        background-color: #f5f5f5; // Very subtle grey
+        border-radius: 2px;
+    }
+}
