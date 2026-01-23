@@ -48,7 +48,7 @@ RUN npm run build
 ################################################################################
 # Create a new stage to run the application with minimal runtime dependencies
 # where the necessary files are copied from the build stage.
-FROM dhi.io/nginx:1.28-alpine3.23 as runner
+FROM nginx:stable-alpine as runner
 
 USER 0
 
