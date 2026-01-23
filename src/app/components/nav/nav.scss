@@ -1,0 +1,38 @@
+@media screen and (max-width: 600px) {
+    .navbar {
+        display: flex;
+        height: auto;
+        min-height: 3.25rem;
+        align-items: center;
+    }
+
+    .navbar-menu {
+        display: flex;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .navbar-start {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .navbar-end {
+        margin-left: auto;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .navbar-item {
+        padding: 0.5rem 0.75rem;
+        display: center;
+        align-items: center;
+    }
+
+    .mobile-hidden {
+        display: none;
+    }
+}
