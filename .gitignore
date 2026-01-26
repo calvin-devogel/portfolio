@@ -43,3 +43,7 @@ __screenshots__/
 Thumbs.db
 
 src/assets/home.yaml
+.vscode
+.vscode/extensions.json
+.vscode/tasks.json
+.vscode/launch.json
