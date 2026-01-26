@@ -11,7 +11,7 @@ cv:
       - label: Infrastructure
         details: Docker, DigitalOcean, Azure, Terraform, Cloudflare
       - label: Tools/Frameworks
-        details: Angular, Node.js, PostgreSQL, CI/CD, Agile, Jira, Git
+        details: Angular, Node.js, Actix Web, .NET, PostgreSQL, CI/CD, Agile, Jira, Git
 
     experience:
       - company: PCI Pharma Services
