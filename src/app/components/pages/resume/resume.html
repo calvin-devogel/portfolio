@@ -2,14 +2,14 @@
     <div left></div>
     <div main class="hero hero-body">
         @if (resumeData(); as resumeData) {
-            <section>
+            <section class="animate-section">
                 <div class="box is-shadowless">
                     <h2 class="title mt-5 has-text-centered">Summary</h2>
                     <p class="resume-item">{{ resumeData.cv.sections.summary }}</p>
                 </div>
             </section>
 
-            <section class="mt-1">
+            <section class="mt-1 animate-section">
                 <div class="box is-shadowless">
                     <h2 class="title is-4">Skills</h2>
                     <div class="columns is-multiline resume-item">
@@ -27,7 +27,7 @@
                 </div>
             </section>
 
-            <section class="mt-1">
+            <section class="mt-1 animate-section">
                 <div class="box is-shadowless">
                     <h2 class="title is-4 mb-5">Experience</h2>
                     @for (job of resumeData.cv.sections.experience; track job; let last = $last) {
@@ -58,7 +58,7 @@
                 </div>
             </section>
             
-            <section class="mt-1">
+            <section class="mt-1 animate-section">
                 <div class="box is-shadowless">
                     <h3 class="title is-4 mb-5">Education</h3>
                     @for (educationItem of resumeData.cv.sections.education; track educationItem; let last = $last) {

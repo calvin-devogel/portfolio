@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PageLayout } from '../../page-layout/page-layout';
 import { ResumeData } from '../../../interfaces/resume-data';
 import { ResumeService } from '../../../services/resume-service';
@@ -10,6 +10,7 @@ import { catchError, of } from 'rxjs';
   imports: [PageLayout],
   templateUrl: './resume.html',
   styleUrls: ['./resume.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Resume {
   private resumeService = inject(ResumeService);
@@ -27,6 +28,7 @@ export class Resume {
     return details ? details.split(',').map(tag => tag.trim()) : [];
   }
 
+  // formatting logic is called on every render. How to pre-format dates?
   formatDate(dateStr?: string): string {
     if (!dateStr) return 'Present';
     const date = new Date(dateStr);
