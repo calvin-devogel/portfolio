@@ -22,10 +22,9 @@ yarn-error.log
 
 # Visual Studio Code
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+.vscode/extensions.json
+.vscode/tasks.json
+.vscode/launch.json
 .history/*
 
 # Miscellaneous
@@ -44,6 +43,3 @@ Thumbs.db
 
 src/assets/home.yaml
 .vscode
-.vscode/extensions.json
-.vscode/tasks.json
-.vscode/launch.json
