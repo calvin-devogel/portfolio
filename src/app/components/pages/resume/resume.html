@@ -17,7 +17,7 @@
                             <div class="column is-12-mobile is-6-tablet">
                                 <h5 class="subtitle is-6 mb-2"><strong>{{ skill.label }}</strong></h5>
                                 <div class="tags">
-                                    @for (tag of getSkillTags(skill.details); track tag) {
+                                    @for (tag of skill.tags; track tag) {
                                         <span class="tag is-info has-background-grey-light">{{ tag }}</span>
                                     }
                                 </div>
@@ -41,7 +41,7 @@
                                 </div>
                                 <div class="level-right">
                                     <span class="tag is-medium has-background-grey-light has-text-black is-family-monospace">
-                                        {{ formatDate(job.start_date) }} - {{ formatDate(job.end_date) || 'Present' }}
+                                        {{ job.start_date }} - {{ job.end_date || 'Present' }}
                                     </span>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                                     </div>
                                 </div>
                                 <div class="level-right">
-                                    <span class="tag is-medium has-background-grey-light has-text-black is-family-monospace">{{ formatDate(educationItem.end_date) }}</span>
+                                    <span class="tag is-medium has-background-grey-light has-text-black is-family-monospace">{{ educationItem.end_date }}</span>
                                 </div>
                             </div>
                             

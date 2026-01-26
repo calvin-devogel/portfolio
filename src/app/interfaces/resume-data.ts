@@ -13,6 +13,7 @@ export interface ResumeData {
 export interface SkillGroup {
     label: string;
     details: string;
+    tags?: string[];
 }
 
 export interface Experience {
