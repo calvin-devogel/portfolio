@@ -28,7 +28,7 @@ export class Resume {
   private transformData(data: ResumeData): ResumeData {
     const formatDate = (dateStr?: string): string => {
       if (!dateStr) return 'Present';
-      return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', year: 'numeric'});
+      return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC'});
     };
 
     const getSkillTags = (details: string): string[] => {
