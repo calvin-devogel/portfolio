@@ -10,6 +10,12 @@ services:
       repo: calvin-devogel/portfolio
     health_check:
       http_path: /health_check
+    routes:
+      - path: /
+    envs:
+      - key: APP_APPLICATION__SERVER_URL
+        scope: RUN_TIME
+        value: ${SERVER_URL}
     http_port: 8080
     instance_count: 1
     instance_size_slug: basic-xxs

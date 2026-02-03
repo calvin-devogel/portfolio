@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FeatherModule } from 'angular-feather';
-import { Github, Linkedin, Home, FileText, Codepen, AlertTriangle } from 'angular-feather/icons';
+import { Github, Linkedin, Home, FileText, Codepen, AlertTriangle, LogOut } from 'angular-feather/icons';
 
 export const icons = {
   Github,
@@ -9,7 +9,8 @@ export const icons = {
   Home,
   FileText,
   Codepen,
-  AlertTriangle
+  AlertTriangle,
+  LogOut
 }
 
 

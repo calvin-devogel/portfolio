@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  private isLoggedInSubject = new BehaviorSubject<boolean | null>(null);
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
   constructor(private http: HttpClient) {
@@ -18,6 +18,7 @@ export class AuthService {
     this.http.get('/api/check-auth', { observe: 'response' }).subscribe({
       next: (response) => {
         if (response.status === 200) this.isLoggedInSubject.next(true);
+        else this.isLoggedInSubject.next(false);
       },
       error: () => this.isLoggedInSubject.next(false)
     });
