@@ -1,12 +1,14 @@
 <app-page-layout>
     <div left></div>
     <div main class="columns is-centered">
-        <div class="columns is-half mt-6 pt-6">
+        <div class="column is-half mt-6 pt-6">
             <section class="animate-section">
                 <h2 class="title mt-0 has-text-centered mb-2">Admin Login</h2>
-                <input class="input mb-4" type="text" placeholder="Username">
-                <input class="input mb-4" type="password" placeholder="Password">
-                <button class="button is-link">Login</button>
+                <form (ngSubmit)="onSubmit()">
+                    <input class="input mb-4" type="text" placeholder="Username" [(ngModel)]="loginData.username" name="username">
+                    <input class="input mb-4" type="password" placeholder="Password" [(ngModel)]="loginData.password" name="password">
+                    <button type="submit" class="button is-link">Login</button>
+                </form>
             </section>
         </div>
     </div>

@@ -24,7 +24,12 @@ export class AuthService {
   }
 
   authenticate(username: string, password: string): Observable<boolean> {
-    return this.http.post('/api/login', { username, password }, {
+    const body = new URLSearchParams();
+    body.set('username', username);
+    body.set('password', password);
+
+    return this.http.post('/api/login', body.toString(), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       observe: 'response',
       withCredentials: true
     }).pipe(

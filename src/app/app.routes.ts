@@ -12,7 +12,7 @@ export const routes: Routes = [
     { path: 'projects', component: Projects },
     { path: 'health_check', redirectTo: '' },
     { path: 'contact', component: Contact },
-    { path: 'login', component: Login, canActivate: [authGuard] },
+    { path: 'login', component: Login },
     {
         path: 'admin', 
         loadComponent: () => import('./components/pages/admin/admin').then(m => m.Admin),
