@@ -53,18 +53,24 @@ RUN npm run build
 # where the necessary files are copied from the build stage.
 FROM nginx:1.28-alpine3.23 as runner
 
+RUN apk add --no-cache gettext
+
 USER 0
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY --chown=nginx:nginx --from=build /usr/src/app/dist/*/browser /usr/share/nginx/html
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 RUN mkdir -p /tmp/client_temp \
              /tmp/proxy_temp_path \
              /tmp/fastcgi_temp \
              /tmp/uwsgi_temp \
              /tmp/scgi_temp \
     && chown -R nginx:nginx /tmp
+
 USER nginx
 EXPOSE 8080
 
-ENTRYPOINT ["nginx", "-c", "/etc/nginx/nginx.conf"]
-CMD ["-g", "daemon off;"]
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["nginx", "-c", "/etc/nginx/nginx.conf", "-g", "daemon off;"]
