@@ -10,7 +10,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "src/assets/env.js", "src/assets/env.template.js"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]
