@@ -1,5 +1,5 @@
 #!/bin/sh
 
-envsubst 'API_URL' < /usr/share/nginx/html/environments/environment.prod.ts > /usr/share/nginx/html/environments/environments.development.ts
+envsubst '${API_URL}' < /usr/share/nginx/html/assets/env.template.ts > /usr/share/nginx/html/assets/env.ts
 
 exec "$@"
