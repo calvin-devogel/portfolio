@@ -13,9 +13,9 @@ services:
     routes:
       - path: /
     envs:
-      - key: APP_APPLICATION__SERVER_URL
+      - key: API_URL
         scope: RUN_TIME
-        value: ${SERVER_URL}
+        value: ${API_URL}
     http_port: 8080
     instance_count: 1
     instance_size_slug: basic-xxs

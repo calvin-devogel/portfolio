@@ -1,0 +1,11 @@
+<div class="notification-container">
+    @for (notif of notificationService.notifications$(); track notif.id) {
+        <div class="notification is-{{notif.type}}" style="margin-bottom: 0.5rem; display: flex; align-items: center;">
+            <button class="delete" (click)="notificationService.dismiss(notif.id)"></button>
+            @if (notif.type === 'error') {
+                <i-feather name="alert-triangle" class="mr-2"></i-feather>
+            }
+            {{ notif.message }}
+        </div>
+    }
+</div>

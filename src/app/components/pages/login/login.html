@@ -7,7 +7,11 @@
                 <form (ngSubmit)="onSubmit()">
                     <input class="input mb-4" type="text" placeholder="Username" [(ngModel)]="loginData.username" name="username">
                     <input class="input mb-4" type="password" placeholder="Password" [(ngModel)]="loginData.password" name="password">
-                    <button type="submit" class="button is-link">Login</button>
+                    <button class="button is-link"
+                        [disabled]="authService.isAuthenticating()"
+                        [class.is-loading]="authService.isAuthenticating()">
+                        Login
+                    </button>
                 </form>
             </section>
         </div>

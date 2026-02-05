@@ -1,7 +1,12 @@
 <app-page-layout>
     <div left></div>
     <div main class="hero hero-body">
-        @if (resumeData(); as resumeData) {
+        @if (hasError()) {
+            <div class="notification is-danger">
+                <i-feather name="alert-triangle"></i-feather>
+                Failed to load resume. Please try again later.
+            </div>
+        } @else if (resumeData(); as resumeData) {
             <section class="animate-section">
                 <div class="box is-shadowless">
                     <h2 class="title mt-5 has-text-centered">Summary</h2>

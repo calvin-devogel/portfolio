@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http'
+import { signal } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
 
 @Injectable({
@@ -8,6 +9,8 @@ import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
 export class AuthService {
   private isLoggedInSubject = new BehaviorSubject<boolean | null>(null);
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
+
+  public isAuthenticating = signal(false);
 
   constructor(private http: HttpClient) {
     this.checkAuthStatus();
@@ -25,6 +28,8 @@ export class AuthService {
   }
 
   authenticate(username: string, password: string): Observable<boolean> {
+    this.isAuthenticating.set(true);
+
     const body = new URLSearchParams();
     body.set('username', username);
     body.set('password', password);
@@ -35,6 +40,7 @@ export class AuthService {
       withCredentials: true
     }).pipe(
       map(response => {
+        this.isAuthenticating.set(false);
         if (response.status === 200) {
           this.isLoggedInSubject.next(true);
           return true;
@@ -42,6 +48,8 @@ export class AuthService {
         return false;
       }),
       catchError(() => {
+        this.isAuthenticating.set(false);
+        this.isLoggedInSubject.next(false);
         return of(false);
       })
     );

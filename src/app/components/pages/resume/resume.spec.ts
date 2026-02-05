@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Resume } from './resume';
-import { ResumeService } from '../../../services/resume-service';
+import { ResumeService } from '../../../services/resume/resume-service';
 import { of } from 'rxjs';
 import { ResumeData } from '../../../interfaces/resume-data';
 import { provideRouter } from '@angular/router';
