@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http'
 import { signal } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
@@ -12,8 +13,14 @@ export class AuthService {
 
   public isAuthenticating = signal(false);
 
+  private platformId = inject(PLATFORM_ID);
+
   constructor(private http: HttpClient) {
-    this.checkAuthStatus();
+    if (isPlatformBrowser(this.platformId)) {
+      this.checkAuthStatus();
+    } else {
+      this.isLoggedInSubject.next(false);
+    }
   }
 
   // check if session exists on load
