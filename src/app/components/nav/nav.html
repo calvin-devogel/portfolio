@@ -16,6 +16,12 @@
             </a>
         </div>
     </div>
+    @if (authService.isLoggedIn$ | async) {
+        <a class="navbar-item is-flex-mobile" (click)="logout()">
+            <i-feather name="log-out" size="32"></i-feather>
+            <p class="mobile-hidden">Logout</p>
+        </a>
+    }
     <div class="navbar-end is-inline-flex-mobile">
         <a class="navbar-item is-flex-mobile" target="_blank" href="https://github.com/calvin-devogel">
             <i-feather name="github" size="32"></i-feather>

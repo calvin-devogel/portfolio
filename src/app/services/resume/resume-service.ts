@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { parse } from 'yaml';
 import { Observable, map } from 'rxjs';
-import { ResumeData } from '../interfaces/resume-data'
+import { ResumeData } from '../../interfaces/resume-data'
 
 
 @Injectable({
