@@ -1,5 +1,5 @@
 #!/bin/sh
 
-envsubst 'API_URL' < /usr/share/nginx/html/assets/config.template.json > /usr/share/nginx/html/assets/config.json
+envsubst 'API_URL' < /usr/share/nginx/html/assets/env.template.ts > /usr/share/nginx/html/assets/env.ts
 
 exec "$@"

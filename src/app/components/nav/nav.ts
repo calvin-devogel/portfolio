@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-// import { IconsModule } from '../../modules/icons/icons-module';
 import { AuthService } from '../../services/auth/auth-service';
 import { AsyncPipe } from '@angular/common';
 import { FeatherModule } from 'angular-feather';
