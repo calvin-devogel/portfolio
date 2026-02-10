@@ -1,14 +1,14 @@
 export interface MessageData {
     id: string;
-    name: string;
+    sender_name: string;
     email: string
-    message: string;
+    message_text: string;
     createdAt: string;
     read?: boolean;
 }
 
 export interface CreateMessageData {
-    name: string;
+    sender_name: string;
     email: string;
-    message: string;
+    message_text: string;
 }
