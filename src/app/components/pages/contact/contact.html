@@ -15,7 +15,7 @@
                                     [class.is-danger]="sender_name?.invalid && sender_name?.touched"
                                     type="text"
                                     placeholder="Your name"
-                                    formControlName="name">
+                                    formControlName="sender_name">
                             </div>
                             @if (sender_name?.invalid && sender_name?.touched) {
                                 @if (sender_name?.errors?.['required']) {
