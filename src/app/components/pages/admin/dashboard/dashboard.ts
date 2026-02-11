@@ -39,7 +39,10 @@ export class Dashboard implements OnInit, OnDestroy {
   private startAutoRefresh(): void {
     const sub = interval(this.REFRESH_INTERVAL).pipe(
       startWith(0),
-      switchMap(() => this.messageService.getMessages(this.currentPage(), this.pageSize()))
+      switchMap(() => {
+        this.isLoading.set(true);
+        return this.messageService.getMessages(this.currentPage(), this.pageSize());
+      })
     ).subscribe({
       next: (response) => {
         this.messages.set(response.messages.map(message => ({
