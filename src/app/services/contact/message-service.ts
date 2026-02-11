@@ -2,7 +2,6 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MessageData, CreateMessageData } from '../../interfaces/message-data';
-import { environment } from '../../../environments/environment.development';
 
 interface MessageResponse {
   message: string;
@@ -21,7 +20,6 @@ interface MessagesPageResponse {
 })
 export class MessageService {
   private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
 
   sendMessage(messageData: CreateMessageData): Observable<MessageResponse> {
     const idempotencyKey = this.generateIdempotencyKey();
@@ -37,7 +35,7 @@ export class MessageService {
     body.set('message_text', messageData.message_text);
 
     return this.http.post<MessageResponse>(
-      `${this.apiUrl}/contact`,
+      '/api/contact',
       body.toString(),
       { headers, withCredentials: false }
     );
@@ -45,7 +43,7 @@ export class MessageService {
 
   getMessages(page: number = 0, pageSize: number = 10): Observable<MessagesPageResponse> {
     return this.http.get<MessagesPageResponse>(
-      `${this.apiUrl}/admin/messages`,
+      '/api/admin/messages',
       {
         params: { page: page.toString(), page_size: pageSize.toString() },
         withCredentials: true
