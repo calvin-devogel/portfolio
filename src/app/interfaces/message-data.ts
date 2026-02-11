@@ -3,8 +3,8 @@ export interface MessageData {
     sender_name: string;
     email: string
     message_text: string;
-    createdAt: string;
-    read?: boolean;
+    created_at: string;
+    read_message?: boolean;
 }
 
 export interface CreateMessageData {

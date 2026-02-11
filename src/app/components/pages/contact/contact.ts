@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PageLayout } from '../../page-layout/page-layout';
@@ -6,6 +6,7 @@ import { FeatherModule } from "angular-feather";
 import { CreateMessageData } from '../../../interfaces/message-data';
 import { MessageService } from '../../../services/contact/message-service';
 import { NotificationService } from '../../../services/notifications/notification-service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-contact',
@@ -18,7 +19,7 @@ import { NotificationService } from '../../../services/notifications/notificatio
   templateUrl: './contact.html',
   styleUrl: './contact.scss',
 })
-export class Contact {
+export class Contact implements OnDestroy {
   private messageService: MessageService = inject(MessageService);
   private notificationService: NotificationService = inject(NotificationService);
   private formBuilder: FormBuilder = inject(FormBuilder);
@@ -26,6 +27,8 @@ export class Contact {
   contactForm: FormGroup;
   isSubmitting: boolean = false;
   submitSuccess: boolean = false;
+
+  private subscription: Subscription = new Subscription();
 
   constructor() {
     this.contactForm = this.formBuilder.group({
@@ -55,6 +58,10 @@ export class Contact {
     });
   }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
   onSubmit(): void {
     if (this.contactForm.invalid) {
       this.markFormGroupTouched(this.contactForm);
@@ -70,7 +77,7 @@ export class Contact {
       message_text: this.contactForm.value.message_text
     };
 
-    this.messageService.sendMessage(formData).subscribe({
+    const sub = this.messageService.sendMessage(formData).subscribe({
       next: (response) => {
         this.isSubmitting = false;
         this.submitSuccess = true;
@@ -92,6 +99,7 @@ export class Contact {
         this.notificationService.error(errorMessage);
       }
     });
+    this.subscription.add(sub);
   }
 
   private markFormGroupTouched(formGroup: FormGroup): void {

@@ -1,0 +1,31 @@
+.message-item {
+    transition: all 0.2s ease;
+
+    &.unread {
+        border-left: 4px solid #3273dc;
+        background-color: #f5f9ff;
+
+        @media(prefers-color-scheme: dark) {
+            background-color: rgba(50, 115, 220, 0.15);
+        }
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+}
+
+.message-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.message-text {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.pagination {
+    margin-top: 2rem;
+}

@@ -59,13 +59,15 @@
                                     formControlName="message_text"></textarea>
                             </div>
                             @if (message_text?.invalid && message_text?.touched) {
+                                <p class="help is-danger">
                                 @if (message_text?.errors?.['required']) {
-                                    <p class="help is-danger">Message is required</p>
+                                    <span>Message is required</span>
                                 } @else if (message_text?.errors?.['minlength']) {
-                                    <p class="help is-danger">Message must be at least 10 characters</p>
+                                    <span>Message must be at least 10 characters</span>
                                 } @else if (message_text?.errors?.['maxlength']) {
-                                    <p class="help is-danger">Message cannot exceed 2000 characters</p>
+                                    <span>Message cannot exceed 5000 characters</span>
                                 }
+                                </p>
                             }
                         </div>
 

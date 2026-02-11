@@ -1,1 +1,67 @@
-<p>dashboard works!</p>
+<div class="container mt-5">
+    <h1 class="title">Message Dashboard</h1>
+
+    @if (isLoading()) {
+        <div class="box">
+            <p class="has-text-centered">Loading messages...</p>
+        </div>
+    }
+
+    @if (!isLoading() && messages().length === 0) {
+        <div class="notification is-info">
+            No messages yet.
+        </div>
+    }
+    <div>
+        @if (!isLoading() && messages().length > 0) {
+            <!-- Messages List -->
+            <div class="message-list mb-5">
+                @for (message of messages(); track message.id) {
+                    <div class="box message-item is-shadowless" [class.unread]="!message.read_message">
+                        <article class="media">
+                            <div class="media-content">
+                                <div class="content">
+                                    <div class="message-header mb-3">
+                                        <strong class="mr-2">{{ message.sender_name }}</strong>
+                                        <small class="has-text-grey">{{ message.email }}</small>
+                                        <span class="tag has-text-black is-family-monospace is-pulled-right">
+                                            {{ formatDate(message.created_at) }}
+                                        </span>
+                                    </div>
+                                    <p class="message-text">{{ message.message_text }}</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                }
+            </div>
+
+            <!-- Pagination Controls -->
+            <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+                <button
+                    class="pagination-previous"
+                    [disabled]="!hasPreviousPage()"
+                    (click)="previousPage()">
+                    Previous
+                </button>
+                <button
+                    class="pagination-next"
+                    [disabled]="!hasNextPage()"
+                    (click)="nextPage()">
+                    Next page
+                </button>
+                <ul class="pagination-list">
+                    <li>
+                        <span class="pagination-link is-current">
+                            Page {{ currentPage() + 1 }} of {{ totalPages() }}
+                        </span>
+                    </li>
+                </ul>
+            </nav>
+
+            <p class="has-text-centered has-text-grey mt-3">
+                Showing {{ messages().length }} of {{ totalCount() }} messages
+            </p>
+        }
+    </div>
+</div>
