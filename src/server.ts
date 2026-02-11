@@ -31,16 +31,27 @@ app.use((req, res, next) => {
   const isDev = process.env['NODE_ENV'] !== 'production';
   const protocol = isDev ? 'http://localhost:* https:' : 'https:';
 
-  res.setHeader(
-    'Content-Security-Policy',
-    [
-      `default-src 'self'`,
-      `img-src 'self' ${protocol} data:`,
-      `script-src 'self' ${protocol} 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net`,
-      `style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net`,
-      `font-src 'self' data:`,
-      `connect-src 'self' ${isDev ? 'http://localhost:* ws://localhost:* https:' : 'https:'}`,
-    ].join('; ')
+  const cspDirectives = isDev
+    ? [
+        // Development: allow localhost connections for APIs/HMR, but avoid broad https: scheme sources.
+        `default-src 'self'`,
+        `img-src 'self' data:`,
+        `script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net`,
+        `style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net`,
+        `font-src 'self' data:`,
+        `connect-src 'self' http://localhost:* ws://localhost:*`,
+      ]
+    : [
+        // Production: no scheme-wide https:, no unsafe-eval, and no unsafe-inline for scripts.
+        `default-src 'self'`,
+        `img-src 'self' data:`,
+        `script-src 'self' https://cdn.jsdelivr.net`,
+        `style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net`,
+        `font-src 'self' data:`,
+        `connect-src 'self'`,
+      ];
+
+  res.setHeader('Content-Security-Policy', cspDirectives.join('; ')
   );
   next();
 })
