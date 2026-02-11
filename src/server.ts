@@ -25,6 +25,27 @@ const angularApp = new AngularNodeAppEngine();
  */
 
 /**
+ * Set security headers including CSP
+ */
+app.use((req, res, next) => {
+  const isDev = process.env['NODE_ENV'] !== 'production';
+  const protocol = isDev ? 'http://localhost:* https:' : 'https:';
+
+  res.setHeader(
+    'Content-Security-Policy',
+    [
+      `default-src 'self'`,
+      `img-src 'self' ${protocol} data:`,
+      `script-src 'self' ${protocol} 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net`,
+      `style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net`,
+      `font-src 'self' data:`,
+      `connect-src 'self' ${isDev ? 'http://localhost:* ws://localhost:* https:' : 'https:'}`,
+    ].join('; ')
+  );
+  next();
+})
+
+/**
  * Serve static files from /browser
  */
 app.use(
