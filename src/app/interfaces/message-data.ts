@@ -1,5 +1,5 @@
 export interface MessageData {
-    id: string;
+    message_id: string;
     sender_name: string;
     email: string;
     message_text: string;

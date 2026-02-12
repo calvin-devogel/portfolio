@@ -46,7 +46,7 @@ export class Dashboard implements OnInit, OnDestroy {
     ).subscribe({
       next: (response) => {
         this.messages.set(response.messages.map(message => ({
-          id: message.id,
+          message_id: message.message_id,
           sender_name: message.sender_name,
           email: message.email,
           message_text: message.message_text,
@@ -71,7 +71,7 @@ export class Dashboard implements OnInit, OnDestroy {
     const sub = this.messageService.getMessages(page, this.pageSize()).subscribe({
       next: (response) => {
         this.messages.set(response.messages.map(message => ({
-          id: message.id,
+          message_id: message.message_id,
           sender_name: message.sender_name,
           email: message.email,
           message_text: message.message_text,

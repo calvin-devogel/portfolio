@@ -25,7 +25,7 @@ export class AuthService {
 
   // check if session exists on load
   private checkAuthStatus() {
-    this.http.get('/api/check-auth', { observe: 'response' }).subscribe({
+    this.http.get('/api/check_auth', { observe: 'response' }).subscribe({
       next: (response) => {
         if (response.status === 200) this.isLoggedInSubject.next(true);
         else this.isLoggedInSubject.next(false);

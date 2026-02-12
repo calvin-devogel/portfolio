@@ -16,7 +16,7 @@
         @if (!isLoading() && messages().length > 0) {
             <!-- Messages List -->
             <div class="message-list mb-5">
-                @for (message of messages(); track message.id) {
+                @for (message of messages(); track message.message_id) {
                     <div class="box message-item is-shadowless" [class.unread]="!message.read_message">
                         <article class="media">
                             <div class="media-content">
