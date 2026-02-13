@@ -21,6 +21,15 @@
             <i-feather name="log-out" size="32"></i-feather>
             <p class="mobile-hidden">Logout</p>
         </a>
+        <a class="navbar-item is-flex-mobile" routerLink="/admin">
+            <i-feather name="layout" size="32"></i-feather>
+            <p class="mobile-hidden">Admin</p>
+        </a>
+    } @else {
+        <a class="navbar-item is-flex-mobile" routerLink="/login">
+            <i-feather name="log-in" size="32"></i-feather>
+            <p class="mobile-hidden">Login</p>
+        </a>
     }
     <div class="navbar-end is-inline-flex-mobile">
         <a class="navbar-item is-flex-mobile" target="_blank" href="https://github.com/calvin-devogel">
