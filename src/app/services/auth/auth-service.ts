@@ -12,7 +12,6 @@ export class AuthService {
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
   public isAuthenticating = signal(false);
   private platformId = inject(PLATFORM_ID);
-  private activityCheckInterval: any;
 
   constructor(private http: HttpClient) {
     if (isPlatformBrowser(this.platformId)) {
