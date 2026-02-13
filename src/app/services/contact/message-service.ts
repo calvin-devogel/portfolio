@@ -63,7 +63,7 @@ export class MessageService {
       '/api/admin/messages',
       { message_id: messageId, read: read },
       { headers, withCredentials: true }
-    )
+    );
   }
 
   // generate uuid v4 for idempotency key

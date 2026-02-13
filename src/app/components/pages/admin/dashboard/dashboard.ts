@@ -5,6 +5,8 @@ import { MessageData } from '../../../../interfaces/message-data';
 import { NotificationService } from '../../../../services/notifications/notification-service';
 import { Subscription, interval, switchMap, startWith } from 'rxjs';
 
+// this needs a re-work. The auto-refresh is clunky, and the message_read status is only updated on click, without
+// accounting for whether or not the database has completed the update.
 @Component({
   selector: 'app-dashboard',
   imports: [CommonModule],
@@ -20,6 +22,9 @@ export class Dashboard implements OnInit, OnDestroy {
   pageSize = signal<number>(20);
   totalCount = signal<number>(0);
   isLoading = signal<boolean>(false);
+
+  // messages currently being updated
+  updatingMessages = signal<Set<string>>(new Set());
 
   totalPages = computed(() => Math.ceil(this.totalCount() / this.pageSize()));
   hasNextPage = computed(() => this.currentPage() < this.totalPages() - 1);
@@ -92,29 +97,46 @@ export class Dashboard implements OnInit, OnDestroy {
   }
 
   markAsRead(message: MessageData): void {
-    if (message.read_message) {
+    if (message.read_message || this.updatingMessages().has(message.message_id)) {
       return;
     }
 
+    this.updatingMessages.update(set => new Set(set).add(message.message_id));
+
     const sub = this.messageService.patchMessage(message.message_id, true).subscribe({
       next: () => {
-        this.messages.update(messages => 
+        this.messages.update(messages =>
           messages.map(m =>
             m.message_id === message.message_id
-            ? { ...m, read_message: true }
-            :m
+            ? { ...m, read_message:true }
+            : m
           )
         );
+        // remove from updating set
+        this.updatingMessages.update(set => {
+          const newSet = new Set(set);
+          newSet.delete(message.message_id);
+          return newSet;
+        });
       },
       error: (error) => {
+        this.updatingMessages.update(set => {
+          const newSet = new Set(set);
+          newSet.delete(message.message_id);
+          return newSet;
+        });
         this.notificationService.error(
-          'Failed to mark messages as read. Please try again later.',
+          'Failed to mark message as read. Please try again later.',
         );
       }
     });
     this.subscription.add(sub);
   }
 
+  isMessageUpdating(messageId: string): boolean {
+    return this.updatingMessages().has(messageId);
+  }
+  
   nextPage(): void {
     if (this.hasNextPage()) {
       this.loadMessages(this.currentPage() + 1);
