@@ -91,6 +91,30 @@ export class Dashboard implements OnInit, OnDestroy {
     this.subscription.add(sub);
   }
 
+  markAsRead(message: MessageData): void {
+    if (message.read_message) {
+      return;
+    }
+
+    const sub = this.messageService.patchMessage(message.message_id, true).subscribe({
+      next: () => {
+        this.messages.update(messages => 
+          messages.map(m =>
+            m.message_id === message.message_id
+            ? { ...m, read_message: true }
+            :m
+          )
+        );
+      },
+      error: (error) => {
+        this.notificationService.error(
+          'Failed to mark messages as read. Please try again later.',
+        );
+      }
+    });
+    this.subscription.add(sub);
+  }
+
   nextPage(): void {
     if (this.hasNextPage()) {
       this.loadMessages(this.currentPage() + 1);

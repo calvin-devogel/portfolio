@@ -3,7 +3,7 @@
 
     &.unread {
         border-left: 4px solid #3273dc;
-        background-color: #f5f9ff;
+        background-color: rgba(100, 160, 255, 0.5);
 
         @media(prefers-color-scheme: dark) {
             background-color: rgba(50, 115, 220, 0.15);
@@ -12,6 +12,15 @@
 
     &:hover {
         transform: translateY(-2px);
+    }
+
+    &:not(.unread) {
+        border-left: 4px solid #3273dc;
+        background-color: rgba(155, 184, 231, 0.20);
+
+        @media(prefers-color-scheme: dark) {
+            background-color: rgba(107, 149, 218, 0.15);
+        }
     }
 }
 

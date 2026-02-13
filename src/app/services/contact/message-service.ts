@@ -51,6 +51,21 @@ export class MessageService {
     );
   }
 
+  patchMessage(messageId: string, read: boolean): Observable<void> {
+    const idempotencyKey = this.generateIdempotencyKey();
+
+    const headers = new HttpHeaders({
+      "Content-Type": "application/json",
+      "Idempotency-Key": idempotencyKey
+    });
+
+    return this.http.patch<void>(
+      '/api/admin/messages',
+      { message_id: messageId, read: read },
+      { headers, withCredentials: true }
+    )
+  }
+
   // generate uuid v4 for idempotency key
   private generateIdempotencyKey(): string {
     if (crypto && crypto.randomUUID) {
