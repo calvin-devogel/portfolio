@@ -17,18 +17,31 @@
             <!-- Messages List -->
             <div class="message-list mb-5">
                 @for (message of messages(); track message.message_id) {
-                    <div class="box message-item is-shadowless" [class.unread]="!message.read_message">
+                    <div class="box message-item is-shadowless"
+                        [class.unread]="!message.read_message"
+                        (click)="markAsRead(message)"
+                        [style.cursor]="!message.read_message ? 'pointer': 'default'">
                         <article class="media">
                             <div class="media-content">
                                 <div class="content">
                                     <div class="message-header mb-3">
-                                        <strong class="mr-2">{{ message.sender_name }}</strong>
-                                        <small class="has-text-grey">{{ message.email }}</small>
+                                        <strong class="mr-2"
+                                            [class.has-text-grey-dark]="message.read_message">
+                                                {{ message.sender_name }}
+                                        </strong>
+                                        <small 
+                                            [class.has-text-grey]="!message.read_message"
+                                            [class.has-text-grey-dark]="message.read_message">
+                                                {{ message.email }}
+                                        </small>
                                         <span class="tag has-text-black is-family-monospace is-pulled-right">
                                             {{ formatDate(message.created_at) }}
                                         </span>
                                     </div>
-                                    <p class="message-text">{{ message.message_text }}</p>
+                                    <p class="message-text"
+                                        [class.has-text-grey-dark]="message.read_message">
+                                            {{ message.message_text }}
+                                    </p>
                                 </div>
                             </div>
                         </article>
