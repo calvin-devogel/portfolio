@@ -43,23 +43,16 @@ export class AuthService {
 
   // check if session exists on load
   private checkAuthStatus() {
-    console.log('[AUTH] Starting checkAuthStatus, current value:', this.isLoggedInSubject.value);
-    
     this.http.get('/api/check_auth', { observe: 'response', withCredentials: true }).subscribe({
       next: (response) => {
-        console.log('[AUTH] checkAuthStatus response:', response.status);
         if (response.status === 200) {
-          console.log('[AUTH] Setting isLoggedIn to TRUE');
           this.isLoggedInSubject.next(true);
         }
         else {
-          console.log('[AUTH] Setting isLoggedIn to FALSE (status:', response.status, ')');
           this.isLoggedInSubject.next(false);
         }
       },
       error: (err) => {
-        console.log('[AUTH] checkAuthStatus ERROR:', err.status, err.statusText);
-        console.log('[AUTH] Setting isLoggedIn to FALSE');
         this.isLoggedInSubject.next(false);
       }
     });
