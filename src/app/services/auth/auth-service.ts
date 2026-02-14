@@ -15,6 +15,11 @@ export class AuthService {
 
   constructor(private http: HttpClient) {
     if (isPlatformBrowser(this.platformId)) {
+      const cachedAuthStatus = localStorage.getItem('isLoggedIn');
+      if (cachedAuthStatus === 'true') {
+        this.isLoggedInSubject.next(true);
+      }
+
       this.checkAuthStatus();
       this.setupActivityTracking();
     }
@@ -44,15 +49,13 @@ export class AuthService {
   private checkAuthStatus() {
     this.http.get('/api/check_auth', { observe: 'response', withCredentials: true }).subscribe({
       next: (response) => {
-        if (response.status === 200) {
-          this.isLoggedInSubject.next(true);
-        }
-        else {
-          this.isLoggedInSubject.next(false);
-        }
+        const isLoggedIn = response.status === 200;
+        this.isLoggedInSubject.next(isLoggedIn);
+        localStorage.setItem('isLoggedIn', String(isLoggedIn));
       },
       error: (err) => {
         this.isLoggedInSubject.next(false);
+        localStorage.setItem('isLoggedIn', 'false');
       }
     });
   }
@@ -73,6 +76,7 @@ export class AuthService {
         this.isAuthenticating.set(false);
         if (response.status === 200) {
           this.isLoggedInSubject.next(true);
+          localStorage.setItem('isLoggedIn', 'true');
           return true;
         }
         return false;
@@ -80,6 +84,7 @@ export class AuthService {
       catchError(() => {
         this.isAuthenticating.set(false);
         this.isLoggedInSubject.next(false);
+        localStorage.setItem('isLoggedIn', 'false');
         return of(false);
       })
     );
@@ -87,7 +92,10 @@ export class AuthService {
 
   logout(): Observable<void> {
     return this.http.post<void>('/api/logout', {}, { withCredentials: true }).pipe(
-      tap(() => this.isLoggedInSubject.next(false))
+      tap(() => {
+        this.isLoggedInSubject.next(false)
+        localStorage.setItem('isLoggedIn', 'false');
+      })
     );
   }
 }
