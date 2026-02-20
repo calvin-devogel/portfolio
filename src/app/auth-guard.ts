@@ -1,30 +1,25 @@
-import { inject } from '@angular/core';
+import { inject, PLATFORM_ID } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
-import { AuthService } from './services/auth/auth-service';
-import { filter, map, take, timeout } from 'rxjs/operators';
-import { catchError, of } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
-import { PLATFORM_ID } from '@angular/core';
+import { catchError, map, of } from 'rxjs';
+import { timeout } from 'rxjs/operators';
+import { AuthService } from './services/auth/auth-service';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = (_route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
   const platformId = inject(PLATFORM_ID);
 
   if (!isPlatformBrowser(platformId)) {
-    return true;
+    // sus
+    return of(false);
   }
 
-  return authService.isLoggedIn$.pipe(
-    filter(isLoggedIn => isLoggedIn !== null),
-    take(1),
+  return authService.refreshAuthStatus().pipe(
     timeout(5000),
-    map(isLoggedIn => {
-      if (!isLoggedIn) {
-        return router.createUrlTree(['/login']);
-    }
-    return true;
-    }),
-    catchError(() => of(router.createUrlTree(['/login'])))
-  );
+    map((isLoggedIn) =>
+      isLoggedIn ? true : router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } })
+    ),
+    catchError(() => of(router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } })))
+  )
 };

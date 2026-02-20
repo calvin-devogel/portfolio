@@ -2,7 +2,7 @@ import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http'
 import { signal } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, map, of, tap, fromEvent, merge, throttleTime } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, tap, fromEvent, merge, throttleTime, finalize } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -15,11 +15,6 @@ export class AuthService {
 
   constructor(private http: HttpClient) {
     if (isPlatformBrowser(this.platformId)) {
-      const cachedAuthStatus = localStorage.getItem('isLoggedIn');
-      if (cachedAuthStatus === 'true') {
-        this.isLoggedInSubject.next(true);
-      }
-
       this.checkAuthStatus();
       this.setupActivityTracking();
     }
@@ -47,17 +42,18 @@ export class AuthService {
 
   // check if session exists on load
   private checkAuthStatus() {
-    this.http.get('/api/check_auth', { observe: 'response', withCredentials: true }).subscribe({
-      next: (response) => {
-        const isLoggedIn = response.status === 200;
+    this.refreshAuthStatus().subscribe();
+  }
+
+  public refreshAuthStatus(): Observable<boolean> {
+    return this.http.get('/api/check_auth', { observe: 'response', withCredentials: true }).pipe(
+      map((response) => response.status === 200),
+      catchError(() => of(false)),
+      tap((isLoggedIn) => {
         this.isLoggedInSubject.next(isLoggedIn);
         localStorage.setItem('isLoggedIn', String(isLoggedIn));
-      },
-      error: (err) => {
-        this.isLoggedInSubject.next(false);
-        localStorage.setItem('isLoggedIn', 'false');
-      }
-    });
+      })
+    );
   }
 
   authenticate(username: string, password: string): Observable<boolean> {
@@ -92,8 +88,8 @@ export class AuthService {
 
   logout(): Observable<void> {
     return this.http.post<void>('/api/logout', {}, { withCredentials: true }).pipe(
-      tap(() => {
-        this.isLoggedInSubject.next(false)
+      finalize(() => {
+        this.isLoggedInSubject.next(false);
         localStorage.setItem('isLoggedIn', 'false');
       })
     );
