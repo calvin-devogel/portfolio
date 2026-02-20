@@ -36,5 +36,21 @@
 }
 
 .pagination {
+    display: grid !important;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
     margin-top: 2rem;
+}
+
+.pagination__left {
+    justify-self: start;
+}
+
+.pagination__center {
+    justify-self: center;
+    margin: 0;
+}
+
+.pagination__right {
+    justify-self: end;
 }

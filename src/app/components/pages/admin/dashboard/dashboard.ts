@@ -1,9 +1,31 @@
-import { Component, OnDestroy, OnInit, inject, signal, computed } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageService } from '../../../../services/contact/message-service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MessageData } from '../../../../interfaces/message-data';
 import { NotificationService } from '../../../../services/notifications/notification-service';
-import { Subscription, interval, switchMap, startWith } from 'rxjs';
+import { interval } from 'rxjs';
+import { startWith, takeUntil } from 'rxjs/operators';
+
+type DashboardStatus = 'idle' | 'loading' | 'ready' | 'empty' | 'error';
+
+interface DashboardState {
+  status: DashboardStatus;
+  messages: MessageData[];
+  currentPage: number;
+  pageSize: number;
+  totalCount: number;
+  errorText: string | null;
+  updatingIds: Set<string>;
+  refreshing: boolean;
+}
 
 // this needs a re-work. The auto-refresh is clunky, and the message_read status is only updated on click, without
 // accounting for whether or not the database has completed the update.
@@ -13,128 +35,132 @@ import { Subscription, interval, switchMap, startWith } from 'rxjs';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
-export class Dashboard implements OnInit, OnDestroy {
+export class Dashboard {
   private messageService: MessageService = inject(MessageService);
   private notificationService: NotificationService = inject(NotificationService);
-
-  messages = signal<MessageData[]>([]);
-  currentPage = signal<number>(0);
-  pageSize = signal<number>(20);
-  totalCount = signal<number>(0);
-  isLoading = signal<boolean>(false);
-
-  // messages currently being updated
-  updatingMessages = signal<Set<string>>(new Set());
-
-  totalPages = computed(() => Math.ceil(this.totalCount() / this.pageSize()));
-  hasNextPage = computed(() => this.currentPage() < this.totalPages() - 1);
-  hasPreviousPage = computed(() => this.currentPage() > 0);
-
-  private subscription: Subscription = new Subscription();
+  private readonly destroyRef: DestroyRef = inject(DestroyRef);
   private readonly REFRESH_INTERVAL = 60000;
 
-  ngOnInit(): void {
+  state = signal<DashboardState>({
+    status: 'idle',
+    messages: [],
+    currentPage: 0,
+    pageSize: 20,
+    totalCount: 0,
+    errorText: null,
+    updatingIds: new Set<string>(),
+    refreshing: false
+  })
+
+  status = computed(() => this.state().status);
+  messages = computed(() => this.state().messages)
+  currentPage = computed(() => this.state().currentPage);
+  totalPages = computed(() =>
+    Math.ceil(this.state().totalCount / this.state().pageSize)
+  );
+  hasNextPage = computed(() => this.currentPage() < this.totalPages() - 1);
+  hasPreviousPage = computed(() => this.currentPage() > 0)
+  isBusy = computed(
+    () => this.status() === 'loading' || this.state().refreshing,
+  );
+
+  constructor() {
+    this.loadMessages(0);
     this.startAutoRefresh();
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+  private patchState(patch: Partial<DashboardState>): void {
+    this.state.update((state) => ({ ...state, ...patch }));
   }
 
   private startAutoRefresh(): void {
-    const sub = interval(this.REFRESH_INTERVAL).pipe(
-      startWith(0),
-      switchMap(() => {
-        this.isLoading.set(true);
-        return this.messageService.getMessages(this.currentPage(), this.pageSize());
-      })
-    ).subscribe({
-      next: (response) => {
-        this.messages.set(response.messages.map(message => ({
-          message_id: message.message_id,
-          sender_name: message.sender_name,
-          email: message.email,
-          message_text: message.message_text,
-          created_at: message.created_at,
-          read_message: message.read_message ?? false
-        })));
-        this.totalCount.set(response.total_count);
-        this.isLoading.set(false);
-      },
-      error: (error) => {
-        this.isLoading.set(false);
-        this.notificationService.error(
-          'Failed to refresh messages. Please try again later.',
-        );
-      }
-    });
-    this.subscription.add(sub);
+    interval(this.REFRESH_INTERVAL)
+      .pipe(startWith(0), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadMessages(this.currentPage(), true));
   }
 
-  loadMessages(page: number = 0): void {
-    this.isLoading.set(true);
-    const sub = this.messageService.getMessages(page, this.pageSize()).subscribe({
-      next: (response) => {
-        this.messages.set(response.messages.map(message => ({
-          message_id: message.message_id,
-          sender_name: message.sender_name,
-          email: message.email,
-          message_text: message.message_text,
-          created_at: message.created_at,
-          read_message: message.read_message ?? false
-        })));
-        this.totalCount.set(response.total_count);
-        this.isLoading.set(false);
-      },
-      error: (error) => {
-        this.isLoading.set(false);
-        this.notificationService.error(
-          'Failed to load messages. Please try again later.',
-        );
-      }
-    })
-    this.subscription.add(sub);
+  loadMessages(page = 0, background = false): void {
+    const initial = this.state().messages.length === 0 && !background;
+
+    this.patchState({
+      status: initial ? 'loading' : this.state().status,
+      refreshing: background,
+      errorText: null,
+    });
+
+    this.messageService
+      .getMessages(page, this.state().pageSize)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          const normalized = response.messages.map((message) => ({
+            ...message,
+            read_message: message.read_message ?? false,
+          }));
+
+          this.patchState({
+            messages: normalized,
+            totalCount: response.total_items,
+            currentPage: page,
+            status: normalized.length ? 'ready' : 'empty',
+            refreshing: false,
+            errorText: null,
+          });
+        },
+        error: () => {
+          this.patchState({
+            status: 'error',
+            refreshing: false,
+            errorText: 'Failed to load messages. Please try again.',
+          });
+          this.notificationService.error('Failed to load messages.');
+        },
+      });
   }
 
   markAsRead(message: MessageData): void {
-    if (message.read_message || this.updatingMessages().has(message.message_id)) {
-      return;
-    }
+    const id = message.message_id;
+    const s = this.state();
+    
+    if (message.read_message || s.updatingIds.has(id)) return;
 
-    this.updatingMessages.update(set => new Set(set).add(message.message_id));
+    // optimistic update
+    const optimisticSet = new Set(s.updatingIds);
+    optimisticSet.add(id);
 
-    const sub = this.messageService.patchMessage(message.message_id, true).subscribe({
-      next: () => {
-        this.messages.update(messages =>
-          messages.map(m =>
-            m.message_id === message.message_id
-            ? { ...m, read_message:true }
-            : m
-          )
-        );
-        // remove from updating set
-        this.updatingMessages.update(set => {
-          const newSet = new Set(set);
-          newSet.delete(message.message_id);
-          return newSet;
-        });
-      },
-      error: (error) => {
-        this.updatingMessages.update(set => {
-          const newSet = new Set(set);
-          newSet.delete(message.message_id);
-          return newSet;
-        });
-        this.notificationService.error(
-          'Failed to mark message as read. Please try again later.',
-        );
-      }
+    this.patchState({
+      updatingIds: optimisticSet,
+      messages: s.messages.map((m) =>
+        m.message_id === id ? { ...m, read_message: true } : m,
+      ),
     });
-    this.subscription.add(sub);
+
+    this.messageService
+      .patchMessage(id, true)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          const nextSet = new Set(this.state().updatingIds);
+          nextSet.delete(id);
+          this.patchState({ updatingIds: nextSet });
+        },
+        error: () => {
+          // rollback
+          const nextSet = new Set(this.state().updatingIds);
+          nextSet.delete(id);
+          this.patchState({
+            updatingIds: nextSet,
+            messages: this.state().messages.map((m) =>
+              m.message_id === id ? { ...m, read_message: false } : m,
+            ),
+          });
+          this.notificationService.error('Failed to update message status.');
+        },
+      });
   }
 
   isMessageUpdating(messageId: string): boolean {
-    return this.updatingMessages().has(messageId);
+    return this.state().updatingIds.has(messageId);
   }
   
   nextPage(): void {
@@ -147,6 +173,10 @@ export class Dashboard implements OnInit, OnDestroy {
     if (this.hasPreviousPage()) {
       this.loadMessages(this.currentPage() - 1);
     }
+  }
+
+  trackByMessageId(_index: number, item: MessageData): string {
+    return item.message_id;
   }
 
   formatDate(dateString: string): string {

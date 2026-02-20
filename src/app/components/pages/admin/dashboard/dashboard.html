@@ -1,19 +1,19 @@
 <div class="container mt-5">
     <h1 class="title">Message Dashboard</h1>
 
-    @if (isLoading()) {
+    @if (status() === 'loading') {
         <div class="box">
             <p class="has-text-centered">Loading messages...</p>
         </div>
     }
 
-    @if (!isLoading() && messages().length === 0) {
+    @if (!(status() === 'loading') && messages().length === 0) {
         <div class="notification is-info">
             No messages yet.
         </div>
     }
     <div>
-        @if (!isLoading() && messages().length > 0) {
+        @if (!(status() === 'loading') && messages().length > 0) {
             <!-- Messages List -->
             <div class="message-list mb-5">
                 @for (message of messages(); track message.message_id) {
@@ -59,28 +59,30 @@
             <!-- Pagination Controls -->
             <nav class="pagination is-centered" role="navigation" aria-label="pagination">
                 <button
-                    class="pagination-previous"
+                    class="pagination-previous pagination__left"
                     [disabled]="!hasPreviousPage()"
                     (click)="previousPage()">
                     Previous
                 </button>
-                <button
-                    class="pagination-next"
-                    [disabled]="!hasNextPage()"
-                    (click)="nextPage()">
-                    Next page
-                </button>
-                <ul class="pagination-list">
+
+                <ul class="pagination-list pagination__center">
                     <li>
                         <span class="pagination-link is-current">
                             Page {{ currentPage() + 1 }} of {{ totalPages() }}
                         </span>
                     </li>
                 </ul>
+
+                <button
+                    class="pagination-next pagination__right"
+                    [disabled]="!hasNextPage()"
+                    (click)="nextPage()">
+                    Next page
+                </button>
             </nav>
 
             <p class="has-text-centered has-text-grey mt-3">
-                Showing {{ messages().length }} of {{ totalCount() }} messages
+                Showing {{ messages().length }} of {{ state().totalCount }} messages
             </p>
         }
     </div>

@@ -12,7 +12,7 @@ interface MessagesPageResponse {
   messages: MessageData[];
   page: number;
   page_size: number;
-  total_count: number;
+  total_items: number;
 }
 
 @Injectable({
