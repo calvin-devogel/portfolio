@@ -54,9 +54,11 @@ export class Dashboard {
   status = computed(() => this.state().status);
   messages = computed(() => this.state().messages)
   currentPage = computed(() => this.state().currentPage);
-  totalPages = computed(() =>
-    Math.ceil(this.state().totalCount / this.state().pageSize)
-  );
+  totalPages = computed(() => {
+    const { totalCount, pageSize } = this.state();
+    if (!Number.isFinite(totalCount) || !Number.isFinite(pageSize) || pageSize <= 0) return 1;
+    return Math.max(1, Math.ceil(totalCount / pageSize))
+  });
   hasNextPage = computed(() => this.currentPage() < this.totalPages() - 1);
   hasPreviousPage = computed(() => this.currentPage() > 0)
   isBusy = computed(

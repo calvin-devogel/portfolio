@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { MessageData, CreateMessageData } from '../../interfaces/message-data';
 
 interface MessageResponse {
@@ -13,6 +13,16 @@ interface MessagesPageResponse {
   page: number;
   page_size: number;
   total_items: number;
+}
+
+interface RawMessagesPageResponse {
+  messages?: MessageData[];
+  page?: number;
+  page_size?: number;
+  total_items?: number;
+  total_count?: number;
+  total?: number;
+  error?: string;
 }
 
 @Injectable({
@@ -42,13 +52,33 @@ export class MessageService {
   }
 
   getMessages(page: number = 0, pageSize: number = 10): Observable<MessagesPageResponse> {
-    return this.http.get<MessagesPageResponse>(
-      '/api/admin/messages',
-      {
+    return this.http
+      .get<RawMessagesPageResponse>('/api/admin/messages', {
         params: { page: page.toString(), page_size: pageSize.toString() },
         withCredentials: true
-      }
-    );
+      })
+      .pipe(
+        map((response) => {
+          const messages = Array.isArray(response.messages) ? response.messages : [];
+          const normalizedPage = Number(response.page ?? page);
+          const normalizedPageSize = Number(response.page_size ?? pageSize);
+
+          const totalRaw =
+            response.total_items ??
+            response.total_count ??
+            response.total ??
+            messages.length;
+
+          const normalizedTotal = Number(totalRaw);
+
+          return {
+            messages,
+            page: Number.isFinite(normalizedPage) ? normalizedPage : page,
+            page_size: Number.isFinite(normalizedPageSize) ? normalizedPageSize : pageSize,
+            total_items: Number.isFinite(normalizedTotal) ? normalizedTotal : messages.length,
+          };
+        })
+      );
   }
 
   patchMessage(messageId: string, read: boolean): Observable<void> {
