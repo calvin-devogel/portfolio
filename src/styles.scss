@@ -109,6 +109,7 @@ body {
   background: rgba(245, 242, 236, 0.60) !important;
   border-bottom: 1px solid rgba(92, 122, 107, 0.14);
   box-shadow: 0 2px 16px rgba(92, 122, 107, 0.08);
+  padding-bottom: 0;
 
   @media (prefers-color-scheme: dark) {
     background: rgba(21, 26, 23, 0.85) !important;
@@ -121,11 +122,12 @@ body {
     border-radius: 8px;
     transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
     gap: 0.4rem;
+    align-self: stretch;
 
     &:hover {
       background: rgba(92, 122, 107, 0.12) !important;
       color: var(--primary) !important;
-      transform: translateY(-1px);
+      border-radius: 0px !important;
     }
 
     @media (prefers-color-scheme: dark) {
