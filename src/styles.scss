@@ -197,22 +197,65 @@ section:not(:last-child) {
 
 // ─── Resume Items ─────────────────────────────────────────────────────────────
 
+// ...existing code...
+
+// ─── Resume Items ─────────────────────────────────────────────────────────────
+
 .resume-item {
-  padding: 1.25rem;
-  margin: 0 0.25rem;
-  border-radius: 10px;
-  border-left: 3px solid transparent;
-  transition: background-color 0.25s ease, border-left-color 0.25s ease, transform 0.25s ease;
+    ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
 
-  &:hover {
-    background-color: rgba(92, 122, 107, 0.07);
-    border-left-color: var(--primary);
-    transform: translateX(4px);
-  }
+        li {
+            text-align: left;
+            transition: transform 0.2s ease, opacity 0.2s ease;
 
-  @media (prefers-color-scheme: dark) {
-    &:hover { background-color: rgba(92, 122, 107, 0.14); }
-  }
+            &:last-child {
+                padding-bottom: 0;
+            }
+
+            &:first-child {
+                padding-top: 0;
+            }
+
+            &:hover {
+                transform: translateX(4px);
+                opacity: 0.85;
+            }
+
+            &::before {
+                content: '';
+                display: inline-block;
+                width: 6px;
+                height: 6px;
+                background: var(--gradient-1);
+                border-radius: 50%;
+                margin-right: 0.6rem;
+                vertical-align: middle;
+                flex-shrink: 0;
+            }
+        }
+    }
+
+    .content {
+        border-top: 1px solid rgba(92, 122, 107, 0.18);
+        padding-top: 0.85rem;
+        margin-top: 0.5rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .resume-item ul li {
+        text-align: left;
+        padding: 1.25rem 0;
+        font-size: 0.88rem;
+        border-bottom: 1px solid rgba(92, 122, 107, 0.15);
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
 }
 
 // ─── Tags / Pills ─────────────────────────────────────────────────────────────
@@ -382,6 +425,16 @@ section:not(:last-child) {
   .column.is-half {
     padding-top: 1rem !important;
     margin-top: 1rem !important;
+  }
+
+    body {
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  p, li, .subtitle {
+    font-size: 0.88rem;
+    text-align: center;
   }
 }
 

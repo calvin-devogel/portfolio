@@ -103,16 +103,19 @@
     }
 
     .navbar-item {
-        padding: 0.4rem 0.4rem;
+        padding-left: 0.4rem;
+        padding-right: 0.4rem;
         display: flex;
         align-items: center;
         gap: 0.25rem;
         flex-shrink: 0;
         white-space: nowrap;
+        align-self: stretch;
 
         // the auth items rendered outside navbar-menu
         &.is-flex-mobile {
             display: flex;
+            align-self: stretch;
         }
     }
 
