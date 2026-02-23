@@ -1,13 +1,422 @@
-/* You can add global styles to this file, and also import other style files */
-html, body {
-    max-width: 100%;
-    height: 100vh;
+:root {
+  --primary: #5c7a6b;        /* sage green */
+  --primary-dark: #3d5c4e;
+  --secondary: #c4724a;      /* terracotta */
+  --accent: #8fa67a;         /* muted olive */
+  --gradient-1: linear-gradient(135deg, #5c7a6b 0%, #c4724a 100%);
+  --gradient-2: linear-gradient(135deg, #8fa67a 0%, #c9b99a 100%);
+  --gradient-3: linear-gradient(135deg, #c4724a 0%, #e8c99a 100%);
+  --surface: rgba(255, 252, 248, 0.88);
+  --surface-dark: rgba(24, 28, 26, 0.88);
+  --shadow-color: rgba(92, 122, 107, 0.18);
+  --card-radius: 14px;
+  --nav-height: 3.25rem;
 }
-// 1. Fade In Animation
+
+html, body {
+  max-width: 100%;
+  min-height: 100vh;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #f5f2ec;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(92, 122, 107, 0.09) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(196, 114, 74, 0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(143, 166, 122, 0.06) 0%, transparent 50%);
+  background-attachment: fixed;
+
+  @media (prefers-color-scheme: dark) {
+    background: #151a17;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(92, 122, 107, 0.14) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(196, 114, 74, 0.09) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 80%, rgba(143, 166, 122, 0.07) 0%, transparent 50%);
+    color: #f0ece6;
+  }
+}
+
+// ─── Animations ───────────────────────────────────────────────────────────────
+
 @keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to   { background-position: 200% center; }
+}
+
+.animate-section {
+  opacity: 0;
+  animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+  @for $i from 1 through 20 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.08}s;
+    }
+  }
+}
+
+.animate-left {
+  opacity: 0;
+  animation: fadeInLeft 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-right {
+  opacity: 0;
+  animation: fadeInRight 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-scale {
+  opacity: 0;
+  animation: scaleIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+// ─── Navbar ───────────────────────────────────────────────────────────────────
+
+.navbar {
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  background: rgba(245, 242, 236, 0.60) !important;
+  border-bottom: 1px solid rgba(92, 122, 107, 0.14);
+  box-shadow: 0 2px 16px rgba(92, 122, 107, 0.08);
+
+  @media (prefers-color-scheme: dark) {
+    background: rgba(21, 26, 23, 0.85) !important;
+    border-bottom: 1px solid rgba(92, 122, 107, 0.22);
+  }
+
+  .navbar-item {
+    color: #3d5248;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    gap: 0.4rem;
+
+    &:hover {
+      background: rgba(92, 122, 107, 0.12) !important;
+      color: var(--primary) !important;
+      transform: translateY(-1px);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      color: #b8c9bf;
+      &:hover { color: #8fb8a4 !important; }
+    }
+  }
+}
+
+// ─── Cards / Boxes ────────────────────────────────────────────────────────────
+
+.box {
+  border-radius: var(--card-radius) !important;
+  border: 1px solid rgba(92, 122, 107, 0.12);
+  box-shadow: 0 2px 16px var(--shadow-color), 0 1px 3px rgba(0,0,0,0.03) !important;
+  background: var(--surface) !important;
+  transition: box-shadow 0.3s ease;
+  margin-left: 1.5rem !important;
+  margin-right: 1.5rem !important;
+
+  &:hover {
+    box-shadow: 0 6px 28px var(--shadow-color), 0 2px 6px rgba(0,0,0,0.05) !important;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background: rgba(28, 34, 30, 0.88) !important;
+    border-color: rgba(92, 122, 107, 0.2);
+  }
+
+  @media screen and (max-width: 768px) {
+    margin-left: 0.5rem !important;
+    margin-right: 0.5rem !important;
+    padding: 1.25rem !important;
+  }
+}
+
+// ─── Section Divider ──────────────────────────────────────────────────────────
+
+section:not(:last-child) {
+  position: relative;
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: var(--gradient-1);
+    border-radius: 4px;
+    opacity: 0.6;
+  }
+}
+
+// ─── Gradient Headings ────────────────────────────────────────────────────────
+
+.gradient-title {
+  background: var(--gradient-1);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 6s ease infinite;
+  display: inline-block;
+}
+
+// ─── Resume Items ─────────────────────────────────────────────────────────────
+
+.resume-item {
+  padding: 1.25rem;
+  margin: 0 0.25rem;
+  border-radius: 10px;
+  border-left: 3px solid transparent;
+  transition: background-color 0.25s ease, border-left-color 0.25s ease, transform 0.25s ease;
+
+  &:hover {
+    background-color: rgba(92, 122, 107, 0.07);
+    border-left-color: var(--primary);
+    transform: translateX(4px);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:hover { background-color: rgba(92, 122, 107, 0.14); }
+  }
+}
+
+// ─── Tags / Pills ─────────────────────────────────────────────────────────────
+
+.tag {
+  border-radius: 50px !important;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &.is-info {
+    background: linear-gradient(135deg, #5c7a6b, #8fa67a) !important;
+    color: #fff !important;
+  }
+
+  &:hover {
+    transform: scale(1.06) translateY(-1px);
+    box-shadow: 0 3px 10px rgba(92, 122, 107, 0.3);
+  }
+}
+
+.date {
+    border-radius: 50px !important;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    background: linear-gradient(135deg, #5c7a6b, #8fa67a) !important;
+    color: #fff !important;
+}
+
+// ─── Buttons ──────────────────────────────────────────────────────────────────
+
+.button.is-link {
+  background: var(--gradient-1) !important;
+  background-size: 200% auto !important;
+  border: none !important;
+  color: #fff !important;
+  font-weight: 700;
+  border-radius: 50px !important;
+  letter-spacing: 0.03em;
+  transition: background-position 0.4s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
+
+  &:hover:not([disabled]) {
+    background-position: right center !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(92, 122, 107, 0.38) !important;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// ─── Inputs ───────────────────────────────────────────────────────────────────
+
+.input, .textarea {
+  border-radius: 10px !important;
+  border: 2px solid rgba(92, 122, 107, 0.22) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+  background: rgba(255, 252, 248, 0.95) !important;
+
+  &:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(92, 122, 107, 0.15) !important;
+    outline: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background: rgba(28, 34, 30, 0.85) !important;
+    color: #f0ece6 !important;
+    border-color: rgba(92, 122, 107, 0.3) !important;
+  }
+}
+
+// ─── Notifications ────────────────────────────────────────────────────────────
+
+.notification {
+  border-radius: 12px !important;
+  border-left: 4px solid;
+
+  &.is-success { border-left-color: var(--accent); }
+  &.is-danger  { border-left-color: var(--secondary); }
+  &.is-warning { border-left-color: #c9a84c; }
+  &.is-info    { border-left-color: var(--primary); }
+  &.is-error   { border-left-color: var(--secondary); }
+}
+
+// ─── Footer ───────────────────────────────────────────────────────────────────
+
+.footer {
+  background: transparent !important;
+  border-top: 1px solid rgba(92, 122, 107, 0.12);
+
+  .contact.tag {
+    background: var(--gradient-1) !important;
+    color: #fff !important;
+    font-weight: 700;
+    padding: 0.5em 1.2em;
+    border-radius: 50px !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(92, 122, 107, 0.32);
+    }
+  }
+}
+
+// ─── Responsiveness ───────────────────────────────────────────────────────────
+
+@media screen and (max-width: 768px) {
+  .level-left + .level-right {
+    margin-top: 0.75rem;
+  }
+
+  .level-item {
+    justify-content: flex-start;
+  }
+
+  .level-right {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+
+  // columns stack naturally on mobile
+  .columns.is-centered > .column.is-half {
+    width: 100%;
+  }
+
+  // fix page padding on small screens
+  .px-4 {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .hero-body {
+    padding: 1rem 0.5rem !important;
+  }
+
+  // make date tags wrap cleanly on resume
+  .tag.date {
+    font-size: 0.7rem !important;
+    padding: 0.25em 0.75em !important;
+    white-space: normal;
+    text-align: center;
+  }
+
+  // resume level rows: stack company + date vertically
+  .level.is-align-items-start {
+    display: block !important;
+
+    .level-right {
+      margin-top: 0.4rem;
+    }
+  }
+
+  // reduce title sizes slightly
+  .title.is-2 { font-size: 1.6rem !important; }
+  .title.is-3 { font-size: 1.4rem !important; }
+  .title.is-4 { font-size: 1.2rem !important; }
+
+  // contact form column full width
+  .column.is-half {
+    padding-top: 1rem !important;
+    margin-top: 1rem !important;
+  }
+}
+
+// ─── Scrollbar ────────────────────────────────────────────────────────────────
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--primary), var(--secondary));
+  border-radius: 3px;
+}
+
+// ─── Utility ──────────────────────────────────────────────────────────────────
+
+.container.is-fluid {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.is-shadowless {
+  box-shadow: 0 2px 16px var(--shadow-color), 0 1px 3px rgba(0,0,0,0.03) !important;
+}
+
+// ─── Page Transitions ─────────────────────────────────────────────────────────
+
+@keyframes fadeSlideIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(8px);
     }
     to {
         opacity: 1;
@@ -15,113 +424,22 @@ html, body {
     }
 }
 
-.container.is-fluid {
-    padding-left: 0rem;
-    padding-right: 0rem;
+router-outlet + * {
+    animation: fadeSlideIn 0.25s ease forwards;
 }
 
-// Apply animation to each section with a staggered delay
-.animate-section {
-    opacity: 0;
-    animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+// ─── Links ────────────────────────────────────────────────────────────────────
 
-    @for $i from 1 through 25 {
-        &:nth-child(#{$i}) {
-            animation-delay: #{$i * 0.1}s;
-        }
-    }
-}
-
-// 2. Interactive Boxes
-.box {
-    width: 100%;
-    flex-grow: 1;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    
-    // Subtle lift effect on hover
-    &:hover {
-        transform: translateY(-2px);
-    }
-}
-
-// 3. Resume Items (Jobs/Education)
-.resume-item {
-    padding: 1rem;
-    margin: 0 -1rem; // Pull out to keep alignment creating a "row" feel
-    border-radius: 8px;
-    border-left: 3px solid transparent; // Preparation for hover border
-    transition: background-color 0.2s ease, border-left-color 0.2s ease;
+.text-link {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: rgba(92, 122, 107, 0.35);
+    text-underline-offset: 3px;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
 
     &:hover {
-        background-color: rgba(0, 0, 0, 0.05); // Very subtle grey bg
-        border-left-color: #888; // Bulma 'info' color, or use your theme color
-
-        .tag {
-            background-color: hsl(0,0%,100%);
-
-            @media(prefers-color-scheme: dark) {
-                background-color: hsl(0,0%,95%);
-            }
-        }
-        @media(prefers-color-scheme: dark) {
-            background-color: rgba(0,0,0,0.25)
-        }
-    }
-}
-
-// 4. Skills Tags
-.tag {
-    transition: transform 0.2s ease, background-color 0.2s ease;
-    background-color: hsl(0, 0%, 71%);
-    
-    &:hover {
-        transform: scale(1.1);
-        z-index: 1; // Ensure it pops over neighbors
-        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
-    }
-}
-
-.contact {
-    &:hover {
-        background-color: hsl(0,0%,100%);
-
-        @media(prefers-color-scheme: dark) {
-            background-color: hsl(0,0%,95%);
-        }
-    }
-}
-
-// 5. Responsiveness Fixes
-@media screen and (max-width: 768px) {
-    // Ensure the date tags align left and have spacing when stacked
-    .level-left + .level-right {
-        margin-top: 0.75rem;
-        display: block; // Force block to respect margin
-        width: 100%;
-        text-align: left;
-    }
-    
-    // If the flex behavior centers them, force start
-    .level-item {
-        justify-content: flex-start;
-    }
-}
-
-// 6. Visual Divisions
-section:not(:last-child) {
-    position: relative;
-    padding-bottom: 2rem;
-    margin-bottom: 2rem;
-
-    &::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px; // Small centered line
-        height: 4px;
-        background-color: #f5f5f5; // Very subtle grey
-        border-radius: 2px;
+        color: var(--secondary);
+        text-decoration-color: rgba(196, 114, 74, 0.5);
     }
 }

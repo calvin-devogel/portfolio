@@ -1,19 +1,29 @@
 <app-page-layout>
     <div left></div>
-    <div main class="hero hero-body">
+    <div main class="px-4 py-6">
         <section class="animate-section">
-            <div class="box is-shadowless">
-                <h2 class="title mt-5 has-text-centered">Home</h2>
-                <p class="resume-item has-text-centered">
-                    Detail-oriented and enthusiastic Software Engineer with 4+ years of 
-                    technical and operational experience seeking a Software Engineering role. 
-                    Proven ability to deliver robust, maintainable code, coordinate cross-functional 
-                    projects, and translate complex business requirements into practical and 
-                    effective solutions.<br class="mb-2">
-                    If you are a recruiter or hiring professional, please reach out to me via 
-                    LinkedIn, or even better, leave me a message on my <a routerLink="/contact">Contact page!</a><br>
-                    I'd love to chat about how I can contribute to your team.
+            <div class="box mt-6 py-6 px-6">
+                <h1 class="title is-2 gradient-title mb-4">Hi, I'm Cal.</h1>
+                <p class="subtitle is-5 mb-4" style="max-width: 580px; line-height: 1.7;">
+                    Detail-oriented Software Engineer with 4+ years of experience building
+                    robust, maintainable software and translating complex requirements into
+                    practical solutions.
                 </p>
+                <p class="mb-5" style="max-width: 520px; line-height: 1.75; opacity: 0.75;">
+                    If you're a recruiter or hiring professional, reach out via LinkedIn or
+                    drop me a message — I'd love to chat about how I can contribute to your team.
+                </p>
+                <div class="buttons">
+                    <a class="button is-link is-medium" routerLink="/contact">
+                        <span class="icon"><i-feather name="mail" size="18"></i-feather></span>
+                        <span>Get in Touch</span>
+                    </a>
+                    <a class="button is-medium" routerLink="/resume"
+                       style="border-radius: 50px; border: 2px solid rgba(92,122,107,0.35); font-weight: 700; background: transparent;">
+                        <span class="icon"><i-feather name="file-text" size="18"></i-feather></span>
+                        <span>View Resume</span>
+                    </a>
+                </div>
             </div>
         </section>
     </div>

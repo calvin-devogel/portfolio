@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth/auth-service';
 import { AsyncPipe } from '@angular/common';
 import { FeatherModule } from 'angular-feather';
 
 @Component({
   selector: 'app-nav',
-  imports: [FeatherModule, RouterLink, AsyncPipe],
+  imports: [FeatherModule, RouterLink, RouterLinkActive, AsyncPipe],
   templateUrl: './nav.html',
   styleUrls: ['./nav.scss'],
 })

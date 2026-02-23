@@ -1,16 +1,16 @@
 <nav class="navbar has-shadow is-fixed-top" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-        <a class="navbar-item" routerLink="/">
+        <a class="navbar-item" routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{exact: true}">
             <i-feather name="home" size="32"></i-feather>
         </a>
     </div>
     <div class="navbar-menu is-inline-flex-mobile">
         <div class="navbar-start">
-            <a class="navbar-item is-flex-mobile" routerLink="/resume">
+            <a class="navbar-item is-flex-mobile" routerLink="/resume" routerLinkActive="is-active">
                 <i-feather name="file-text" size="32"></i-feather>
                 <p class="mobile-hidden">Resume</p>
             </a>
-            <a class="navbar-item is-flex-mobile" routerLink="/projects">
+            <a class="navbar-item is-flex-mobile" routerLink="/projects" routerLinkActive="is-active">
                 <i-feather name="codepen" size="32"></i-feather>
                 <p class="mobile-hidden">Projects</p>
             </a>
@@ -21,12 +21,12 @@
             <i-feather name="log-out" size="32"></i-feather>
             <p class="mobile-hidden">Logout</p>
         </a>
-        <a class="navbar-item is-flex-mobile" routerLink="/admin">
+        <a class="navbar-item is-flex-mobile" routerLink="/admin" routerLinkActive="is-active">
             <i-feather name="layout" size="32"></i-feather>
             <p class="mobile-hidden">Admin</p>
         </a>
     } @else {
-        <a class="navbar-item is-flex-mobile" routerLink="/login">
+        <a class="navbar-item is-flex-mobile" routerLink="/login" routerLinkActive="is-active">
             <i-feather name="log-in" size="32"></i-feather>
             <p class="mobile-hidden">Login</p>
         </a>

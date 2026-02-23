@@ -1,10 +1,20 @@
-<app-page-layout>
-    <div left></div>
-    <div main class="columns is-centered">
-        <div class="column is-half mt-6 pt-6">
-            <section class="animate-section">
-                <app-dashboard/>
-            </section>
-        </div>
-    </div>
-</app-page-layout>
+<div class="admin-layout">
+
+    <!-- ─── Left Blade ─────────────────────────────────────────────────── -->
+    <aside class="admin-blade">
+        <p class="blade-label">Dashboard</p>
+        <a class="blade-item is-active" routerLink="/admin/messages" routerLinkActive="is-active">
+            <i-feather name="mail" size="18"></i-feather>
+            Messages
+        </a>
+        <!-- Future blade items go here -->
+    </aside>
+
+    <!-- ─── Main Content ───────────────────────────────────────────────── -->
+    <main class="admin-content">
+        <section class="animate-section">
+            <app-dashboard/>
+        </section>
+    </main>
+
+</div>

@@ -1,19 +1,90 @@
-@media screen and (max-width: 600px) {
+// ─── Active State ─────────────────────────────────────────────────────────────
+
+.navbar-item {
+    border-radius: 0px;
+    transition: background 0.2s ease, color 0.2s ease;
+    position: relative;
+
+    &:hover {
+        border-radius: 0px !important;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(92, 122, 107, 0.15), rgba(196, 114, 74, 0.08));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    &.is-active::before {
+        opacity: 1;
+    }
+
+    &.is-active:hover::before {
+        background: linear-gradient(135deg, rgba(92, 122, 107, 0.22), rgba(196, 114, 74, 0.13));
+        opacity: 1;
+    }
+}
+
+.navbar-item.is-active {
+    background: transparent !important;
+    color: var(--primary) !important;
+    border-radius: 0px;
+    transition: background 0.5s ease, color 0.5s ease;
+
+    i-feather {
+        color: var(--primary);
+        stroke: var(--primary);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        background: transparent !important;
+        color: #8fb8a4 !important;
+
+        &::before {
+            background: linear-gradient(135deg, rgba(92, 122, 107, 0.25), rgba(196, 114, 74, 0.12));
+        }
+
+        i-feather {
+            color: #8fb8a4;
+            stroke: #8fb8a4;
+        }
+    }
+}
+
+// ─── Mobile ───────────────────────────────────────────────────────────────────
+
+@media screen and (max-width: 768px) {
     .navbar {
         display: flex;
+        flex-wrap: nowrap;
         height: auto;
         min-height: 3.25rem;
         align-items: center;
         width: 100%;
-        overflow-x: hidden;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    .navbar-brand {
+        flex-shrink: 0;
     }
 
     .navbar-menu {
         display: flex;
+        flex-shrink: 1;
         box-shadow: none;
         padding: 0;
         margin: 0;
-        flex-shrink: 1;
+        background: transparent;
     }
 
     .navbar-start {
@@ -24,16 +95,25 @@
 
     .navbar-end {
         margin-left: auto;
-        margin-right: 1rem;
+        margin-right: 0.25rem;
         display: flex;
         flex-direction: row;
         align-items: center;
+        flex-shrink: 0;
     }
 
     .navbar-item {
-        padding: 0.5rem 0.25rem;
-        display: center;
+        padding: 0.4rem 0.4rem;
+        display: flex;
         align-items: center;
+        gap: 0.25rem;
+        flex-shrink: 0;
+        white-space: nowrap;
+
+        // the auth items rendered outside navbar-menu
+        &.is-flex-mobile {
+            display: flex;
+        }
     }
 
     .mobile-hidden {

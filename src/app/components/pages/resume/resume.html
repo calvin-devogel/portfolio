@@ -8,15 +8,15 @@
             </div>
         } @else if (resumeData(); as resumeData) {
             <section class="animate-section">
-                <div class="box is-shadowless">
-                    <h2 class="title mt-5 has-text-centered">Summary</h2>
+                <div class="box mt-6 py-6 px-6 is-shadowless">
+                    <h2 class="title is-3 gradient-title mb-4">Summary</h2>
                     <p class="resume-item">{{ resumeData.cv.sections.summary }}</p>
                 </div>
             </section>
 
             <section class="mt-1 animate-section">
-                <div class="box is-shadowless">
-                    <h2 class="title is-4">Skills</h2>
+                <div class="box px-6 py-6 is-shadowless">
+                    <h2 class="title is-4 gradient-title">Skills</h2>
                     <div class="columns is-multiline resume-item">
                         @for (skill of resumeData.cv.sections.skills; track skill) {
                             <div class="column is-12-mobile is-6-tablet">
@@ -33,8 +33,8 @@
             </section>
 
             <section class="mt-1 animate-section">
-                <div class="box is-shadowless">
-                    <h2 class="title is-4 mb-5">Experience</h2>
+                <div class="box py-6 px-6 is-shadowless">
+                    <h2 class="title is-4 gradient-title mb-5">Experience</h2>
                     @for (job of resumeData.cv.sections.experience; track job; let last = $last) {
                         <div class="mb-6 resume-item" [class.mb-0]="last">
                             <div class="level mb-2 is-align-items-start">
@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
                                 <div class="level-right">
-                                    <span class="tag is-medium has-text-black is-family-monospace">
+                                    <span class="tag date is-family-monospace">
                                         {{ job.start_date }} - {{ job.end_date || 'Present' }}
                                     </span>
                                 </div>
@@ -64,8 +64,8 @@
             </section>
             
             <section class="mt-1 animate-section">
-                <div class="box is-shadowless">
-                    <h3 class="title is-4 mb-5">Education</h3>
+                <div class="box px-6 py-6 is-shadowless">
+                    <h3 class="title is-4 gradient-title mb-5">Education</h3>
                     @for (educationItem of resumeData.cv.sections.education; track educationItem; let last = $last) {
                         <div class="mb-5 resume-item" [class.mb-0]="last">
                             <div class="level mb-1 is-align-items-start">
@@ -76,7 +76,7 @@
                                     </div>
                                 </div>
                                 <div class="level-right">
-                                    <span class="tag is-medium has-text-black is-family-monospace">{{ educationItem.end_date }}</span>
+                                    <span class="tag date is-family-monospace">{{ educationItem.end_date }}</span>
                                 </div>
                             </div>
                             
