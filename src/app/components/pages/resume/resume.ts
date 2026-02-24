@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
 import { PageLayout } from '../../page-layout/page-layout';
 import { ResumeData, SkillGroup } from '../../../interfaces/resume-data';
 import { ResumeService } from '../../../services/resume/resume-service';
@@ -6,6 +6,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, map, of, tap } from 'rxjs'
 import { NotificationService } from '../../../services/notifications/notification-service';
 import { FeatherModule } from 'angular-feather';
+import { SeoService } from '../../../services/seo-service';
+import { resumeSchema, personSchema } from '../../../modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
 
 @Component({
   selector: 'app-resume',
@@ -14,9 +16,10 @@ import { FeatherModule } from 'angular-feather';
   styleUrls: ['./resume.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Resume {
+export class Resume implements OnInit {
   private resumeService = inject(ResumeService);
   private notificationService = inject(NotificationService);
+  private seoService = inject(SeoService);
 
   isLoading = signal(true);
   hasError = signal(false);
@@ -62,5 +65,16 @@ export class Resume {
     })
 
     return data;
+  }
+
+  ngOnInit(): void {
+    this.seoService.updateSeo({
+      title: 'Calvin de Vogel | Resume',
+      description: 'View my professional experience, skills, and education.',
+      canonicalUrl: 'https://devogel.dev/resume',
+      ogTitle: 'Calvin de Vogel | Resume',
+      ogType: 'website',
+      structuredData: [resumeSchema, personSchema],
+    });
   }
 }

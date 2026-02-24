@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PageLayout } from '../../page-layout/page-layout';
@@ -7,6 +7,8 @@ import { CreateMessageData } from '../../../interfaces/message-data';
 import { MessageService } from '../../../services/contact/message-service';
 import { NotificationService } from '../../../services/notifications/notification-service';
 import { Subscription } from 'rxjs';
+import { SeoService } from '../../../services/seo-service';
+import { contactSchema, personSchema } from '../../../modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
 
 @Component({
   selector: 'app-contact',
@@ -17,12 +19,13 @@ import { Subscription } from 'rxjs';
     ReactiveFormsModule
   ],
   templateUrl: './contact.html',
-  styleUrl: './contact.scss',
+  styleUrls: ['./contact.scss'],
 })
-export class Contact implements OnDestroy {
+export class Contact implements OnDestroy, OnInit {
   private messageService: MessageService = inject(MessageService);
   private notificationService: NotificationService = inject(NotificationService);
   private formBuilder: FormBuilder = inject(FormBuilder);
+  private seoService: SeoService = inject(SeoService);
 
   contactForm: FormGroup;
   isSubmitting: boolean = false;
@@ -58,6 +61,17 @@ export class Contact implements OnDestroy {
     });
   }
 
+  ngOnInit(): void {
+    this.seoService.updateSeo({
+      title: 'Calvin de Vogel | Contact',
+      description: 'Get in touch with me!',
+      canonicalUrl: 'https://devogel.dev/contact',
+      ogTitle: 'Calvin de Vogel | Contact',
+      ogType: 'website',
+      structuredData: [contactSchema, personSchema],
+    });
+  }
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
@@ -78,7 +92,7 @@ export class Contact implements OnDestroy {
     };
 
     const sub = this.messageService.sendMessage(formData).subscribe({
-      next: (response) => {
+      next: () => {
         this.isSubmitting = false;
         this.submitSuccess = true;
         this.contactForm.reset();

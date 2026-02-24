@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   selector: 'app-login',
   imports: [PageLayout, FormsModule],
   templateUrl: './login.html',
-  styleUrl: './login.scss',
+  styleUrls: ['./login.scss'],
 })
 export class Login implements OnDestroy {
   authService = inject(AuthService);
@@ -22,7 +22,8 @@ export class Login implements OnDestroy {
   
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-   }
+  }
+
   onSubmit() {
     const sub = this.authService.authenticate(this.loginData.username, this.loginData.password).subscribe(success => {
       if (success) {
