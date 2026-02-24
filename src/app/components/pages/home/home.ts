@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { PageLayout } from '../../page-layout/page-layout';
 import { RouterLink } from "@angular/router";
 import { FeatherModule } from 'angular-feather';
-import { SeoService } from '../../../services/seo-service';
+import { SeoService } from '../../../services/seo/seo-service';
 import { homeSchema, personSchema } from '../../../modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
 
 @Component({

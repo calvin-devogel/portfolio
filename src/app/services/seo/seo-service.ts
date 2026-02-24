@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
-import { SeoData } from '../interfaces/seo-data';
+import { SeoData } from '../../interfaces/seo-data';
 
 @Injectable({
   providedIn: 'root',

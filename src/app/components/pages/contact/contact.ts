@@ -7,7 +7,7 @@ import { CreateMessageData } from '../../../interfaces/message-data';
 import { MessageService } from '../../../services/contact/message-service';
 import { NotificationService } from '../../../services/notifications/notification-service';
 import { Subscription } from 'rxjs';
-import { SeoService } from '../../../services/seo-service';
+import { SeoService } from '../../../services/seo/seo-service';
 import { contactSchema, personSchema } from '../../../modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
 
 @Component({

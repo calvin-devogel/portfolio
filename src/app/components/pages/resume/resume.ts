@@ -6,7 +6,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, map, of, tap } from 'rxjs'
 import { NotificationService } from '../../../services/notifications/notification-service';
 import { FeatherModule } from 'angular-feather';
-import { SeoService } from '../../../services/seo-service';
+import { SeoService } from '../../../services/seo/seo-service';
 import { resumeSchema, personSchema } from '../../../modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
 
 @Component({
