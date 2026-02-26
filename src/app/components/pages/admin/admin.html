@@ -3,9 +3,13 @@
     <!-- ─── Left Blade ─────────────────────────────────────────────────── -->
     <aside class="admin-blade">
         <p class="blade-label">Dashboard</p>
-        <a class="blade-item is-active" routerLink="/admin/messages" routerLinkActive="is-active">
+        <a class="blade-item" routerLink="/admin/messages" routerLinkActive="is-active">
             <i-feather name="mail" size="18"></i-feather>
             Messages
+        </a>
+        <a class="blade-item" routerLink="/admin/blog" routerLinkActive="is-active">
+            <i-feather name="edit-3" size="18"></i-feather>
+            Blog
         </a>
         <!-- Future blade items go here -->
     </aside>
@@ -13,7 +17,7 @@
     <!-- ─── Main Content ───────────────────────────────────────────────── -->
     <main class="admin-content">
         <section class="animate-section">
-            <app-dashboard/>
+            <router-outlet/>
         </section>
     </main>
 
