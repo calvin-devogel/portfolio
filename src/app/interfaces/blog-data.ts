@@ -1,7 +1,5 @@
 export interface CreateBlogPost {
-    post_id: string;
     title: string;
-    slug: string;
     content: string;
     excerpt: string;
     author: string;

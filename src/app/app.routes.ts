@@ -17,11 +17,12 @@ export const routes: Routes = [
         path: 'admin', 
         loadComponent: () => import('./components/pages/admin/admin').then(m => m.Admin),
         canActivate: [authGuard],
+        canActivateChild: [authGuard],
         children: [
             { path: '', redirectTo: 'messages', pathMatch: 'full' },
             { path: 'messages', loadComponent: () => import('./components/pages/admin/dashboard/messages/messages').then(m => m.Messages) },
             { path: 'blog', loadComponent: () => import('./components/pages/admin/dashboard/blog/blog').then(m => m.Blog) },
-        ]
+        ],
     },
     { path: '**', redirectTo: '', pathMatch: 'full'}, 
 ];

@@ -1,1 +1,220 @@
-<p>blog works!</p>
+<div class="blog-dashboard">
+
+  <aside class="post-list-panel">
+    <div class="panel-header">
+      <span class="panel-title">Posts</span>
+      <button class="button is-link is-small" (click)="newPost()">
+        <i-feather name="plus" size="14"></i-feather>
+        New
+      </button>
+    </div>
+
+    @if (loadingPosts()) {
+      <div class="list-loading">
+        <i-feather name="loader" size="20"></i-feather>
+        <span>Loading…</span>
+      </div>
+    }
+
+    @if (listError()) {
+      <div class="notification is-danger is-light is-small">{{ listError() }}</div>
+    }
+
+    @if (!loadingPosts() && posts().length === 0 && !listError()) {
+      <div class="list-empty">No posts yet. Create one!</div>
+    }
+
+    <ul class="post-list">
+      @for (post of posts(); track post.post_id) {
+        <li
+          class="post-list-item"
+          [class.is-selected]="selectedPost()?.post_id === post.post_id"
+          (click)="selectPost(post)"
+        >
+          <div class="post-list-title">{{ post.title }}</div>
+          <div class="post-list-meta">
+            <span class="post-status-dot" [class.is-published]="post.published"></span>
+            <span class="post-date">{{ formatDate(post.created_at) }}</span>
+          </div>
+        </li>
+      }
+    </ul>
+
+    <!-- Pagination -->
+    @if (totalPages() > 1) {
+      <div class="list-pagination">
+        <button class="button is-small" [disabled]="currentPage() === 0" (click)="prevPage()">
+          <i-feather name="chevron-left" size="14"></i-feather>
+        </button>
+        <span>{{ currentPage() + 1 }} / {{ totalPages() }}</span>
+        <button class="button is-small" [disabled]="currentPage() >= totalPages() - 1" (click)="nextPage()">
+          <i-feather name="chevron-right" size="14"></i-feather>
+        </button>
+      </div>
+    }
+  </aside>
+
+  <section class="editor-panel">
+
+    <!-- Editor Header -->
+    <div class="editor-header">
+      <div class="editor-tabs">
+        <button
+          class="editor-tab"
+          [class.is-active]="editorMode() === 'edit' || editorMode() === 'create'"
+          (click)="setMode(isEditing() ? 'edit' : 'create')"
+        >
+          <i-feather name="edit-2" size="14"></i-feather>
+          Write
+        </button>
+        <button
+          class="editor-tab"
+          [class.is-active]="editorMode() === 'preview'"
+          (click)="setMode('preview')"
+        >
+          <i-feather name="eye" size="14"></i-feather>
+          Preview
+        </button>
+      </div>
+
+      <div class="editor-actions">
+        @if (isEditing()) {
+          <span class="publish-badge" [class.is-published]="selectedPost()!.published">
+            {{ selectedPost()!.published ? 'Published' : 'Draft' }}
+          </span>
+          <button
+            class="button is-small"
+            [class.is-warning]="selectedPost()!.published"
+            [class.is-success]="!selectedPost()!.published"
+            [disabled]="saving()"
+            (click)="togglePublish()"
+          >
+            <i-feather [name]="selectedPost()!.published ? 'eye-off' : 'globe'" size="14"></i-feather>
+            {{ selectedPost()!.published ? 'Unpublish' : 'Publish' }}
+          </button>
+          <button
+            class="button is-danger is-small"
+            [disabled]="deleting()"
+            (click)="deletePost()"
+          >
+            <i-feather name="trash-2" size="14"></i-feather>
+            Delete
+          </button>
+        }
+        <button
+          class="button is-link is-small"
+          [disabled]="saving()"
+          (click)="savePost()"
+        >
+          <i-feather name="save" size="14"></i-feather>
+          {{ isEditing() ? 'Save' : 'Create' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    @if (editorSuccess()) {
+      <div class="notification is-success is-light">
+        <i-feather name="check-circle" size="14"></i-feather>
+        {{ editorSuccess() }}
+      </div>
+    }
+    @if (editorError()) {
+      <div class="notification is-danger is-light">
+        <i-feather name="alert-circle" size="14"></i-feather>
+        {{ editorError() }}
+      </div>
+    }
+
+    @if (editorMode() !== 'preview') {
+      <div class="editor-fields">
+        <div class="field">
+          <label class="label">Title</label>
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              placeholder="Post title…"
+              [(ngModel)]="form.title"
+              (input)="autoSlug()"
+            />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label class="label">Slug</label>
+            <div class="control">
+              <input
+                class="input"
+                type="text"
+                placeholder="url-friendly-slug"
+                [(ngModel)]="form.slug"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Author</label>
+            <div class="control">
+              <input
+                class="input"
+                type="text"
+                placeholder="Author name"
+                [(ngModel)]="form.author"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Excerpt</label>
+          <div class="control">
+            <textarea
+              class="textarea"
+              rows="2"
+              placeholder="Short summary shown in listings…"
+              [(ngModel)]="form.excerpt"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="field editor-content-field">
+          <label class="label">
+            Content
+            <span class="label-hint">Markdown supported</span>
+          </label>
+          <div class="control">
+            <textarea
+              class="textarea editor-textarea"
+              placeholder="Write your post in Markdown…"
+              [(ngModel)]="form.content"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (editorMode() === 'preview') {
+      <div class="preview-pane">
+        @if (!form.title && !form.content) {
+          <div class="preview-empty">Nothing to preview yet.</div>
+        } @else {
+          <h1 class="preview-title">{{ form.title }}</h1>
+          @if (form.author) {
+            <p class="preview-author">by {{ form.author }}</p>
+          }
+          @if (form.excerpt) {
+            <p class="preview-excerpt">{{ form.excerpt }}</p>
+          }
+          <hr class="preview-divider" />
+          <div class="preview-content">
+            @for (line of previewLines(); track $index) {
+              <p>{{ line }}</p>
+            }
+          </div>
+        }
+      </div>
+    }
+
+  </section>
+</div>
