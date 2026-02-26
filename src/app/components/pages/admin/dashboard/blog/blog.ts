@@ -109,7 +109,6 @@ export class Blog implements OnInit {
     if (this.editorMode() === 'create') {
       this.form.slug = this.form.title
         .toLowerCase()
-        .replace(/[^a-z0-9]/g, '')
         .trim()
         .replace(/\s+/g, '-');
     }
