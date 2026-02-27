@@ -35,7 +35,7 @@ app.use((req, res, next) => {
     ? [
         // Development: allow localhost connections for APIs/HMR, but avoid broad https: scheme sources.
         `default-src 'self'`,
-        `img-src 'self' data:`,
+        `img-src 'self' data: https://media.devogel.dev`, // allow requests to your cdn
         `script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net`,
         `style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net`,
         `font-src 'self' data:`,
@@ -44,7 +44,7 @@ app.use((req, res, next) => {
     : [
         // Production: no scheme-wide https:, no unsafe-eval, and no unsafe-inline for scripts.
         `default-src 'self'`,
-        `img-src 'self' data:`,
+        `img-src 'self' data: https://media.devogel.dev`, // allow requests to your cdn
         `script-src 'self' https://cdn.jsdelivr.net`,
         `style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net`,
         `font-src 'self' data:`,
