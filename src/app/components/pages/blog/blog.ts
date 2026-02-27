@@ -8,9 +8,10 @@ import {
   QueryList,
   ElementRef,
   AfterViewInit,
+  PLATFORM_ID
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { BlogService } from '@services/blog/blog-service';
 import { BlogPost } from '@interfaces/blog-data';
 import { PageLayout } from '@components/page-layout/page-layout';
@@ -24,6 +25,7 @@ import { PageLayout } from '@components/page-layout/page-layout';
 })
 export class Blog implements OnInit, AfterViewInit {
   private blogService = inject(BlogService);
+  private platformId = inject(PLATFORM_ID);
 
   @ViewChildren('postCard') postCards!: QueryList<ElementRef<HTMLElement>>;
 
@@ -43,8 +45,10 @@ export class Blog implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.setupIntersectionObserver();
-    this.postCards.changes.subscribe(() => this.setupIntersectionObserver());
+    if (isPlatformBrowser(this.platformId)) {
+      this.setupIntersectionObserver();
+      this.postCards.changes.subscribe(() => this.setupIntersectionObserver());
+    }
   }
 
   private observer?: IntersectionObserver;
