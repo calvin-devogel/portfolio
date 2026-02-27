@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
-import { PageLayout } from '../../page-layout/page-layout';
-import { Dashboard } from './dashboard/dashboard';
 import { FeatherModule } from 'angular-feather';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+
+export type DashboardStatus = 'idle' | 'loading' | 'ready' | 'empty' | 'error';
 
 @Component({
   selector: 'app-admin',
-  imports: [Dashboard, FeatherModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, FeatherModule],
   templateUrl: './admin.html',
-  styleUrl: './admin.scss',
+  styleUrls: ['./admin.scss'],
 })
 export class Admin {
 

@@ -1,0 +1,39 @@
+<div class="post-page-wrap mt-6 pt-6">
+    @if (loading()) {
+        <div class="box post-skeleton">
+            <div class="skeleton-title wide"></div>
+            <div class="skeleton-meta"></div>
+            @for (i of [1,2,3,4,5]; track i) {
+                <div class="skeleton-line" [style.width]="i % 3 === 0 ? '70%' : '100%'"></div>
+            }
+        </div>
+    }
+
+    @if (error()) {
+        <div class="notification is-danger">
+            Post not found or failed to load.
+        <a routerLink="/blog" class="text-link"> ← Back to All Posts</a>
+        </div>
+    }
+
+    @if (post() && !loading()) {
+        <article class="box post-article animate-section">
+            <a routerLink="/blog" class="back-link text-link"> ← All Posts</a>
+
+            <header class="post-header">
+                <h1 class="title is-2 gradient-title">{{ post()!.title }}</h1>
+                <div class="post-header">
+                    <span class="tag-date">{{ post()!.created_at | date: 'MMM d, yyyy' }}</span>
+                    <br/>
+                    <span class="post-author">{{ post()!.author }}</span>
+                </div>
+            </header>
+
+            <div class="post-body content"><markdown [data]="post()!.content"></markdown></div>
+
+            <footer class="post-footer">
+                <a routerLink="/blog" class="button is-link"> ←Back to All Posts</a>
+            </footer>
+        </article>
+    }
+</div>

@@ -1,4 +1,4 @@
-import {
+import { 
   Component,
   DestroyRef,
   computed,
@@ -6,16 +6,15 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MessageService } from '../../../../services/contact/message-service';
+import { MessageService } from '@services/contact/message-service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MessageData } from '../../../../interfaces/message-data';
-import { NotificationService } from '../../../../services/notifications/notification-service';
+import { MessageData } from '@interfaces/message-data';
+import { NotificationService } from '@services/notifications/notification-service';
+import { DashboardStatus } from '../../admin';
 import { interval } from 'rxjs';
-import { startWith, takeUntil } from 'rxjs/operators';
+import { startWith } from 'rxjs/operators';
 
-type DashboardStatus = 'idle' | 'loading' | 'ready' | 'empty' | 'error';
-
-interface DashboardState {
+interface MesagePageState {
   status: DashboardStatus;
   messages: MessageData[];
   currentPage: number;
@@ -29,18 +28,18 @@ interface DashboardState {
 // this needs a re-work. The auto-refresh is clunky, and the message_read status is only updated on click, without
 // accounting for whether or not the database has completed the update.
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-messages',
   imports: [CommonModule],
-  templateUrl: './dashboard.html',
-  styleUrl: './dashboard.scss',
+  templateUrl: './messages.html',
+  styleUrl: './messages.scss',
 })
-export class Dashboard {
+export class Messages {
   private messageService: MessageService = inject(MessageService);
   private notificationService: NotificationService = inject(NotificationService);
   private readonly destroyRef: DestroyRef = inject(DestroyRef);
   private readonly REFRESH_INTERVAL = 60000;
 
-  state = signal<DashboardState>({
+  state = signal<MesagePageState>({
     status: 'idle',
     messages: [],
     currentPage: 0,
@@ -59,18 +58,16 @@ export class Dashboard {
     if (!Number.isFinite(totalCount) || !Number.isFinite(pageSize) || pageSize <= 0) return 1;
     return Math.max(1, Math.ceil(totalCount / pageSize))
   });
-  hasNextPage = computed(() => this.currentPage() < this.totalPages() - 1);
-  hasPreviousPage = computed(() => this.currentPage() > 0)
-  isBusy = computed(
-    () => this.status() === 'loading' || this.state().refreshing,
-  );
+  hasNextPage = computed(() => this.currentPage() < this.totalPages());
+  hasPreviousPage = computed(() => this.currentPage() > 0);
+  isBusy = computed(() => this.state().status === 'loading' || this.state().refreshing);
 
   constructor() {
     this.loadMessages(0);
     this.startAutoRefresh();
   }
 
-  private patchState(patch: Partial<DashboardState>): void {
+private patchState(patch: Partial<MesagePageState>): void {
     this.state.update((state) => ({ ...state, ...patch }));
   }
 
