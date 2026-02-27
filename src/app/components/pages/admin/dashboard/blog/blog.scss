@@ -1,4 +1,4 @@
-// ─── Layout ───────────────────────────────────────────────────────────────────
+// layout
 
 .blog-dashboard {
   display: grid;
@@ -14,7 +14,7 @@
   }
 }
 
-// ─── Post List Panel ──────────────────────────────────────────────────────────
+// post list panel
 
 .post-list-panel {
   display: flex;
@@ -35,7 +35,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.85rem 1rem;
+  padding: 1.1rem 1.25rem;
+  min-height: 52px;
   border-bottom: 1px solid rgba(92, 122, 107, 0.14);
 
   .panel-title {
@@ -127,7 +128,7 @@
   font-size: 0.8rem;
 }
 
-// ─── Editor Panel ─────────────────────────────────────────────────────────────
+// editor
 
 .editor-panel {
   display: flex;
@@ -147,7 +148,7 @@
   }
 }
 
-// ─── Editor Header ────────────────────────────────────────────────────────────
+// editor header
 
 .editor-header {
   display: flex;
@@ -211,7 +212,7 @@
   }
 }
 
-// ─── Notifications (override for compact display) ─────────────────────────────
+// notifs (override for compact)
 
 .editor-panel .notification {
   display: flex;
@@ -222,7 +223,7 @@
   margin: 0;
 }
 
-// ─── Form Fields ──────────────────────────────────────────────────────────────
+// form fields
 
 .editor-fields {
   display: flex;
@@ -284,7 +285,7 @@
   resize: none !important;
 }
 
-// ─── Preview Pane ─────────────────────────────────────────────────────────────
+  // preview pane
 
 .preview-pane {
   flex: 1;
@@ -340,5 +341,80 @@
     margin-bottom: 0.75rem;
 
     @media (prefers-color-scheme: dark) { color: #d0cbc4; }
+  }
+}
+
+// replace bulma button styles for publish/delete
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid rgba(92, 122, 107, 0.28);
+  border-radius: 50px;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #666;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+  line-height: 1;
+
+  @media (prefers-color-scheme: dark) {
+    color: #aaa;
+    border-color: rgba(92, 122, 107, 0.35);
+  }
+
+  &:hover:not(:disabled) {
+    background: rgba(92, 122, 107, 0.1);
+    color: var(--primary);
+    border-color: rgba(92, 122, 107, 0.4);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  &.is-primary {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--primary) 85%, black);
+      border-color: color-mix(in srgb, var(--primary) 85%, black);
+      color: #fff;
+    }
+  }
+
+  &.is-muted {
+    border-color: rgba(92, 122, 107, 0.3);
+    color: var(--primary);
+
+    &:hover:not(:disabled) {
+      background: rgba(92, 122, 107, 0.12);
+      border-color: var(--primary);
+    }
+  }
+
+  &.is-danger {
+    border-color: rgba(180, 80, 80, 0.3);
+    color: #b45050;
+
+    &:hover:not(:disabled) {
+      background: rgba(180, 80, 80, 0.08);
+      border-color: rgba(180, 80, 80, 0.55);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      color: #d47878;
+      border-color: rgba(212, 120, 120, 0.3);
+
+      &:hover:not(:disabled) {
+        background: rgba(212, 120, 120, 0.1);
+        border-color: rgba(212, 120, 120, 0.5);
+      }
+    }
   }
 }

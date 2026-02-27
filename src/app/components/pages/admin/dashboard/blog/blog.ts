@@ -57,7 +57,7 @@ export class Blog implements OnInit {
   loadPosts() {
     this.loadingPosts.set(true);
     this.listError.set(null);
-    this.blogService.getPosts(this.currentPage(), this.pageSize()).subscribe({
+    this.blogService.getPosts(this.currentPage(), this.pageSize(), false).subscribe({
       next: (response) => {
         this.posts.set(response.data);
         this.totalPages.set(response.pagination.total_pages);

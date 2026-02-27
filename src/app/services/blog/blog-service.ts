@@ -10,9 +10,17 @@ import { BlogPost, CreateBlogPost, BlogPageResponse, RawBlogPageResponse } from 
 export class BlogService {
   private http = inject(HttpClient);
 
-  getPosts(page: number = 0, pageSize: number = 10, onPublished: boolean = false): Observable<BlogPageResponse> {
+  getPosts(page: number = 0, pageSize: number = 10, onPublished: boolean = false, slug?: string): Observable<BlogPageResponse> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'BlogPost-Page': page.toString(),
+      'BlogPost-Page-Size': pageSize.toString(),
+      'BlogPost-On-Published': onPublished.toString(),
+      'slug': slug ?? ''
+    });
+
     return this.http.get<RawBlogPageResponse>('/api/blog', {
-      params: { page: page.toString(), page_size: pageSize.toString(), on_published: onPublished.toString() },
+      headers
     })
     .pipe(
       map((response) => {
@@ -53,7 +61,7 @@ export class BlogService {
   patchPost(postId: string, published: boolean): Observable<void> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Idempotency-Key': crypto.randomUUID()});
     return this.http.patch<void>('/api/admin/blog',
-      { blog_post_id: postId, published },
+      { post_id: postId, published },
       {
         withCredentials: true,
         headers

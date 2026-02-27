@@ -2,12 +2,12 @@
 
 	<aside class="post-list-panel">
 		<div class="panel-header">
-			<span class="panel-title">Posts</span>
-			<button class="button is-link is-small" (click)="newPost()">
-				<i-feather name="plus" size="14"></i-feather>
-				New
-			</button>
-		</div>
+            <span class="panel-title">Posts</span>
+            <button class="pill-btn" (click)="newPost()">
+                <i-feather name="plus" size="14"></i-feather>
+                New
+            </button>
+        </div>
 
 		@if (loadingPosts()) {
 		<div class="list-loading">
@@ -67,26 +67,25 @@
 				</button>
 			</div>
 
-			<div class="editor-actions">
-				@if (isEditing()) {
-				<span class="publish-badge" [class.is-published]="selectedPost()!.published">
-					{{ selectedPost()!.published ? 'Published' : 'Draft' }}
-				</span>
-				<button class="button is-small" [class.is-warning]="selectedPost()!.published"
-					[class.is-success]="!selectedPost()!.published" [disabled]="saving()" (click)="togglePublish()">
-					<i-feather [name]="selectedPost()!.published ? 'eye-off' : 'globe'" size="14"></i-feather>
-					{{ selectedPost()!.published ? 'Unpublish' : 'Publish' }}
-				</button>
-				<button class="button is-danger is-small" [disabled]="deleting()" (click)="deletePost()">
-					<i-feather name="trash-2" size="14"></i-feather>
-					Delete
-				</button>
-				}
-				<button class="button is-link is-small" [disabled]="saving()" (click)="savePost()">
-					<i-feather name="save" size="14"></i-feather>
-					{{ isEditing() ? 'Save' : 'Create' }}
-				</button>
-			</div>
+            <div class="editor-actions">
+                @if (isEditing()) {
+                <span class="publish-badge" [class.is-published]="selectedPost()!.published">
+                    {{ selectedPost()!.published ? 'Published' : 'Draft' }}
+                </span>
+                <button class="pill-btn is-muted" [disabled]="saving()" (click)="togglePublish()">
+                    <i-feather [name]="selectedPost()!.published ? 'eye-off' : 'globe'" size="14"></i-feather>
+                    {{ selectedPost()!.published ? 'Unpublish' : 'Publish' }}
+                </button>
+                <button class="pill-btn is-danger" [disabled]="deleting()" (click)="deletePost()">
+                    <i-feather name="trash-2" size="14"></i-feather>
+                    Delete
+                </button>
+                }
+                <button class="pill-btn is-primary" [disabled]="saving()" (click)="savePost()">
+                    <i-feather name="save" size="14"></i-feather>
+                    {{ isEditing() ? 'Save' : 'Create' }}
+                </button>
+            </div>
 		</div>
 
 		<!-- Notifications -->

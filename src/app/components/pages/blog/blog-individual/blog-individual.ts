@@ -34,11 +34,10 @@ export class BlogIndividual implements OnInit {
     this.error.set(false);
 
     // up next: get-by-slug to fetch individual posts
-    this.blogService.getPosts().subscribe({
+    this.blogService.getPosts(0, 10, true, slug).subscribe({
       next: (response) => {
-        const foundPost = response.data.find(post => post.slug === slug) ?? null;
-        if (foundPost) {
-          this.post.set(foundPost);
+        if (response.data.length > 0) {
+          this.post.set(response.data[0]);
         } else {
           this.error.set(true);
         }

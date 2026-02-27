@@ -73,7 +73,7 @@ export class Blog implements OnInit, AfterViewInit {
     this.loading.set(true);
     this.error.set(false);
 
-    this.blogService.getPosts(this.page, this.pageSize).subscribe({
+    this.blogService.getPosts(this.page, this.pageSize, true).subscribe({
       next: (response) => {
         this.posts.update(posts => [...posts, ...response.data]);
         this.totalPages = response.pagination.total_pages;
