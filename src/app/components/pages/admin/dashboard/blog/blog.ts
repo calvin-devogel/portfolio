@@ -19,6 +19,8 @@ type EditorMode = 'create' | 'edit' | 'preview';
 })
 export class Blog implements OnInit {
   private blogService = inject(BlogService);
+  private successTimeout: ReturnType<typeof setTimeout> | null = null;
+  private errorTimeout: ReturnType<typeof setTimeout> | null = null;
 
   // post list
   posts = signal<BlogPost[]>([]);
@@ -48,6 +50,22 @@ export class Blog implements OnInit {
   };
 
   isEditing = computed(() => this.selectedPost() !== null);
+
+  dirtyFields = computed(() => {
+    const post = this.selectedPost();
+    if (!post) return null;
+    const dirty: Partial<Record<keyof typeof this.form, boolean>> = {};
+    if (this.form.title !== post.title) dirty['title'] = true;
+    if (this.form.excerpt !== post.excerpt) dirty['excerpt'] = true;
+    if (this.form.content !== post.content) dirty['content'] = true;
+    if (this.form.author !== post.author) dirty['author'] = true;
+    return dirty;
+  });
+
+  hasDirtyFields = computed(() => {
+    const dirty = this.dirtyFields();
+    return dirty !== null && Object.keys(dirty).length > 0;
+  });
 
   ngOnInit() {
     this.loadPosts();
@@ -117,31 +135,61 @@ export class Blog implements OnInit {
   setMode(mode: EditorMode): void {
     this.editorMode.set(mode);
   }
-  // endpoint shouldn't need a PUT but 
-  // can currently only update isPublished, so come back to this
+
   savePost(): void {
     this.clearMessages();
     this.saving.set(true);
 
-    const payload: CreateBlogPost = {
-      title: this.form.title,
-      content: this.form.content,
-      excerpt: this.form.excerpt,
-      author: this.form.author,
-    };
-
-    this.blogService.createPost(payload).subscribe({
-      next: (response) => {
-        this.editorSuccess.set(`Post ${this.form.title} created successfully.`);
+    if (this.isEditing()) {
+      const post = this.selectedPost();
+      const dirty = this.dirtyFields();
+      if (!dirty || Object.keys(dirty).length === 0) {
         this.saving.set(false);
-        this.loadPosts();
-        this.newPost();
-      },
-      error: (err) => {
-        this.editorError.set('Failed to save post: ' + (err.error?.error || err.message || 'Unknown error'));
-        this.saving.set(false);
+        return;
       }
-    });
+
+      const payload: Partial<BlogPost> = { post_id: post!.post_id };
+      if (dirty.title) payload.title = this.form.title;
+      if (dirty.excerpt) payload.excerpt = this.form.excerpt;
+      if (dirty.content) payload.content = this.form.content;
+      if (dirty.author) payload.author = this.form.author;
+
+      this.blogService.editPost(post!.post_id, payload).subscribe({
+        next: () => {
+          const updated = { ...post!, ...payload };
+          this.selectedPost.set(updated);
+          this.posts.update(list => 
+            list.map(p => p.post_id === updated.post_id ? updated : p)
+          );
+          this.setSuccess(`Post "${updated.title}" updated successfully`);
+          this.saving.set(false);
+        },
+        error: (err) => {
+          this.setError('Failed to update post: ' + (err.error?.error || err.message || 'Unknown error'));
+          this.saving.set(false);
+        }
+      });
+    } else {
+      const payload: CreateBlogPost = {
+        title: this.form.title,
+        content: this.form.content,
+        excerpt: this.form.excerpt,
+        author: this.form.author,
+      };
+
+      this.blogService.createPost(payload).subscribe({
+        next: () => {
+          this.saving.set(false);
+          this.loadPosts();
+          this.newPost();
+          this.setSuccess(`Post "${payload.title}" created successfully`);
+        },
+        error: (err) => {
+          this.setError('Failed to create post: ' + (err.error?.error || err.message || 'Unknown error'));
+          this.saving.set(false);
+        }
+      });
+    }
   }
 
   togglePublish(): void {
@@ -149,18 +197,18 @@ export class Blog implements OnInit {
     if (!post) return;
     this.clearMessages();
     this.saving.set(true);
-    this.blogService.patchPost(post.post_id, !post.published ).subscribe({
+    this.blogService.publishPost(post.post_id, !post.published ).subscribe({
       next: () => {
         const updated = { ...post, published: !post.published };
         this.selectedPost.set(updated);
         this.posts.update(list =>
           list.map(p => p.post_id === post.post_id ? updated : p)
         );
-        this.editorSuccess.set(`Post ${updated.published ? 'published' : 'unpublished'}.`);
+        this.setSuccess(`Post ${updated.published ? 'published' : 'unpublished'}.`);
         this.saving.set(false);
       },
       error: () => {
-        this.editorError.set('Failed to update publish status.');
+        this.setError('Failed to update publish status.');
         this.saving.set(false);
       }
     });
@@ -174,11 +222,12 @@ export class Blog implements OnInit {
     this.blogService.deletePost(post.post_id).subscribe({
       next: () => {
         this.posts.update(list => list.filter(p => p.post_id !== post.post_id));
-        this.newPost();
         this.deleting.set(false);
+        this.newPost();
+        this.setSuccess(`Post "${post.title}" deleted successfully.`);
       },
       error: () => {
-        this.editorError.set('Failed to delete post.');
+        this.setError('Failed to delete post.');
         this.deleting.set(false);
       }
     });
@@ -186,7 +235,21 @@ export class Blog implements OnInit {
   
   // helpers
 
+  setSuccess(message: string, duration = 4000): void {
+    if (this.successTimeout) clearTimeout(this.successTimeout);
+    this.editorSuccess.set(message);
+    this.successTimeout = setTimeout(() => this.editorSuccess.set(null), duration);
+  }
+
+  setError(message: string, duration = 6000): void {
+    if (this.errorTimeout) clearTimeout(this.errorTimeout);
+    this.editorError.set(message);
+    this.errorTimeout = setTimeout(() => this.editorError.set(null), duration);
+  }
+
   clearMessages(): void {
+    if (this.successTimeout) clearTimeout(this.successTimeout);
+    if (this.errorTimeout) clearTimeout(this.errorTimeout);
     this.editorError.set(null);
     this.editorSuccess.set(null);
   }

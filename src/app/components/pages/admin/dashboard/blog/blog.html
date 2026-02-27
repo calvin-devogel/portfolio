@@ -88,19 +88,24 @@
             </div>
 		</div>
 
-		<!-- Notifications -->
-		@if (editorSuccess()) {
-		<div class="notification is-success is-light">
-			<i-feather name="check-circle" size="14"></i-feather>
-			{{ editorSuccess() }}
-		</div>
-		}
-		@if (editorError()) {
-		<div class="notification is-danger is-light">
-			<i-feather name="alert-circle" size="14"></i-feather>
-			{{ editorError() }}
-		</div>
-		}
+        @if (editorSuccess()) {
+        <div class="notification is-success is-light editor-notification">
+            <i-feather name="check-circle" size="14"></i-feather>
+            <span>{{ editorSuccess() }}</span>
+            <button class="notification-close" (click)="editorSuccess.set(null)" aria-label="Dismiss">
+                <i-feather name="x" size="13"></i-feather>
+            </button>
+        </div>
+        }
+        @if (editorError()) {
+        <div class="notification is-danger is-light editor-notification">
+            <i-feather name="alert-circle" size="14"></i-feather>
+            <span>{{ editorError() }}</span>
+            <button class="notification-close" (click)="editorError.set(null)" aria-label="Dismiss">
+                <i-feather name="x" size="13"></i-feather>
+            </button>
+        </div>
+        }
 
 		@if (editorMode() !== 'preview') {
 		<div class="editor-fields">

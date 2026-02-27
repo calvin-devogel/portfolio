@@ -53,15 +53,26 @@ export class BlogService {
 
   createPost(post: CreateBlogPost): Observable<void> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Idempotency-Key': crypto.randomUUID()});
-    return this.http.post<void>('/api/admin/blog', post, {
+    return this.http.post<void>('/api/admin/blog/post', post, {
       withCredentials: true, headers
     })
   }
 
-  patchPost(postId: string, published: boolean): Observable<void> {
+  publishPost(postId: string, published: boolean): Observable<void> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Idempotency-Key': crypto.randomUUID()});
-    return this.http.patch<void>('/api/admin/blog',
+    return this.http.patch<void>('/api/admin/blog/publish',
       { post_id: postId, published },
+      {
+        withCredentials: true,
+        headers
+      }
+    )
+  }
+
+  editPost(postId: string, edits: Partial<BlogPost>): Observable<void> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Idempotency-Key': crypto.randomUUID()});
+    return this.http.patch<void>('/api/admin/blog/edit',
+      { post_id: postId, ...edits },
       {
         withCredentials: true,
         headers
@@ -71,7 +82,7 @@ export class BlogService {
 
   deletePost(postId: string): Observable<void> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Idempotency-Key': crypto.randomUUID()});
-    return this.http.delete<void>('/api/admin/blog', {
+    return this.http.delete<void>('/api/admin/blog/delete', {
       body: { blog_post_id: postId },
       withCredentials: true,
       headers

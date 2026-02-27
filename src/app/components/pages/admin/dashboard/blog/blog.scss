@@ -214,6 +214,11 @@
 
 // notifs (override for compact)
 
+@keyframes notif-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .editor-panel .notification {
   display: flex;
   align-items: center;
@@ -221,6 +226,33 @@
   padding: 0.6rem 1rem;
   font-size: 0.82rem;
   margin: 0;
+}
+
+.editor-notification {
+  animation: notif-in 0.2s ease forwards;
+  transition: opacity 0.3s ease;
+
+  span {
+    flex: 1;
+  }
+}
+
+.notification-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.1rem;
+  color: inherit;
+  opacity: 0.6;
+  flex-shrink: 0;
+  margin-left: auto;
+
+  &:hover {
+    opacity: 1;
+  }
 }
 
 // form fields
