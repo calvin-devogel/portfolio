@@ -10,9 +10,9 @@ import { BlogPost, CreateBlogPost, BlogPageResponse, RawBlogPageResponse } from 
 export class BlogService {
   private http = inject(HttpClient);
 
-  getPosts(page: number = 0, pageSize: number = 10): Observable<BlogPageResponse> {
+  getPosts(page: number = 0, pageSize: number = 10, onPublished: boolean = false): Observable<BlogPageResponse> {
     return this.http.get<RawBlogPageResponse>('/api/blog', {
-      params: { page: page.toString(), page_size: pageSize.toString() },
+      params: { page: page.toString(), page_size: pageSize.toString(), on_published: onPublished.toString() },
     })
     .pipe(
       map((response) => {

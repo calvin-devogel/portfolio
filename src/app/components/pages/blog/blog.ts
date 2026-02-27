@@ -44,6 +44,7 @@ export class Blog implements OnInit, AfterViewInit {
     this.fetchPosts();
   }
 
+  // read this: https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.setupIntersectionObserver();
