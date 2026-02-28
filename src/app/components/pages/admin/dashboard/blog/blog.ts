@@ -4,6 +4,7 @@ import { BlogService } from '@services/blog/blog-service'
 import { FormsModule } from '@angular/forms';
 import { FeatherModule } from 'angular-feather';
 import { BlogPost, CreateBlogPost } from '@interfaces/blog-data';
+import { MarkdownComponent, provideMarkdown } from 'ngx-markdown';
 
 type EditorMode = 'create' | 'edit' | 'preview';
 
@@ -13,7 +14,9 @@ type EditorMode = 'create' | 'edit' | 'preview';
     CommonModule,
     FormsModule,
     FeatherModule,
+    MarkdownComponent,
   ],
+  providers: [provideMarkdown()],
   templateUrl: './blog.html',
   styleUrl: './blog.scss',
 })
