@@ -5,6 +5,8 @@ import { Projects } from '@components/pages/projects/projects';
 import { Contact } from '@components/pages/contact/contact';
 import { Login } from '@components/pages/login/login';
 import { authGuard } from './auth-guard';
+import { Messages } from '@components/pages/admin/dashboard/messages/messages';
+import { Blog as AdminBlog } from '@components/pages/admin/dashboard/blog/blog';
 
 export const routes: Routes = [
     { path: '', component: Home, pathMatch: 'full' },
@@ -28,8 +30,8 @@ export const routes: Routes = [
         canActivateChild: [authGuard],
         children: [
             { path: '', redirectTo: 'messages', pathMatch: 'full' },
-            { path: 'messages', loadComponent: () => import('@components/pages/admin/dashboard/messages/messages').then(m => m.Messages) },
-            { path: 'blog', loadComponent: () => import('@components/pages/admin/dashboard/blog/blog').then(m => m.Blog) },
+            { path: 'messages', component: Messages },
+            { path: 'blog', component: AdminBlog },
         ],
     },
     { path: '**', redirectTo: '', pathMatch: 'full'}, 
