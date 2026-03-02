@@ -4,7 +4,6 @@ import { FeatherModule } from 'angular-feather';
 
 @Component({
   selector: 'app-notification-toast',
-  standalone: true,
   imports: [FeatherModule],
   templateUrl: './notification-toast.html',
   styleUrl: './notification-toast.scss',

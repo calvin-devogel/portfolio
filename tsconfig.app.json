@@ -8,9 +8,7 @@
       "node"
     ]
   },
-  "include": [
-    "src/**/*.ts"
-, "src/assets/env.js", "src/assets/env.template.js"  ],
+  "include": [ "src/**/*.ts" ],
   "exclude": [
     "src/**/*.spec.ts"
   ]

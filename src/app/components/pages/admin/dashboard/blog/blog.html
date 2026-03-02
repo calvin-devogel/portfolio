@@ -3,7 +3,7 @@
 	<aside class="post-list-panel">
 		<div class="panel-header">
 			<span class="panel-title">Posts</span>
-			<button class="pill-btn" (click)="newPost()">
+			<button class="pill-button" (click)="newPost()">
 				<i-feather name="plus" size="14"></i-feather>
 				New
 			</button>
@@ -72,20 +72,20 @@
 				<span class="publish-badge" [class.is-published]="selectedPost()!.published">
 					{{ selectedPost()!.published ? 'Published' : 'Draft' }}
 				</span>
-				<button class="pill-btn is-muted" [disabled]="saving()" (click)="togglePublish()">
+				<button class="pill-button is-muted" [disabled]="saving()" (click)="togglePublish()">
 					<i-feather [name]="selectedPost()!.published ? 'eye-off' : 'globe'" size="14"></i-feather>
 					{{ selectedPost()!.published ? 'Unpublish' : 'Publish' }}
 				</button>
-				<button class="pill-btn is-danger" [disabled]="deleting()" (click)="deletePost()">
+				<button class="pill-button is-danger" [disabled]="deleting()" (click)="deletePost()">
 					<i-feather name="trash-2" size="14"></i-feather>
 					Delete
 				</button>
 				}
-				<button class="pill-btn" (click)="openSplitModal()" title="Split">
+				<button class="pill-button" (click)="openSplitModal()" title="Split">
 					<i-feather name="columns" size="14"></i-feather>
 					Split
 				</button>
-				<button class="pill-btn is-primary" [disabled]="saving()" (click)="savePost()">
+				<button class="pill-button is-primary" [disabled]="saving()" (click)="savePost()">
 					<i-feather name="save" size="14"></i-feather>
 					{{ isEditing() ? 'Save' : 'Create' }}
 				</button>
@@ -193,20 +193,20 @@
         </div>
         <div class="editor-actions">
           @if (isEditing()) {
-          <button class="pill-btn is-muted" [disabled]="saving()" (click)="togglePublish()">
+          <button class="pill-button is-muted" [disabled]="saving()" (click)="togglePublish()">
             <i-feather [name]="selectedPost()!.published ? 'eye-off' : 'globe'" size="14"></i-feather>
             {{ selectedPost()!.published ? 'Unpublish' : 'Publish' }}
           </button>
-          <button class="pill-btn is-danger" [disabled]="deleting()" (click)="deletePost()">
+          <button class="pill-button is-danger" [disabled]="deleting()" (click)="deletePost()">
             <i-feather name="trash-2" size="14"></i-feather>
             Delete
           </button>
           }
-          <button class="pill-btn is-primary" [disabled]="saving()" (click)="savePost()">
+          <button class="pill-button is-primary" [disabled]="saving()" (click)="savePost()">
             <i-feather name="save" size="14"></i-feather>
             {{ isEditing() ? 'Save' : 'Create' }}
           </button>
-          <button class="pill-btn" (click)="closeSplitModal()">
+          <button class="pill-button" (click)="closeSplitModal()">
             <i-feather name="x" size="14"></i-feather>
             Close
           </button>

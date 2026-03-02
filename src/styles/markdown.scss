@@ -1,17 +1,13 @@
 // shared markdown styles
 
+// filepath: /Users/calvin/angular/portfolio/src/styles/markdown.scss
 .markdown-body {
     font-size: 0.95rem;
     line-height: 1.8;
     color: #333;
+    @media (prefers-color-scheme: dark) { color: #d8d0c8; }
 
-    @media (prefers-color-scheme: dark) {
-        color: #d8d0c8;
-    }
-
-    p {
-        margin-bottom: 0.85rem;
-    }
+    p { margin-bottom: 0.85rem; }
 
     h1, h2, h3, h4, h5, h6 {
         color: var(--primary);
@@ -23,28 +19,23 @@
 
     h1 { font-size: 1.6rem; }
     h2 { font-size: 1.35rem; }
-    h3 { font-size: 1.15rem;}
+    h3 { font-size: 1.15rem; }
     h4 { font-size: 1rem; }
 
     a {
         color: var(--primary);
         text-decoration: underline;
         text-underline-offset: 2px;
-
         &:hover { color: var(--secondary); }
     }
 
     strong { font-weight: 700; }
-    em { font-style: italic; }
+    em     { font-style: italic; }
 
     ul, ol {
         margin: 0.5rem 0.85rem 1.5rem;
-
-        li {
-            margin-bottom: 0.3rem;
-        }
+        li { margin-bottom: 0.3rem; }
     }
-
     ul { list-style: disc; }
     ol { list-style: decimal; }
 
@@ -54,25 +45,17 @@
         border-radius: 4px;
         font-size: 0.88em;
         font-family: 'Menlo', 'Courier New', monospace;
-
-        @media (prefers-color-scheme: dark) {
-            background: rgba(92, 122, 107, 0.2);
-        }
+        @media (prefers-color-scheme: dark) { background: rgba(92, 122, 107, 0.2); }
     }
 
     pre {
-        background: rbga(24, 28, 26, 0.88);
+        background: var(--surface-dark);
         color: #c9d6c1;
         border-radius: 10px;
         padding: 1.25rem;
         overflow-x: auto;
         margin: 1rem 0;
-        
-        code {
-            background: transparent;
-            padding: 0;
-            font-size: 0.85rem;
-        }
+        code { background: transparent; padding: 0; font-size: 0.85rem; }
     }
 
     blockquote {
@@ -81,15 +64,12 @@
         color: #666;
         font-style: italic;
         margin: 1rem 0;
-
-        @media (prefers-color-scheme: dark) {
-            color: #aaa;
-        }
+        @media (prefers-color-scheme: dark) { color: #aaa; }
     }
 
     hr {
         border: none;
-        border-top: 1px solid rgba(92, 122, 107, 0.2);
+        border-top: 1px solid var(--border-medium);
         margin: 1.5rem 0;
     }
 
@@ -98,26 +78,10 @@
         border-collapse: collapse;
         margin: 1.5rem 0;
 
-        th, td {
-            padding: 0.5rem 0.75rem;
-            border: 1px solid rgba(92, 177, 107, 0.2);
-            text-align: left;
-        }
-
-        th {
-            background: rgba(92, 177, 107, 0.08);
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        tr:nth-child(even) td {
-            background: rgba(92, 122, 107, 0.04);
-        }
+        th, td { padding: 0.5rem 0.75rem; border: 1px solid var(--border-medium); text-align: left; }
+        th { background: var(--tint-sm); font-weight: 700; color: var(--primary); }
+        tr:nth-child(even) td { background: var(--tint-xs); }
     }
 
-    img {
-        max-width: 100%;
-        border-radius: 8px;
-        margin: 0.75rem 0;
-    }
+    img { max-width: 100%; border-radius: 8px; margin: 0.75rem 0; }
 }

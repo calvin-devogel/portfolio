@@ -18,7 +18,6 @@ import { PageLayout } from '@components/page-layout/page-layout';
 
 @Component({
   selector: 'app-blog',
-  standalone: true,
   imports: [RouterLink, DatePipe, PageLayout],
   templateUrl: './blog.html',
   styleUrls: ['./blog.scss'],

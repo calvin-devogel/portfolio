@@ -7,7 +7,6 @@ import { MarkdownComponent, provideMarkdown } from 'ngx-markdown';
 
 @Component({
   selector: 'app-blog-individual',
-  standalone: true,
   imports: [RouterLink, DatePipe, MarkdownComponent],
   providers: [provideMarkdown()],
   templateUrl: './blog-individual.html',

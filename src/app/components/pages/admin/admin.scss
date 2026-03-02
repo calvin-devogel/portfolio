@@ -1,16 +1,16 @@
+@use "../../../../styles/mixins" as *;
+
 .admin-layout {
     display: flex;
     min-height: calc(100vh - var(--nav-height));
     padding-top: var(--nav-height);
 }
 
-// ─── Blade ────────────────────────────────────────────────────────────────────
-
 .admin-blade {
     width: 220px;
     flex-shrink: 0;
     padding: 1.5rem 0.75rem;
-    border-right: 1px solid rgba(92, 122, 107, 0.14);
+    border-right: 1px solid var(--border-subtle);
     background: rgba(245, 242, 236, 0.6);
     backdrop-filter: blur(12px);
     position: sticky;
@@ -20,7 +20,7 @@
 
     @media (prefers-color-scheme: dark) {
         background: rgba(21, 26, 23, 0.7);
-        border-right-color: rgba(92, 122, 107, 0.22);
+        border-right-color: var(--border-medium);
     }
 
     @media screen and (max-width: 768px) {
@@ -28,7 +28,7 @@
         height: auto;
         position: static;
         border-right: none;
-        border-bottom: 1px solid rgba(92, 122, 107, 0.14);
+        border-bottom: 1px solid var(--border-subtle);
         display: flex;
         flex-direction: row;
         padding: 0.5rem;
@@ -37,17 +37,10 @@
 }
 
 .blade-label {
-    font-size: 0.7rem;
-    font-weight: 700;
+    @include upper-label(0.7rem, 0.7);
     letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--primary);
     padding: 0 0.5rem 0.5rem;
-    opacity: 0.7;
-
-    @media screen and (max-width: 768px) {
-        display: none;
-    }
+    @media screen and (max-width: 768px) { display: none; }
 }
 
 .blade-item {
@@ -64,47 +57,31 @@
     text-decoration: none;
     white-space: nowrap;
 
-    i-feather {
-        flex-shrink: 0;
-        color: var(--primary);
-        opacity: 0.7;
-        transition: opacity 0.2s ease;
-    }
+    i-feather { flex-shrink: 0; color: var(--primary); opacity: 0.7; transition: opacity 0.2s ease; }
 
     &:hover {
-        background: rgba(92, 122, 107, 0.1);
+        background: var(--tint-sm);
         color: var(--primary);
         transform: translateX(3px);
-
         i-feather { opacity: 1; }
-
-        @media screen and (max-width: 768px) {
-            transform: none;
-        }
+        @media screen and (max-width: 768px) { transform: none; }
     }
 
     &.is-active {
         background: rgba(92, 122, 107, 0.13);
         color: var(--primary);
-
         i-feather { opacity: 1; }
     }
 
     @media (prefers-color-scheme: dark) {
         color: #b8c9bf;
-
         &:hover, &.is-active { color: #8fb8a4; }
     }
 }
-
-// ─── Content ──────────────────────────────────────────────────────────────────
 
 .admin-content {
     flex: 1;
     padding: 2rem 1.5rem;
     overflow-y: auto;
-
-    @media screen and (max-width: 768px) {
-        padding: 1rem 0.5rem;
-    }
+    @media screen and (max-width: 768px) { padding: 1rem 0.5rem; }
 }

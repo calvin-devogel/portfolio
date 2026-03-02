@@ -270,15 +270,24 @@ export class Blog implements OnInit, OnDestroy {
   }
 
   closeSplitModal(): void {
+    if (!this.modalViewRef) return;
     this.splitModalOpen.set(false);
-    this.document.body.style.overflow = '';
 
-    if (this.modalViewRef) {
-      this.appRef.detachView(this.modalViewRef);
-      this.modalViewRef.rootNodes.forEach(node => node.remove?.());
-      this.modalViewRef.destroy();
-      this.modalViewRef = null;
-    }
+    const overlay = this.modalViewRef.rootNodes[0] as HTMLElement;
+    const modal = overlay?.querySelector('.split-modal') as HTMLElement | null;
+    overlay?.classList.add('is-closing');
+    modal?.classList.add('is-closing');
+
+    const DURATION = 200;
+    setTimeout(() => {
+      this.document.body.style.overflow = '';
+      if (this.modalViewRef) {
+        this.appRef.detachView(this.modalViewRef);
+        this.modalViewRef.rootNodes.forEach(node => node.remove?.());
+        this.modalViewRef.destroy();
+        this.modalViewRef = null;
+      }
+    }, DURATION);
   }
 
   ngOnDestroy(): void {
