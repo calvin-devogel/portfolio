@@ -6,11 +6,13 @@
     "start": "ng serve",
     "build": "ng build",
     "build:stats": "ng build --stats-json",
+    "analyze": "ng build --configuration=production --stats-json && npx esbuild-visualizer --metadata=dist/my-angular-app/stats.json --open=true",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:portfolio": "node dist/portfolio/server/server.mjs",
     "lint": "ng lint"
   },
+  "sideEffects": false,
   "prettier": {
     "printWidth": 100,
     "singleQuote": true,

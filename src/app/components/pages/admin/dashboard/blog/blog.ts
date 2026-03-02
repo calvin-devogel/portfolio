@@ -30,7 +30,7 @@ type EditorMode = 'create' | 'edit' | 'preview';
   ],
   providers: [provideMarkdown()],
   templateUrl: './blog.html',
-  styleUrls: ['./blog.scss'],
+  styleUrls: ['./blog.scss', './splitModal.scss'],
 })
 export class Blog implements OnInit, OnDestroy {
   private blogService = inject(BlogService);

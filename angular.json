@@ -38,8 +38,7 @@
               }
             ],
             "styles": [
-              "src/styles.scss",
-              "src/styles/markdown.scss"
+              "src/styles.scss"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",
@@ -52,6 +51,11 @@
           },
           "configurations": {
             "production": {
+              "optimization": true,
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
               "budgets": [
                 {
                   "type": "initial",
