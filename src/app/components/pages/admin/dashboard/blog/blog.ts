@@ -18,7 +18,7 @@ type EditorMode = 'create' | 'edit' | 'preview';
   ],
   providers: [provideMarkdown()],
   templateUrl: './blog.html',
-  styleUrl: './blog.scss',
+  styleUrls: ['./blog.scss'],
 })
 export class Blog implements OnInit {
   private blogService = inject(BlogService);
