@@ -1,4 +1,16 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  signal,
+  computed,
+  TemplateRef,
+  ViewChild,
+  EmbeddedViewRef,
+  OnDestroy,
+  ApplicationRef,
+} from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { BlogService } from '@services/blog/blog-service'
 import { FormsModule } from '@angular/forms';
@@ -20,15 +32,20 @@ type EditorMode = 'create' | 'edit' | 'preview';
   templateUrl: './blog.html',
   styleUrls: ['./blog.scss'],
 })
-export class Blog implements OnInit {
+export class Blog implements OnInit, OnDestroy {
   private blogService = inject(BlogService);
   private successTimeout: ReturnType<typeof setTimeout> | null = null;
   private errorTimeout: ReturnType<typeof setTimeout> | null = null;
+  @ViewChild('splitModalTpl') splitModalTpl!: TemplateRef<void>;
+  private appRef = inject(ApplicationRef);
+  private modalViewRef: EmbeddedViewRef<void> | null = null;
+  private document = inject(DOCUMENT);
 
   // post list
   posts = signal<BlogPost[]>([]);
   loadingPosts = signal(false);
   listError = signal<string | null>(null);
+  splitModalOpen = signal(false);
 
   // pagination
   currentPage = signal(0);
@@ -226,6 +243,7 @@ export class Blog implements OnInit {
       next: () => {
         this.posts.update(list => list.filter(p => p.post_id !== post.post_id));
         this.deleting.set(false);
+        this.closeSplitModal();
         this.newPost();
         this.setSuccess(`Post "${post.title}" deleted successfully.`);
       },
@@ -237,6 +255,35 @@ export class Blog implements OnInit {
   }
   
   // helpers
+
+  openSplitModal(): void {
+    if (this.modalViewRef) return;
+
+    this.splitModalOpen.set(true);
+    this.document.body.style.overflow = 'hidden';
+
+    this.modalViewRef = this.splitModalTpl.createEmbeddedView(void 0);
+    this.appRef.attachView(this.modalViewRef);
+    this.modalViewRef.rootNodes.forEach(node =>
+      this.document.body.appendChild(node)
+    );
+  }
+
+  closeSplitModal(): void {
+    this.splitModalOpen.set(false);
+    this.document.body.style.overflow = '';
+
+    if (this.modalViewRef) {
+      this.appRef.detachView(this.modalViewRef);
+      this.modalViewRef.rootNodes.forEach(node => node.remove?.());
+      this.modalViewRef.destroy();
+      this.modalViewRef = null;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.closeSplitModal();
+  }
 
   setSuccess(message: string, duration = 4000): void {
     if (this.successTimeout) clearTimeout(this.successTimeout);
