@@ -15,11 +15,11 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: 'blog',
-    renderMode: RenderMode.Prerender,
+    renderMode: RenderMode.Client,
   },
   {
     path: 'blog/:slug',
-    renderMode: RenderMode.Server,
+    renderMode: RenderMode.Client,
   },
   {
     path: 'contact',
