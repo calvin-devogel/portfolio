@@ -12,7 +12,7 @@ export const authGuard: CanActivateFn = (_route, state) => {
 
   if (!isPlatformBrowser(platformId)) {
     // sus
-    return of(true);
+    return of(false);
   }
 
   return authService.refreshAuthStatus().pipe(

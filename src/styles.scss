@@ -253,7 +253,7 @@ section:not(:last-child) {
 
 	@media (prefers-color-scheme: dark) { color: var(--text-faint); border-color: var(--border-strong); }
 
-	&:hover:not(:disabled) { background: var(--tint-md); color: var(--primary); border-color: var(--border-string); }
+	&:hover:not(:disabled) { background: var(--tint-md); color: var(--primary); border-color: var(--border-strong); }
 	&:disabled { opacity: 0.45; cursor: not-allowed; }
 
 	&.is-primary {

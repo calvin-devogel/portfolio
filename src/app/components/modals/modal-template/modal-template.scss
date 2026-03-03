@@ -8,8 +8,8 @@
     background: rgba(0, 0, 0, 0.55);
     backdrop-filter: blur(4px);
     padding: 1.5rem;
-    animation: fadeIn 0.2s ease-out;
-    &.is-closing { animation: fadeOut 0.2s ease-in forwards; }
+    animation: fadeIn 0.2s ease-in-out;
+    &.is-closing { animation: fadeOut 0.2s ease-in-out forwards; }
 }
 
 .modal-base {
@@ -20,8 +20,8 @@
     border: 1px solid var(--border-subtle);
     box-shadow: 0 24px 80px rgba(0,0,0,0.22);
     overflow: hidden;
-    animation: slideUp 0.2s ease-out;
-    &.is-closing { animation: slideDown 0.2s ease-in forwards; }
+    animation: slideUp 0.2s ease-in-out;
+    &.is-closing { animation: slideDown 0.2s ease-in-out forwards; }
 }
 
 .modal-header {
@@ -70,11 +70,11 @@
 }
 
 @keyframes slideUp {
-    from    { transform: translateY(16px)   scale(0.985); }
-    to      { transform: translateY(0)      scale(1); }
+    from    { opacity: 0; transform: translateY(16px)   scale(0.985); }
+    to      { opacity: 1; transform: translateY(0)      scale(1); }
 }
 
 @keyframes slideDown {
-    from    { transform: translateY(0)      scale(1); }
-    to      { transform: translateY(16px)   scale(0.985); }
+    from    { opacity: 1; transform: translateY(0)      scale(1); }
+    to      { opacity: 0; transform: translateY(16px)   scale(0.985); }
 }

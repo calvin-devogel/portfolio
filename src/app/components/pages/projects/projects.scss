@@ -54,7 +54,7 @@
     &__links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.35rem; }
 
     @media screen and (max-width: 768px) {
-        flex-direcition: column;
+        flex-direction: column;
         gap: 0.75rem;
         &:hover { transform: translateY(-3px); }
         &__icon { @extend %project-icon; }

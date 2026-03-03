@@ -8,8 +8,11 @@ import {
   QueryList,
   ElementRef,
   AfterViewInit,
-  PLATFORM_ID
+  PLATFORM_ID,
+  OnDestroy,
+  DestroyRef,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { BlogService } from '@services/blog/blog-service';
@@ -22,9 +25,10 @@ import { PageLayout } from '@components/page-layout/page-layout';
   templateUrl: './blog.html',
   styleUrls: ['./blog.scss'],
 })
-export class Blog implements OnInit, AfterViewInit {
+export class Blog implements OnInit, AfterViewInit, OnDestroy {
   private blogService = inject(BlogService);
   private platformId = inject(PLATFORM_ID);
+  private destroyRef = inject(DestroyRef);
 
   @ViewChildren('postCard') postCards!: QueryList<ElementRef<HTMLElement>>;
 
@@ -47,7 +51,9 @@ export class Blog implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.setupIntersectionObserver();
-      this.postCards.changes.subscribe(() => this.setupIntersectionObserver());
+      this.postCards.changes
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => this.setupIntersectionObserver());
     }
   }
 
@@ -97,5 +103,9 @@ export class Blog implements OnInit, AfterViewInit {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.observer?.disconnect();
   }
 }

@@ -43,7 +43,8 @@ export class ModalTemplate implements OnDestroy {
 
   @ViewChild('modalTemplate') modalTemplate!: TemplateRef<void>;
   private modalViewRef: EmbeddedViewRef<void> | null = null;
-  private readonly ANIMATION_DURATION = 200; // Duration of the open/close animation in ms
+  private readonly ANIMATION_DURATION = 200;
+  private closeTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   isModalOpen = signal(false);
 
@@ -63,24 +64,28 @@ export class ModalTemplate implements OnDestroy {
   }
 
   closeModal() {
-    if (!this.modalViewRef) return;
+    if (!this.modalViewRef || this.closeTimeoutId !== null) return;
     
     const overlay = this.modalViewRef.rootNodes[0] as HTMLElement;
-    const modal = overlay?.querySelector('.modal') as HTMLElement | null;
+    const modal = overlay?.querySelector('.modal-base') as HTMLElement | null;
     overlay?.classList.add('is-closing');
     modal?.classList.add('is-closing');
 
-    setTimeout(() => {
-      this.document.body.style.overflow = '';
-      if (this.modalViewRef) {
-        this.appRef.detachView(this.modalViewRef);
-        this.modalViewRef.rootNodes.forEach(node => node.remove?.());
-        this.modalViewRef.destroy();
-        this.modalViewRef = null;
-      }
+    this.closeTimeoutId = setTimeout(() => {
+      this.detachModal();
+      this.closeTimeoutId = null;
       this.isModalOpen.set(false);
       this.closed.emit();
     }, this.ANIMATION_DURATION);
+  }
+
+  private detachModal(): void {
+    if (!this.modalViewRef) return;
+    this.document.body.style.overflow = '';
+    this.appRef.detachView(this.modalViewRef);
+    this.modalViewRef.rootNodes.forEach(node => node.remove?.());
+    this.modalViewRef.destroy();
+    this.modalViewRef = null;
   }
 
   onBackdropClick(): void {
@@ -88,6 +93,10 @@ export class ModalTemplate implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.closeModal();
+    if (this.closeTimeoutId !== null) {
+      clearTimeout(this.closeTimeoutId);
+      this.closeTimeoutId = null;
+    }
+    this.detachModal();
   }
 }
