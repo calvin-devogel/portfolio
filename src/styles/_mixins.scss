@@ -31,7 +31,7 @@
 }
 
 // pills
-// used in: .pill-btn (change to pill-button, we prefer semantic), .tag, .date, .project-link
+// used in: .pill-button, .tag, .date, .project-link
 
 @mixin pill-base($size: 0.8rem) {
     display: inline-flex;

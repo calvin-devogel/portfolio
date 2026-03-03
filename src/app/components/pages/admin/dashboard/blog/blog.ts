@@ -4,19 +4,16 @@ import {
   OnInit,
   signal,
   computed,
-  TemplateRef,
   ViewChild,
-  EmbeddedViewRef,
   OnDestroy,
-  ApplicationRef,
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { BlogService } from '@services/blog/blog-service'
 import { FormsModule } from '@angular/forms';
 import { FeatherModule } from 'angular-feather';
 import { BlogPost, CreateBlogPost } from '@interfaces/blog-data';
 import { MarkdownComponent, provideMarkdown } from 'ngx-markdown';
+import { ModalTemplate } from '@components/modals/modal-template/modal-template';
 
 type EditorMode = 'create' | 'edit' | 'preview';
 
@@ -27,6 +24,7 @@ type EditorMode = 'create' | 'edit' | 'preview';
     FormsModule,
     FeatherModule,
     MarkdownComponent,
+    ModalTemplate,
   ],
   providers: [provideMarkdown()],
   templateUrl: './blog.html',
@@ -36,10 +34,7 @@ export class Blog implements OnInit, OnDestroy {
   private blogService = inject(BlogService);
   private successTimeout: ReturnType<typeof setTimeout> | null = null;
   private errorTimeout: ReturnType<typeof setTimeout> | null = null;
-  @ViewChild('splitModalTpl') splitModalTpl!: TemplateRef<void>;
-  private appRef = inject(ApplicationRef);
-  private modalViewRef: EmbeddedViewRef<void> | null = null;
-  private document = inject(DOCUMENT);
+  @ViewChild('splitModal') splitModal!: ModalTemplate;
 
   // post list
   posts = signal<BlogPost[]>([]);
@@ -257,37 +252,11 @@ export class Blog implements OnInit, OnDestroy {
   // helpers
 
   openSplitModal(): void {
-    if (this.modalViewRef) return;
-
-    this.splitModalOpen.set(true);
-    this.document.body.style.overflow = 'hidden';
-
-    this.modalViewRef = this.splitModalTpl.createEmbeddedView(void 0);
-    this.appRef.attachView(this.modalViewRef);
-    this.modalViewRef.rootNodes.forEach(node =>
-      this.document.body.appendChild(node)
-    );
+    this.splitModal.openModal();
   }
 
   closeSplitModal(): void {
-    if (!this.modalViewRef) return;
-    this.splitModalOpen.set(false);
-
-    const overlay = this.modalViewRef.rootNodes[0] as HTMLElement;
-    const modal = overlay?.querySelector('.split-modal') as HTMLElement | null;
-    overlay?.classList.add('is-closing');
-    modal?.classList.add('is-closing');
-
-    const DURATION = 200;
-    setTimeout(() => {
-      this.document.body.style.overflow = '';
-      if (this.modalViewRef) {
-        this.appRef.detachView(this.modalViewRef);
-        this.modalViewRef.rootNodes.forEach(node => node.remove?.());
-        this.modalViewRef.destroy();
-        this.modalViewRef = null;
-      }
-    }, DURATION);
+    this.splitModal.closeModal();
   }
 
   ngOnDestroy(): void {
