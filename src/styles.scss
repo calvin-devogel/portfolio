@@ -356,39 +356,6 @@ section:not(:last-child) {
 	p, li, .subtle { font-size: 0.88rem; text-align: center; }
 }
 
-// scrollbar
-
-// ::-webkit-scrollbar { width: 6px !important; }
-
-// ::-webkit-scrollbar-track { background: transparent !important; }
-
-// ::-webkit-scrollbar-thumb { 
-// 	background: linear-gradient(var(--primary), var(--secondary)) !important;
-// 	border-radius: 3px !important;
-// 	opacity: 0;
-// 	transition: opacity 0.3s ease;
-// }
-
-// body:not(:hover) ::-webkit-scrollbar-thumb { background: transparent !important; }
-
-// scroll wrapper
-
-.scroll-container {
-	height: 100vh;
-	overflow-y: auto;
-	scrollbar-width: thin;
-	scrollbar-color: var(--primary) transparent;
-
-	&::-webkit-scrollbar { width: 6px; }
-	&::-webkit-scrollbar-track { background: transparent !important; }
-	&::-webkit-scrollbar-thumb { 
-		background: linear-gradient(var(--primary), var(--secondary)) !important;
-		border-radius: 3px !important;
-		opacity: 0;
-		transition: opacity 0.3s ease;
-	}
-}
-
 // utility
 
 .container.is-fluid { padding-left: 0; padding-right: 0; }
