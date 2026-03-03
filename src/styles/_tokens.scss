@@ -51,4 +51,7 @@
         --tint-md: rgba(92, 122, 107, 0.15);
         --tint-lg: rgba(92, 122, 107, 0.22);
     }
+
+    scrollbar-width: thin; // firefox is washed man
+    scrollbar-color: var(--primary) transparent;
 }

@@ -88,43 +88,6 @@ body {
 
 router-outlet + * { animation: fadeSlideIn 0.25s ease forwards; }
 
-// navbar
-
-.navbar {
-	backdrop-filter: blur(12px) saturate(160%);
-	-webkit-backdrop-filter: blur(12px) saturate(160%);
-	background: rgba(245, 242, 236, 0.60) !important;
-	border-bottom: 1px solid var(--border-subtle);
-	box-shadow: 0 2px 16px var(--tint-sm);
-	padding-bottom: 0;
-
-	@media (prefers-color-scheme: dark) {
-		background: rgba(21, 26, 23, 0.85) !important;
-		border-bottom-color: var(--border-medium);
-	}
-
-	.navbar-item {
-		color: #3d5248;
-		font-weight: 600;
-		border-radius: 8px;
-		transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-		gap: 0.4rem;
-		align-self: stretch;
-
-		&:hover {
-			background: var(--tint-md) !important;
-			color: var(--primary) !important;
-			border-radius: 0px !important;
-		}
-
-		// text color only used in nav, add a var?
-		@media (prefers-color-scheme: dark) {
-			color: #b8c9bf;
-			&:hover { color: #8fb8a4 !important;}
-		}
-	}
-}
-
 // cards/boxes
 
 .box {
@@ -395,11 +358,36 @@ section:not(:last-child) {
 
 // scrollbar
 
-::-webkit-scrollbar { width: 6px; }
+// ::-webkit-scrollbar { width: 6px !important; }
 
-::-webkit-scrollbar-track { background: transparent; }
+// ::-webkit-scrollbar-track { background: transparent !important; }
 
-::-webkit-scrollbar-thumb { background: linear-gradient(var(--primary), var(--secondary)); border-radius: 3px; }
+// ::-webkit-scrollbar-thumb { 
+// 	background: linear-gradient(var(--primary), var(--secondary)) !important;
+// 	border-radius: 3px !important;
+// 	opacity: 0;
+// 	transition: opacity 0.3s ease;
+// }
+
+// body:not(:hover) ::-webkit-scrollbar-thumb { background: transparent !important; }
+
+// scroll wrapper
+
+.scroll-container {
+	height: 100vh;
+	overflow-y: auto;
+	scrollbar-width: thin;
+	scrollbar-color: var(--primary) transparent;
+
+	&::-webkit-scrollbar { width: 6px; }
+	&::-webkit-scrollbar-track { background: transparent !important; }
+	&::-webkit-scrollbar-thumb { 
+		background: linear-gradient(var(--primary), var(--secondary)) !important;
+		border-radius: 3px !important;
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+}
 
 // utility
 
