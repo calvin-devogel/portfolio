@@ -83,7 +83,7 @@ export class BlogService {
   deletePost(postId: string): Observable<void> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Idempotency-Key': crypto.randomUUID()});
     return this.http.delete<void>('/api/admin/blog/delete', {
-      body: { blog_post_id: postId },
+      body: { post_id: postId },
       withCredentials: true,
       headers
     })
