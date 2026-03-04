@@ -112,8 +112,7 @@
 			<div class="field">
 				<label class="label">Title</label>
 				<div class="control">
-					<input class="input" type="text" placeholder="Post title…" [(ngModel)]="form.title"
-						(input)="autoSlug()" />
+					<input class="input" type="text" placeholder="Post title..." [ngModel]="formTitle()" (ngModelChange)="formTitle.set($event); autoSlug()" />
 				</div>
 			</div>
 
@@ -121,14 +120,13 @@
 				<div class="field">
 					<label class="label">Slug</label>
 					<div class="control">
-						<input class="input" type="text" placeholder="url-friendly-slug" [(ngModel)]="form.slug"
-							[disabled]="true" />
+						<input class="input" type="text" placeholder="url-friendly-slug" [ngModel]="formSlug()" [disabled]="true" />
 					</div>
 				</div>
 				<div class="field">
 					<label class="label">Author</label>
 					<div class="control">
-						<input class="input" type="text" placeholder="Author name" [(ngModel)]="form.author" />
+						<input class="input" type="text" placeholder="Author name" [ngModel]="formAuthor()" (ngModelChange)="formAuthor.set($event)" />
 					</div>
 				</div>
 			</div>
@@ -137,7 +135,7 @@
 				<label class="label">Excerpt</label>
 				<div class="control">
 					<textarea class="textarea" rows="2" placeholder="Short summary shown in listings…"
-						[(ngModel)]="form.excerpt"></textarea>
+						[ngModel]="formExcerpt()" (ngModelChange)="formExcerpt.set($event)"></textarea>
 				</div>
 			</div>
 
@@ -148,7 +146,7 @@
 				</label>
 				<div class="control">
 					<textarea class="textarea editor-textarea" placeholder="Write your post in Markdown…"
-						[(ngModel)]="form.content"></textarea>
+						[ngModel]="formRawContent()" (ngModelChange)="formRawContent.set($event)"></textarea>
 				</div>
 			</div>
 		</div>
@@ -156,19 +154,25 @@
 
 		@if (editorMode() === 'preview') {
 		<div class="preview-pane">
-			@if (!form.title && !form.content) {
+			@if (!formTitle() && !formRawContent()) {
 			<div class="preview-empty">Nothing to preview yet.</div>
 			} @else {
-			<h1 class="preview-title">{{ form.title }}</h1>
-			@if (form.author) {
-			<p class="preview-author">by {{ form.author }}</p>
+			<h1 class="preview-title">{{ formTitle() }}</h1>
+			@if (formAuthor()) {
+			<p class="preview-author">by {{ formAuthor() }}</p>
 			}
-			@if (form.excerpt) {
-			<p class="preview-excerpt">{{ form.excerpt }}</p>
+			@if (formExcerpt()) {
+			<p class="preview-excerpt">{{ formExcerpt() }}</p>
 			}
 			<hr class="preview-divider" />
 			<div class="preview-content markdown-body">
-				<markdown [data]="form.content"></markdown>
+				@for (section of parsedSections(); track $index) {
+					@if (section.type === 'markdown') {
+						<markdown [data]="section.content"></markdown>
+					} @else if (section.type === 'carousel') {
+						<app-carousel [slides]="section.slides ?? []" [label]="section.label ?? ''"></app-carousel>
+					}
+				}
 			</div>
 			}
 		</div>
@@ -233,7 +237,7 @@
 					<label class="label">Title</label>
 					<div class="control">
 						<input class="input" type="text" placeholder="Post title..."
-							[(ngModel)]="form.title" (input)="autoSlug()"/>
+							[ngModel]="formTitle()" (ngModelChange)="formTitle.set($event); autoSlug()"/>
 					</div>
 				</div>
 				<div class="field editor-content-field">
@@ -244,7 +248,7 @@
 					<div class="control">
 						<textarea class="textarea editor-textarea"
 							placeholder="Write your post in Markdown…"
-							[(ngModel)]="form.content"></textarea>
+							[ngModel]="formRawContent()" (ngModelChange)="formRawContent.set($event)"></textarea>
 					</div>
 				</div>
 			</div>
@@ -258,13 +262,19 @@
 				Live Preview
 			</div>
 			<div class="preview-pane">
-				@if (!form.title && !form.content) {
+				@if (!formTitle() && !formRawContent()) {
 				<div class="preview-empty">Start writing to see a live preview.</div>
 				} @else {
-				<h1 class="preview-title">{{ form.title }}</h1>
+				<h1 class="preview-title">{{ formTitle() }}</h1>
 				<hr class="preview-divider" />
 				<div class="preview-content markdown-body">
-					<markdown [data]="form.content"></markdown>
+					@for (section of parsedSections(); track $index) {
+						@if (section.type === 'markdown') {
+							<markdown [data]="section.content"></markdown>
+						} @else if (section.type === 'carousel') {
+							<app-carousel [slides]="section.slides ?? []" [label]="section.label ?? ''"></app-carousel>
+						}
+					}	
 				</div>
 				}
 			</div>
@@ -274,7 +284,7 @@
 
 <app-modal-template
 	#splitModal
-	title="{{ form.title || 'Untitled Post' }}"
+	title="{{ formTitle() || 'Untitled Post' }}"
 	modalMaxWidth="1280px"
 	modalHeight="90vh"
 	[titleIconTemplate]="splitTitleIcon"

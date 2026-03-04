@@ -4,10 +4,11 @@ import { DatePipe } from '@angular/common';
 import { BlogService } from '@services/blog/blog-service';
 import { BlogPost } from '@interfaces/blog-data';
 import { MarkdownComponent, provideMarkdown } from 'ngx-markdown';
+import { Carousel } from '@components/carousel/carousel';
 
 @Component({
   selector: 'app-blog-individual',
-  imports: [RouterLink, DatePipe, MarkdownComponent],
+  imports: [RouterLink, DatePipe, MarkdownComponent, Carousel],
   providers: [provideMarkdown()],
   templateUrl: './blog-individual.html',
   styleUrls: ['./blog-individual.scss'],
@@ -32,8 +33,7 @@ export class BlogIndividual implements OnInit {
     this.loading.set(true);
     this.error.set(false);
 
-    // up next: get-by-slug to fetch individual posts
-    this.blogService.getPosts(0, 10, true, slug).subscribe({
+    this.blogService.getPosts(0, 1, true, slug).subscribe({
       next: (response) => {
         if (response.data.length > 0) {
           this.post.set(response.data[0]);

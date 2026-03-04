@@ -5,13 +5,15 @@ export interface CarouselImage {
 }
 
 export interface BlogSection {
-    type: 'carousel' | 'markdown';
-    content: CarouselImage[] | string;
+    type: 'markdown' | 'carousel';
+    content?: string;
+    label?: string;
+    slides?: CarouselImage[];
 }
 
 export interface CreateBlogPost {
     title: string;
-    content: string;
+    sections: BlogSection[];
     excerpt: string;
     author: string;
 }
@@ -20,7 +22,7 @@ export interface BlogPost {
     post_id: string;
     title: string;
     slug: string;
-    content: string;
+    sections: BlogSection[];
     excerpt: string;
     author: string;
     published: boolean;

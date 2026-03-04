@@ -31,7 +31,15 @@
 
             <hr class="post-divider" />
 
-            <div class="post-body content markdown-body"><markdown [data]="post()!.content"></markdown></div>
+            <div class="post-body content markdown-body">
+                @for (section of post()!.sections; track $index) {
+                    @if (section.type === 'markdown') {
+                        <markdown [data]="section.content"></markdown>
+                    } @else if (section.type === 'carousel') {
+                        <app-carousel [slides]="section.slides ?? []" [label]="section.label ?? ''"></app-carousel>
+                    }
+                }
+            </div>
 
             <footer class="post-footer">
                 <a routerLink="/blog" class="button is-link"> ← Back to All Posts</a>
