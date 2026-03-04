@@ -1,3 +1,14 @@
+export interface CarouselImage {
+    src: string;
+    alt?: string;
+    caption?: string;
+}
+
+export interface BlogSection {
+    type: 'carousel' | 'markdown';
+    content: CarouselImage[] | string;
+}
+
 export interface CreateBlogPost {
     title: string;
     content: string;
