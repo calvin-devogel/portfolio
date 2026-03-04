@@ -19,6 +19,7 @@
     --surface: rgba(255, 252, 248, 0.88);
     --surface-dark: rgba(24, 28, 26, 0.88);
     --surface-card: rgba(255, 252, 248, 0.97);
+    --surface-dark-opaque: rgba(24, 28, 26, 1);
 
     // shadows and borders
     --shadow-color: rgba(92, 122, 107, 0.18);
@@ -35,6 +36,7 @@
     // text
     --text-muted: #888;
     --text-faint: #aaa;
+    --text-body: #333;
 
     // layout
     --card-radius: 14px;
@@ -50,6 +52,7 @@
         --tint-sm: rgba(92, 122, 107, 0.10);
         --tint-md: rgba(92, 122, 107, 0.15);
         --tint-lg: rgba(92, 122, 107, 0.22);
+        --text-body: #d8d0c8;
     }
 
     scrollbar-width: thin; // firefox is washed man

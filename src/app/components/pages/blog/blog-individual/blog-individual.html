@@ -22,19 +22,29 @@
 
             <header class="post-header">
                 <h1 class="title is-2 gradient-title">{{ post()!.title }}</h1>
-                <div class="post-header">
+                <div class="post-meta">
                     <span class="tag date">{{ post()!.created_at | date: 'MMM d, yyyy' }}</span>
-                    <br/>
                     <span class="post-author">{{ post()!.author }}</span>
                 </div>
             </header>
 
             <hr class="post-divider" />
 
-            <div class="post-body content markdown-body"><markdown [data]="post()!.content"></markdown></div>
+            <div class="post-body content markdown-body">
+                @for (section of post()!.sections; track $index) {
+                    @if (section.type === 'markdown') {
+                        <markdown [data]="section.content"></markdown>
+                    } @else if (section.type === 'carousel') {
+                        <app-carousel [slides]="section.slides ?? []" [label]="section.label ?? ''"></app-carousel>
+                    }
+                }
+            </div>
 
             <footer class="post-footer">
-                <a routerLink="/blog" class="button is-link"> ← Back to All Posts</a>
+                <div class="post-meta">
+                    <a routerLink="/blog" class="button is-link"> ← Back to All Posts</a>
+                    <p class="post-last-edited">Last edited: {{ post()!.updated_at | date: 'MMM d, yyyy' }}</p>
+                </div>
             </footer>
         </article>
     }

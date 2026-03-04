@@ -11,9 +11,10 @@ import { CommonModule } from '@angular/common';
 import { BlogService } from '@services/blog/blog-service'
 import { FormsModule } from '@angular/forms';
 import { FeatherModule } from 'angular-feather';
-import { BlogPost, CreateBlogPost } from '@interfaces/blog-data';
+import { BlogPost, CreateBlogPost, BlogSection } from '@interfaces/blog-data';
 import { MarkdownComponent, provideMarkdown } from 'ngx-markdown';
 import { ModalTemplate } from '@components/modals/modal-template/modal-template';
+import { Carousel } from '@components/carousel/carousel';
 
 type EditorMode = 'create' | 'edit' | 'preview';
 
@@ -25,6 +26,7 @@ type EditorMode = 'create' | 'edit' | 'preview';
     FeatherModule,
     MarkdownComponent,
     ModalTemplate,
+    Carousel
   ],
   providers: [provideMarkdown()],
   templateUrl: './blog.html',
@@ -56,24 +58,87 @@ export class Blog implements OnInit, OnDestroy {
   editorSuccess = signal<string | null>(null);
 
   // form fields
-  form = {
-    title: '',
-    slug: '',
-    excerpt: '',
-    content: '',
-    author: '',
-  };
+  formTitle = signal('');
+  formSlug = signal('');
+  formExcerpt = signal('');
+  formRawContent = signal('');
+  formAuthor = signal('');
 
   isEditing = computed(() => this.selectedPost() !== null);
+
+  private parseRawContent(raw: string): BlogSection[] {
+    const CAROUSEL_START = /^---carousel-start(\s+(.+?))?---$/m;
+    const CAROUSEL_END = /^---carousel-end---$/m;
+    const lines = raw.split('\n');
+    const sections: BlogSection[] = [];
+    let buffer: string[] = [];
+    let inCarousel = false;
+    let carouselLabel = '';
+    let carouselLines: string[] = [];
+
+    for (const line of lines) {
+      const matchStart = line.match(CAROUSEL_START);
+      const matchEnd = line.match(CAROUSEL_END);
+      if (matchStart && !inCarousel) {
+        if (buffer.length > 0) {
+          sections.push({ type: 'markdown', content: buffer.join('\n').trim() });
+          buffer = [];
+        }
+        inCarousel = true;
+        carouselLabel = matchStart[1] ?? '';
+        carouselLines = [];
+        buffer = [];
+      } else if (matchEnd && inCarousel) {
+        sections.push({
+          type:'carousel',
+          label: carouselLabel || undefined,
+          slides: carouselLines
+            .map(l => l.trim())
+            .filter(Boolean)
+            .map(l => {
+              const [src, alt, caption] = l.split('|').map(s => s.trim());
+              return { src, alt, caption };
+            }),
+        });
+        inCarousel = false;
+        carouselLabel = '';
+        carouselLines = [];
+      } else if (inCarousel) {
+        carouselLines.push(line);
+      } else {
+        buffer.push(line);
+      }
+    }
+
+    // flush
+    if (!inCarousel && buffer.length > 0) {
+      sections.push({ type: 'markdown', content: buffer.join('\n').trim() });
+    }
+
+    return sections.filter(section => section.type === 'carousel' ? (section.slides?.length ?? 0) > 0 : !!section.content);
+  }
+
+  private sectionsToRaw(sections: BlogSection[]): string {
+    return sections.map(section => {
+      if (section.type === 'carousel') {
+        const header = section.label ? `---carousel-start ${section.label}---` : `---carousel-start---`;
+        const slideLines = (section.slides ?? [])
+          .map(slide => [slide.src, slide.alt ?? '', slide.caption ?? ''].join(' | '))
+          .join('\n');
+        return `${header}\n${slideLines}\n---carousel-end---`;
+      }
+      return section.content ?? '';
+    }).join('\n\n');
+  }
 
   dirtyFields = computed(() => {
     const post = this.selectedPost();
     if (!post) return null;
-    const dirty: Partial<Record<keyof typeof this.form, boolean>> = {};
-    if (this.form.title !== post.title) dirty['title'] = true;
-    if (this.form.excerpt !== post.excerpt) dirty['excerpt'] = true;
-    if (this.form.content !== post.content) dirty['content'] = true;
-    if (this.form.author !== post.author) dirty['author'] = true;
+    const dirty: Partial<Record<string, boolean>> = {};
+    if (this.formTitle() !== post.title) dirty['title'] = true;
+    if (this.formExcerpt() !== post.excerpt) dirty['excerpt'] = true;
+    if (this.formRawContent() !== this.sectionsToRaw(post.sections)) dirty['rawContent'] = true;
+    if (this.formAuthor() !== post.author) dirty['author'] = true;
     return dirty;
   });
 
@@ -121,29 +186,31 @@ export class Blog implements OnInit, OnDestroy {
   selectPost(post: BlogPost): void {
     this.selectedPost.set(post);
     this.editorMode.set('edit');
-    this.form = {
-      title: post.title,
-      slug: post.slug,
-      excerpt: post.excerpt,
-      content: post.content,
-      author: post.author,
-    };
+    this.formTitle.set(post.title);
+    this.formSlug.set(post.slug);
+    this.formExcerpt.set(post.excerpt);
+    this.formRawContent.set(this.sectionsToRaw(post.sections));
+    this.formAuthor.set(post.author);
     this.clearMessages();
   }
 
   newPost(): void {
     this.selectedPost.set(null);
     this.editorMode.set('create');
-    this.form = { title: '', slug: '', excerpt: '', content: '', author: '' };
+    this.formTitle.set('');
+    this.formSlug.set('');
+    this.formExcerpt.set('');
+    this.formRawContent.set('');
+    this.formAuthor.set('');
     this.clearMessages();
   }
 
   autoSlug(): void {
     if (this.editorMode() === 'create') {
-      this.form.slug = this.form.title
+      this.formSlug.set(this.formTitle()
         .toLowerCase()
         .trim()
-        .replace(/\s+/g, '-');
+        .replace(/\s+/g, '-'));
     }
   }
 
@@ -154,6 +221,7 @@ export class Blog implements OnInit, OnDestroy {
   savePost(): void {
     this.clearMessages();
     this.saving.set(true);
+    const sections = this.parseRawContent(this.formRawContent());
 
     if (this.isEditing()) {
       const post = this.selectedPost();
@@ -164,10 +232,10 @@ export class Blog implements OnInit, OnDestroy {
       }
 
       const payload: Partial<BlogPost> = { post_id: post!.post_id };
-      if (dirty.title) payload.title = this.form.title;
-      if (dirty.excerpt) payload.excerpt = this.form.excerpt;
-      if (dirty.content) payload.content = this.form.content;
-      if (dirty.author) payload.author = this.form.author;
+      if (dirty['title']) payload.title = this.formTitle();
+      if (dirty['excerpt']) payload.excerpt = this.formExcerpt();
+      if (dirty['rawContent']) payload.sections = sections;
+      if (dirty['author']) payload.author = this.formAuthor();
 
       this.blogService.editPost(post!.post_id, payload).subscribe({
         next: () => {
@@ -186,10 +254,10 @@ export class Blog implements OnInit, OnDestroy {
       });
     } else {
       const payload: CreateBlogPost = {
-        title: this.form.title,
-        content: this.form.content,
-        excerpt: this.form.excerpt,
-        author: this.form.author,
+        title: this.formTitle(),
+        sections,
+        excerpt: this.formExcerpt(),
+        author: this.formAuthor(),
       };
 
       this.blogService.createPost(payload).subscribe({
@@ -286,5 +354,6 @@ export class Blog implements OnInit, OnDestroy {
     return new Date(iso).toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
   }
 
-  previewLines = computed(() => this.form.content.split('\n').map(l => l.trim()).filter(Boolean));
+  // previewLines = computed(() => this.form.content.split('\n').map(l => l.trim()).filter(Boolean));
+  parsedSections = computed(() => this.parseRawContent(this.formRawContent()));
 }

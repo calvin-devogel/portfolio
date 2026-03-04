@@ -1,6 +1,19 @@
+export interface CarouselImage {
+    src: string;
+    alt?: string;
+    caption?: string;
+}
+
+export interface BlogSection {
+    type: 'markdown' | 'carousel';
+    content?: string;
+    label?: string;
+    slides?: CarouselImage[];
+}
+
 export interface CreateBlogPost {
     title: string;
-    content: string;
+    sections: BlogSection[];
     excerpt: string;
     author: string;
 }
@@ -9,7 +22,7 @@ export interface BlogPost {
     post_id: string;
     title: string;
     slug: string;
-    content: string;
+    sections: BlogSection[];
     excerpt: string;
     author: string;
     published: boolean;
