@@ -36,6 +36,7 @@
     // text
     --text-muted: #888;
     --text-faint: #aaa;
+    --text-body: #333;
 
     // layout
     --card-radius: 14px;
@@ -51,6 +52,7 @@
         --tint-sm: rgba(92, 122, 107, 0.10);
         --tint-md: rgba(92, 122, 107, 0.15);
         --tint-lg: rgba(92, 122, 107, 0.22);
+        --text-body: #d8d0c8;
     }
 
     scrollbar-width: thin; // firefox is washed man

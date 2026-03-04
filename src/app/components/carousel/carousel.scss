@@ -15,6 +15,8 @@
 
 .carousel-track {
     display: flex;
+    margin-top: -0.75rem;
+    margin-bottom: -0.75rem;
     transition: transform 420ms cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
 }
@@ -29,6 +31,7 @@
 
     img {
         object-fit: fill;
+        border-radius: 0 !important;
         object-position: center;
         height: auto;
         width: 100%;
@@ -46,7 +49,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 0.65rem 1rem;
+    padding: 2rem 1rem;
     font-size: 0.82rem;
     line-height: 1.4;
     color: #fff;

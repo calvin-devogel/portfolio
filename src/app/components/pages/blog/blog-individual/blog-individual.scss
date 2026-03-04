@@ -33,7 +33,7 @@
 
 .post-author {
 	font-size: 0.85rem;
-	color: #888;
+	color: var(--text-muted);
 }
 
 .post-divider {
@@ -47,11 +47,7 @@
 .post-body {
 	font-size: 1rem;
 	line-height: 1.8;
-	color: #333;
-
-	@media (prefers-color-scheme: dark) {
-		color: #d8d0c8;
-	}
+	color: var(--text-body);
 
 	h2,
 	h3,
@@ -96,6 +92,12 @@
 	margin-top: 2.5rem;
 	padding-top: 1.5rem;
 	border-top: 1px solid rgba(92, 122, 107, 0.15);
+}
+
+.post-last-edited {
+	font-size: 0.85rem;
+	color: var(--text-muted);
+	margin: 0;
 }
 
 // skeleton

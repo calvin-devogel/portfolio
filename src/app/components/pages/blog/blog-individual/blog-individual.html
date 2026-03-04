@@ -22,9 +22,8 @@
 
             <header class="post-header">
                 <h1 class="title is-2 gradient-title">{{ post()!.title }}</h1>
-                <div class="post-header">
+                <div class="post-meta">
                     <span class="tag date">{{ post()!.created_at | date: 'MMM d, yyyy' }}</span>
-                    <br/>
                     <span class="post-author">{{ post()!.author }}</span>
                 </div>
             </header>
@@ -42,7 +41,10 @@
             </div>
 
             <footer class="post-footer">
-                <a routerLink="/blog" class="button is-link"> ← Back to All Posts</a>
+                <div class="post-meta">
+                    <a routerLink="/blog" class="button is-link"> ← Back to All Posts</a>
+                    <p class="post-last-edited">Last edited: {{ post()!.updated_at | date: 'MMM d, yyyy' }}</p>
+                </div>
             </footer>
         </article>
     }
