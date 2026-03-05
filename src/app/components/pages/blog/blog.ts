@@ -18,6 +18,8 @@ import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { BlogService } from '@services/blog/blog-service';
 import { BlogPost } from '@interfaces/blog-data';
 import { PageLayout } from '@components/page-layout/page-layout';
+import { SeoService } from '@services/seo/seo-service';
+import { blogListSchema, personSchema } from '@modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
 
 @Component({
   selector: 'app-blog',
@@ -29,6 +31,7 @@ export class Blog implements OnInit, AfterViewInit, OnDestroy {
   private blogService = inject(BlogService);
   private platformId = inject(PLATFORM_ID);
   private destroyRef = inject(DestroyRef);
+  private seoService = inject(SeoService);
 
   @ViewChildren('postCard') postCards!: QueryList<ElementRef<HTMLElement>>;
 
@@ -44,6 +47,13 @@ export class Blog implements OnInit, AfterViewInit, OnDestroy {
   hasMore = computed(() => this.page < this.totalPages - 1);
 
   ngOnInit() {
+    this.seoService.updateSeo({
+      title: 'Calvin de Vogel | Blog',
+      description: 'Thoughts on software engineering and technology, plus project write-ups from Calvin de Vogel.',
+      canonicalUrl: `https://devogel.dev/blog`,
+      ogType: 'website',
+      structuredData: [blogListSchema, personSchema]
+    })
     this.fetchPosts();
   }
 

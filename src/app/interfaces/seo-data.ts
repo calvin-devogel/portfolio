@@ -5,6 +5,11 @@ export interface SeoData {
     ogTitle?: string;
     ogDescription?: string;
     ogType?: string;
+    article?: {
+        publishedTime?: string;
+        modifiedTime?: string;
+        author?: string;
+    };
     structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
@@ -40,4 +45,16 @@ export interface BreadcrumbSchema {
         name: string;
         item: string;
     }[];
+}
+
+export interface BlogPostingSchema {
+    '@context': 'https://schema.org';
+    '@type': 'BlogPosting';
+    headline: string;
+    description: string;
+    url: string;
+    author: { '@type': 'Person'; name: string };
+    datePublished?: string;
+    dateModified?: string;
+    [key: string]: unknown;
 }

@@ -18,6 +18,12 @@ export class SeoService {
     this.meta.updateTag({ property: 'og:description', content: data.ogDescription || data.description });
     this.meta.updateTag({ property: 'og:type', content: data.ogType || 'website' });
 
+    if (data.article) {
+      this.setArticleTags(data.article);
+    } else {
+      this.removeArticleTags();
+    }
+
     if (data.canonicalUrl) {
       this.setCanonicalUrl(data.canonicalUrl);
     }
@@ -27,6 +33,24 @@ export class SeoService {
     } else {
       this.removeStructuredData();
     }
+  }
+
+  private setArticleTags(article: NonNullable<SeoData['article']>): void {
+    if (article.publishedTime) {
+      this.meta.updateTag({ property: 'article:published_time', content: article.publishedTime });
+    }
+    if (article.modifiedTime) {
+      this.meta.updateTag({ property: 'article:modified_time', content: article.modifiedTime });
+    }
+    if (article.author) {
+      this.meta.updateTag({ property: 'article:author', content: article.author });
+    }
+  }
+
+  private removeArticleTags(): void {
+    ['article:published_time', 'article:modified_time', 'article:author'].forEach(property => {
+      const tag = this.meta.getTag(`property='${property}'`);
+    });
   }
 
   private setCanonicalUrl(url: string): void {
