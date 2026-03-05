@@ -1,51 +1,57 @@
-<div class="post-page-wrap mt-6 pt-6">
-    @if (loading()) {
-        <div class="box post-skeleton">
-            <div class="skeleton-title wide"></div>
-            <div class="skeleton-meta"></div>
-            @for (i of [1,2,3,4,5]; track i) {
-                <div class="skeleton-line" [style.width]="i % 3 === 0 ? '70%' : '100%'"></div>
+<app-page-layout>
+    <div left></div>
+    <div main>
+        <div class="post-page-wrap mt-6 pt-6">
+            @if (loading()) {
+                <div class="box post-skeleton">
+                    <div class="skeleton-title wide"></div>
+                    <div class="skeleton-meta"></div>
+                    @for (i of [1,2,3,4,5]; track i) {
+                        <div class="skeleton-line" [style.width]="i % 3 === 0 ? '70%' : '100%'"></div>
+                    }
+                </div>
+            }
+
+            @if (error()) {
+                <div class="notification is-danger">
+                    Post not found or failed to load.
+                <a routerLink="/blog" class="text-link"> ← Back to All Posts</a>
+                </div>
+            }
+
+            @if (post() && !loading()) {
+                <article class="box post-article animate-section">
+                    <a routerLink="/blog" class="back-link text-link"> ← All Posts</a>
+
+                    <header class="post-header">
+                        <h1 class="title is-2 gradient-title">{{ post()!.title }}</h1>
+                        <div class="post-meta">
+                            <span class="tag date">{{ post()!.created_at | date: 'MMM d, yyyy' }}</span>
+                            <span class="post-author">{{ post()!.author }}</span>
+                        </div>
+                    </header>
+
+                    <hr class="post-divider" />
+
+                    <div class="post-body content markdown-body">
+                        @for (section of post()!.sections; track $index) {
+                            @if (section.type === 'markdown') {
+                                <markdown [data]="section.content"></markdown>
+                            } @else if (section.type === 'carousel') {
+                                <app-carousel [slides]="section.slides ?? []" [label]="section.label ?? ''"></app-carousel>
+                            }
+                        }
+                    </div>
+
+                    <footer class="post-footer">
+                        <div class="post-meta">
+                            <a routerLink="/blog" class="button is-link"> ← Back to All Posts</a>
+                            <p class="post-last-edited">Last edited: {{ post()!.updated_at | date: 'MMM d, yyyy' }}</p>
+                        </div>
+                    </footer>
+                </article>
             }
         </div>
-    }
-
-    @if (error()) {
-        <div class="notification is-danger">
-            Post not found or failed to load.
-        <a routerLink="/blog" class="text-link"> ← Back to All Posts</a>
-        </div>
-    }
-
-    @if (post() && !loading()) {
-        <article class="box post-article animate-section">
-            <a routerLink="/blog" class="back-link text-link"> ← All Posts</a>
-
-            <header class="post-header">
-                <h1 class="title is-2 gradient-title">{{ post()!.title }}</h1>
-                <div class="post-meta">
-                    <span class="tag date">{{ post()!.created_at | date: 'MMM d, yyyy' }}</span>
-                    <span class="post-author">{{ post()!.author }}</span>
-                </div>
-            </header>
-
-            <hr class="post-divider" />
-
-            <div class="post-body content markdown-body">
-                @for (section of post()!.sections; track $index) {
-                    @if (section.type === 'markdown') {
-                        <markdown [data]="section.content"></markdown>
-                    } @else if (section.type === 'carousel') {
-                        <app-carousel [slides]="section.slides ?? []" [label]="section.label ?? ''"></app-carousel>
-                    }
-                }
-            </div>
-
-            <footer class="post-footer">
-                <div class="post-meta">
-                    <a routerLink="/blog" class="button is-link"> ← Back to All Posts</a>
-                    <p class="post-last-edited">Last edited: {{ post()!.updated_at | date: 'MMM d, yyyy' }}</p>
-                </div>
-            </footer>
-        </article>
-    }
-</div>
+    </div>
+    <div right></div>
+</app-page-layout>

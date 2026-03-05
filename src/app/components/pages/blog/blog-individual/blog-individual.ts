@@ -5,10 +5,11 @@ import { BlogService } from '@services/blog/blog-service';
 import { BlogPost } from '@interfaces/blog-data';
 import { MarkdownComponent, provideMarkdown } from 'ngx-markdown';
 import { Carousel } from '@components/carousel/carousel';
+import { PageLayout } from '@components/page-layout/page-layout';
 
 @Component({
   selector: 'app-blog-individual',
-  imports: [RouterLink, DatePipe, MarkdownComponent, Carousel],
+  imports: [RouterLink, DatePipe, MarkdownComponent, Carousel, PageLayout],
   providers: [provideMarkdown()],
   templateUrl: './blog-individual.html',
   styleUrls: ['./blog-individual.scss'],
