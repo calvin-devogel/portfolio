@@ -16,7 +16,7 @@ export class BlogService {
       'BlogPost-Page': page.toString(),
       'BlogPost-Page-Size': pageSize.toString(),
       'BlogPost-On-Published': onPublished.toString(),
-      'BlogPost-Slug': slug ?? ''
+      'slug': slug ?? ''
     });
 
     return this.http.get<RawBlogPageResponse>('/api/blog', {
