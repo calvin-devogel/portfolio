@@ -1,3 +1,5 @@
+<app-contact #contactModal></app-contact>
+
 <app-page-layout>
     <div left></div>
     <div main class="px-4 py-6">
@@ -14,7 +16,7 @@
                     drop me a message — I'd love to chat about how I can contribute to your team.
                 </p>
                 <div class="buttons">
-                    <a class="button is-link is-medium" routerLink="/contact">
+                    <a class="button is-link is-medium" (click)="openContactModal()">
                         <span class="icon"><i-feather name="mail" size="18"></i-feather></span>
                         <span>Get in Touch</span>
                     </a>

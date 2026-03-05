@@ -1,19 +1,18 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PageLayout } from '../../page-layout/page-layout';
 import { FeatherModule } from "angular-feather";
 import { CreateMessageData } from '../../../interfaces/message-data';
 import { MessageService } from '../../../services/contact/message-service';
 import { NotificationService } from '../../../services/notifications/notification-service';
 import { Subscription } from 'rxjs';
 import { SeoService } from '../../../services/seo/seo-service';
-import { contactSchema, personSchema } from '../../../modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
+import { ModalTemplate } from '@components/modals/modal-template/modal-template';
 
 @Component({
   selector: 'app-contact',
   imports: [
-    PageLayout,
+    ModalTemplate,
     CommonModule,
     FeatherModule,
     ReactiveFormsModule
@@ -21,11 +20,12 @@ import { contactSchema, personSchema } from '../../../modules/structured-data.sc
   templateUrl: './contact.html',
   styleUrls: ['./contact.scss'],
 })
-export class Contact implements OnDestroy, OnInit {
+export class Contact implements OnDestroy {
   private messageService: MessageService = inject(MessageService);
   private notificationService: NotificationService = inject(NotificationService);
   private formBuilder: FormBuilder = inject(FormBuilder);
   private seoService: SeoService = inject(SeoService);
+  @ViewChild('contactModal') contactModal!: ModalTemplate;
 
   contactForm: FormGroup;
   isSubmitting: boolean = false;
@@ -61,15 +61,8 @@ export class Contact implements OnDestroy, OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.seoService.updateSeo({
-      title: 'Calvin de Vogel | Contact',
-      description: 'Get in touch with me!',
-      canonicalUrl: 'https://devogel.dev/contact',
-      ogTitle: 'Calvin de Vogel | Contact',
-      ogType: 'website',
-      structuredData: [contactSchema, personSchema],
-    });
+  openModal(): void {
+    this.contactModal.openModal();
   }
 
   ngOnDestroy(): void {

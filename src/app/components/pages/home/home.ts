@@ -1,13 +1,14 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { PageLayout } from '../../page-layout/page-layout';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { PageLayout } from '@components/page-layout/page-layout';
 import { RouterLink } from "@angular/router";
 import { FeatherModule } from 'angular-feather';
-import { SeoService } from '../../../services/seo/seo-service';
-import { homeSchema, personSchema } from '../../../modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
+import { SeoService } from '@services/seo/seo-service';
+import { Contact } from '@components/modals/contact/contact';
+import { homeSchema, personSchema } from '@modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
 
 @Component({
   selector: 'app-home',
-  imports: [PageLayout, RouterLink, FeatherModule],
+  imports: [PageLayout, RouterLink, FeatherModule, Contact],
   templateUrl: './home.html',
   styleUrls: ['./home.scss'],
 })
@@ -23,4 +24,8 @@ export class Home implements OnInit {
       structuredData: [homeSchema, personSchema],
     });
   }
+
+  @ViewChild('contactModal') contactModal!: Contact;
+
+  openContactModal(): void { this.contactModal.openModal(); }
 }
