@@ -16,7 +16,7 @@ describe('AuthService', () => {
       ]
     });
     service = TestBed.inject(AuthService);
-    httpMock = TestBed.inject(HttpTestingController)
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
@@ -25,7 +25,7 @@ describe('AuthService', () => {
 
   it('should check auth status on initialization (success)', () => {
     // the constructor calls checkAuthStatus right away
-    const req = httpMock.expectOne('/api/check-auth');
+    const req = httpMock.expectOne('/api/check_auth');
     expect(req.request.method).toBe('GET');
     req.flush({}, { status: 200, statusText: 'OK' });
 
@@ -38,7 +38,7 @@ describe('AuthService', () => {
   });
 
   it('should check auth status on initialization (failure)', () => {
-    const req = httpMock.expectOne('/api/check-auth');
+    const req = httpMock.expectOne('/api/check_auth');
     req.flush({}, { status: 401, statusText: 'Unauthorized' });
 
     service.isLoggedIn$.subscribe(status => {
@@ -50,7 +50,7 @@ describe('AuthService', () => {
 
   it('should authenticate user successfully', () => {
     // clear initial checkAuthStatus call
-    httpMock.expectOne('/api/check-auth');
+    httpMock.expectOne('/api/check_auth');
 
     service.authenticate('user', 'pass').subscribe(result => {
       expect(result).toBeTruthy();
@@ -64,7 +64,7 @@ describe('AuthService', () => {
 
   it('should handle authentication failure', () => {
     // clear initial checkAuthStatus call
-    httpMock.expectOne('/api/check-auth');
+    httpMock.expectOne('/api/check_auth');
 
     service.authenticate('user', 'wrongpass').subscribe(result => {
       expect(result).toBeFalsy();
@@ -75,7 +75,7 @@ describe('AuthService', () => {
   });
 
   it('should logout and update state', () => {
-    httpMock.expectOne('/api/check-auth');
+    httpMock.expectOne('/api/check_auth');
 
     service.logout().subscribe();
 
