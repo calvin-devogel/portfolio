@@ -1,0 +1,18 @@
+<ng-template #loginBody>
+    <div class="login-wrapper p-4">
+        <form (ngSubmit)="onSubmit()">
+            <input class="input mb-4" type="text" placeholder="Username" [(ngModel)]="loginData.username" name="username">
+            <input class="input mb-4" type="password" placeholder="Password" [(ngModel)]="loginData.password" name="password">
+            <button class="button is-link is-fullwidth" [disabled]="authService.isAuthenticating()" [class.is-loading]="authService.isAuthenticating()">
+                Login
+            </button>
+        </form>
+    </div>
+</ng-template>
+
+<app-modal-template
+    #loginModal
+    title="Admin Login"
+    modalMaxWidth="400px"
+    [bodyTemplate]="loginBody"
+></app-modal-template>

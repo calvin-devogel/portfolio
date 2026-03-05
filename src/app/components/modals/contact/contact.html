@@ -1,0 +1,101 @@
+<ng-template #contactBody>
+    <div class="contact-wrapper">
+        <div class="contact-header">
+            <p class="subtitle">Have a question or interest in discussing work opportunities? Send me a message!</p>
+        </div>
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" novalidate aria-label="Contact form">
+            <!-- Name Field -->
+            <div class="field">
+                <label class="label gradient-title" for="sender_name">Name</label>
+                <div class="control has-icons-left">
+                    <input id="sender_name" class="input"
+                        [class.is-danger]="sender_name?.invalid && sender_name?.touched" type="text"
+                        placeholder="Your name" formControlName="sender_name"
+                        [attr.aria-invalid]="sender_name?.invalid && sender_name?.touched"
+                        aria-describedby="sender_name_error">
+                    <span class="icon is-left" aria-hidden="true">
+                        <i-feather name="user" size="16"></i-feather>
+                    </span>
+                </div>
+                <div id="sender_name-error" aria-live="polite">
+                    @if (sender_name?.invalid && sender_name?.touched) {
+                    @if (sender_name?.errors?.['required']) {
+                    <p class="help is-warning">Name is required.</p>
+                    } @else if (sender_name?.errors?.['minlength']) {
+                    <p class="help is-warning">Name must be at least 2 characters</p>
+                    } @else if (sender_name?.errors?.['maxlength']) {
+                    <p class="help is-warning">Name cannot exceed 100 characters</p>
+                    }
+                    }
+                </div>
+            </div>
+
+            <!-- Email Field -->
+            <div class="field">
+                <label class="label gradient-title" for="email">Email</label>
+                <div class="control has-icons-left">
+                    <input id="email" class="input" [class.is-danger]="email?.invalid && email?.touched" type="email"
+                        placeholder="your.email@example.com" formControlName="email"
+                        [attr.aria-invalid]="email?.invalid && email?.touched" aria-describedby="email_error">
+                    <span class="icon is-left" aria-hidden="true">
+                        <i-feather name="mail" size="16"></i-feather>
+                    </span>
+                </div>
+                <div id="email-error" aria-live="polite">
+                    @if (email?.invalid && email?.touched) {
+                    @if (email?.errors?.['required']) {
+                    <p class="help is-warning">Email is required</p>
+                    } @else if (email?.errors?.['email']) {
+                    <p class="help is-warning">Please enter a valid email address</p>
+                    }
+                    }
+                </div>
+            </div>
+
+            <!-- Message Field -->
+            <div class="field">
+                <label class="label gradient-title" for="message_text">Message</label>
+                <div class="control">
+                    <textarea id="message_text" class="textarea"
+                        [class.is-danger]="message_text?.invalid && message_text?.touched" placeholder="Your message..."
+                        rows="6" formControlName="message_text"
+                        [attr.aria-invalid]="message_text?.invalid && message_text?.touched"
+                        aria-describedby="message_text_error"></textarea>
+                </div>
+                <div id="message_text-error" aria-live="polite">
+                    <p class="help is-warning">
+                        @if (message_text?.invalid && message_text?.touched) {
+                        @if (message_text?.errors?.['required']) {
+                        <span>Message is required</span>
+                        } @else if (message_text?.errors?.['minlength']) {
+                        <span>Message must be at least 10 characters</span>
+                        } @else if (message_text?.errors?.['maxlength']) {
+                        <span>Message cannot exceed 5000 characters</span>
+                        }
+                        }
+                    </p>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="field">
+                <div class="control">
+                    <button class="button is-link is-fullwidth" type="submit" [disabled]="isSubmitting"
+                        [attr.aria-busy]="isSubmitting" [class.is-loading]="isSubmitting">
+                        <span class="icon" aria-hidden="true">
+                            <i-feather name="send" size="16"></i-feather>
+                        </span>
+                        <span>{{ isSubmitting ? 'Sending...' : 'Send Message' }}</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<app-modal-template
+    #contactModal
+    title="Contact Me"
+    modalMaxWidth="640px"
+    [bodyTemplate]="contactBody">
+</app-modal-template>

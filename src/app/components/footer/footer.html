@@ -1,8 +1,10 @@
+<app-contact #contactModal></app-contact>
+
 <footer class="footer is-family-monospace" aria-label="Site footer">
     <div class="columns">
         <div class="column">
             <div class="content">
-                <p class="mt-0 pt-0"><a class="contact tag is-medium" routerLink='/contact'>Contact me!</a></p>
+                <p class="mt-0 pt-0"><a class="contact tag is-medium" (click)="openContactModal()">Contact me!</a></p>
             </div>
         </div>
         <div class="column">

@@ -2,8 +2,7 @@ import { Routes } from '@angular/router';
 import { Home } from '@components/pages/home/home';
 import { Resume } from '@components/pages/resume/resume';
 import { Projects } from '@components/pages/projects/projects';
-import { Contact } from '@components/pages/contact/contact';
-import { Login } from '@components/pages/login/login';
+import { Login } from '@components/modals/login/login';
 import { authGuard } from './auth-guard';
 import { Messages } from '@components/pages/admin/dashboard/messages/messages';
 import { Blog as AdminBlog } from '@components/pages/admin/dashboard/blog/blog';
@@ -13,8 +12,6 @@ export const routes: Routes = [
     { path: 'resume', component: Resume },
     { path: 'projects', component: Projects },
     { path: 'health_check', redirectTo: '' },
-    { path: 'contact', component: Contact },
-    { path: 'login', component: Login },
     { 
         path: 'blog',
         loadComponent: () => import('@components/pages/blog/blog').then(m => m.Blog) 
