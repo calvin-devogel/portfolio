@@ -5,6 +5,7 @@ export interface SeoData {
     ogTitle?: string;
     ogDescription?: string;
     ogType?: string;
+    ogImage?: string;
     article?: {
         publishedTime?: string;
         modifiedTime?: string;

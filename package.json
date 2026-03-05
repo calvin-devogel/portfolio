@@ -51,6 +51,8 @@
     "eslint": "^9.39.2",
     "jsdom": "^27.1.0",
     "ngx-markdown": "^21.1.0",
+    "png-to-ico": "^3.0.1",
+    "sharp": "^0.34.5",
     "typescript": "~5.9.2",
     "typescript-eslint": "8.50.1",
     "vitest": "^4.0.8",

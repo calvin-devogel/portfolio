@@ -10,6 +10,7 @@ export class SeoService {
   private meta = inject(Meta);
   private title = inject(Title)
   private document = inject(DOCUMENT);
+  private readonly DEFAULT_OG_IMAGE = 'https://devogel.dev/og-image.png';
 
   updateSeo(data: SeoData): void {
     this.title.setTitle(data.title);
@@ -17,6 +18,7 @@ export class SeoService {
     this.meta.updateTag({ property: 'og:title', content: data.ogTitle || data.title });
     this.meta.updateTag({ property: 'og:description', content: data.ogDescription || data.description });
     this.meta.updateTag({ property: 'og:type', content: data.ogType || 'website' });
+    this.meta.updateTag({ property: 'og:image', content: data.ogImage || this.DEFAULT_OG_IMAGE });
 
     if (data.article) {
       this.setArticleTags(data.article);
@@ -50,6 +52,9 @@ export class SeoService {
   private removeArticleTags(): void {
     ['article:published_time', 'article:modified_time', 'article:author'].forEach(property => {
       const tag = this.meta.getTag(`property='${property}'`);
+      if (tag) {
+        this.meta.removeTagElement(tag);
+      }
     });
   }
 
