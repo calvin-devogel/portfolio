@@ -306,6 +306,14 @@ section:not(:last-child) {
 	}
 }
 
+input::-webkit-credentials-auto-fill-button,
+input::-webkit-contacts-auto-fill-button,
+input::-webkit-strong-password-auto-fill-button,
+input::-webkit-caps-lock-indicator {
+    visibility: hidden;
+    pointer-events: none;
+}
+
 // notifications
 
 .notification {

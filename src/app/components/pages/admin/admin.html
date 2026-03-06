@@ -1,6 +1,5 @@
 <div class="admin-layout">
 
-    <!-- ─── Left Blade ─────────────────────────────────────────────────── -->
     <aside class="admin-blade">
         <p class="blade-label">Dashboard</p>
         <a class="blade-item" routerLink="/admin/messages" routerLinkActive="is-active">
@@ -11,10 +10,12 @@
             <i-feather name="edit-3" size="18"></i-feather>
             Blog
         </a>
-        <!-- Future blade items go here -->
+        <a class="blade-item" routerLink="/admin/account-settings" routerLinkActive="is-active">
+            <i-feather name="settings" size="18"></i-feather>
+            Account Settings
+        </a>
     </aside>
 
-    <!-- ─── Main Content ───────────────────────────────────────────────── -->
     <main class="admin-content">
         <section class="animate-section">
             <router-outlet/>
