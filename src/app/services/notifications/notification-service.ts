@@ -35,5 +35,8 @@ export class NotificationService {
   success(message: string, duration = 3000) {
     this.show(message, 'success', duration);
   }
-  
+
+  info(message: string, duration = 4000) {
+    this.show(message, 'info', duration);
+  }
 }

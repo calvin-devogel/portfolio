@@ -1,0 +1,91 @@
+<div class="container mt-5">
+	<h1 class="title">Account Settings</h1>
+
+	@if (state() === 'loading') {
+	<div class="box has-text-centered">Loading...</div>
+	}
+
+	@if (state() === 'disabled') {
+	<div class="settings-card box is-shadowless">
+		<div class="settings-card__header">
+			<i-feather name="shield-off" size="20"></i-feather>
+			<div>
+				<p class="settings-card__title">Two-Factor Authentication</p>
+				<p class="settings-card__subtitle">Not enabled. Add an extra layer of security to your account.</p>
+			</div>
+		</div>
+		<button class="pill-button is-primary" [disabled]="busy()" [class.is-loading]="busy()" (click)="startSetup()">
+			Enable 2FA
+		</button>
+	</div>
+	}
+
+	@if (state() === 'setup-pending') {
+	<div class="settings-card box is-shadowless">
+		<div class="settings-card__header">
+			<i-feather name="smartphone" size="20"></i-feather>
+			<div>
+				<p class="settings-card__title">Scan with your authenticator app</p>
+				<p class="settings-card__subtitle">Then enter the 6-digit code below to verify and activate.</p>
+			</div>
+		</div>
+
+		@if (qrDataUrl()) {
+		<img class="qr-code" [src]="qrDataUrl()!" alt="TOTP QR code" width="220" height="220">
+		}
+
+		<form class="confirm-form" (ngSubmit)="confirmSetup()">
+			<div class="otp-inputs">
+				@for (_ of confirmDigits; track $index; let i = $index) {
+				<input #confirmDigitInput class="otp-digit" type="text" inputmode="numeric" maxlength="1"
+					[value]="confirmDigits[i]" (input)="onConfirmDigitInput(i, $event)"
+					(keydown)="onConfirmDigitKeydown(i, $event)" (paste)="onConfirmDigitPaste($event)"
+					autocomplete="one-time-code">
+				}
+			</div>
+			<div class="confirm-form__actions">
+				<button class="pill-button is-primary is-link" type="submit"
+					[disabled]="busy() || confirmCode.length !== 6" [class.is-loading]="busy()">
+					Verify &amp; Activate
+				</button>
+				<button class="pill-button is-muted" type="button" [disabled]="busy()" (click)="cancelSetup()">
+					Cancel
+				</button>
+			</div>
+		</form>
+	</div>
+	}
+
+	@if (state() === 'enabled') {
+	<div class="settings-card box is-shadowless">
+		<div class="settings-card__header">
+			<i-feather name="shield" size="20"></i-feather>
+			<div>
+				<p class="settings-card__title">Two-Factor Authentication</p>
+				<p class="settings-card__subtitle">Active. Your account requires a TOTP code on login.</p>
+			</div>
+		</div>
+
+		@if (disableStep() === 'idle') {
+		<button class="pill-button is-danger" [disabled]="busy()" (click)="startDisable()">
+			Disable 2FA
+		</button>
+		} @else {
+		<form class="confirm-form" (ngSubmit)="disableTotp()">
+			<p class="disable-label">Enter your password to confirm:</p>
+			<input class="input" type="password" placeholder="Password" [(ngModel)]="disablePassword"
+				name="disablePassword" autocomplete="current-password">
+			<div class="confirm-form__actions">
+				<button class="pill-button is-danger" type="submit" [disabled]="busy() || !disablePassword"
+					[class.is-loading]="busy()">
+					Confirm Disable
+				</button>
+				<button class="pill-button is-muted" type="button" [disabled]="busy()" (click)="cancelDisable()">
+					Cancel
+				</button>
+			</div>
+		</form>
+		}
+	</div>
+	}
+</div>

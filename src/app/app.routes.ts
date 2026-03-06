@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { Home } from '@components/pages/home/home';
 import { Resume } from '@components/pages/resume/resume';
 import { Projects } from '@components/pages/projects/projects';
-import { Login } from '@components/modals/login/login';
+import { AccountSettings } from '@components/pages/admin/dashboard/account-settings/account-settings';
 import { authGuard } from './auth-guard';
 import { Messages } from '@components/pages/admin/dashboard/messages/messages';
 import { Blog as AdminBlog } from '@components/pages/admin/dashboard/blog/blog';
@@ -29,6 +29,7 @@ export const routes: Routes = [
             { path: '', redirectTo: 'messages', pathMatch: 'full' },
             { path: 'messages', component: Messages },
             { path: 'blog', component: AdminBlog },
+            { path: 'account-settings', component: AccountSettings },
         ],
     },
     { path: '**', redirectTo: '', pathMatch: 'full'}, 

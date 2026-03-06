@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http'
 import { signal } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, map, of, tap, fromEvent, merge, throttleTime, finalize } from 'rxjs';
 
+export type AuthResult = 'success' | 'mfa_required' | 'failed';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -56,7 +58,7 @@ export class AuthService {
     );
   }
 
-  authenticate(username: string, password: string): Observable<boolean> {
+  authenticate(username: string, password: string): Observable<AuthResult> {
     this.isAuthenticating.set(true);
 
     const body = new URLSearchParams();
@@ -73,17 +75,43 @@ export class AuthService {
         if (response.status === 200) {
           this.isLoggedInSubject.next(true);
           localStorage.setItem('isLoggedIn', 'true');
-          return true;
+          return 'success' as AuthResult;
         }
-        return false;
+        if (response.status === 202) {
+          return 'mfa_required' as AuthResult;
+        }
+        return 'failed' as AuthResult;
       }),
       catchError(() => {
         this.isAuthenticating.set(false);
         this.isLoggedInSubject.next(false);
         localStorage.setItem('isLoggedIn', 'false');
-        return of(false);
+        return of('failed' as AuthResult);
       })
     );
+  }
+
+  verifyTotp(code: string): Observable<boolean> {
+    this.isAuthenticating.set(true);
+
+    return this.http.post('/api/verify_totp', { code } , {
+      observe: 'response',
+      withCredentials: true
+    }).pipe(
+      map(response => {
+        this.isAuthenticating.set(false);
+        const success = response.status === 200;
+        if (success) {
+          this.isLoggedInSubject.next(true);
+          localStorage.setItem('isLoggedIn', 'true');
+        }
+        return success;
+      }),
+      catchError(() => {
+        this.isAuthenticating.set(false);
+        return of(false);
+      })
+    )
   }
 
   logout(): Observable<void> {
