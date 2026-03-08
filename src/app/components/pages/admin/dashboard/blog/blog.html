@@ -170,7 +170,7 @@
 					@if (section.type === 'markdown') {
 						<markdown [data]="section.content"></markdown>
 					} @else if (section.type === 'carousel') {
-						<app-carousel [slides]="section.slides ?? []" [label]="section.label ?? ''"></app-carousel>
+						<app-carousel [slides]="section.slides" [label]="section.label ?? ''"></app-carousel>
 					}
 				}
 			</div>
@@ -272,7 +272,7 @@
 						@if (section.type === 'markdown') {
 							<markdown [data]="section.content"></markdown>
 						} @else if (section.type === 'carousel') {
-							<app-carousel [slides]="section.slides ?? []" [label]="section.label ?? ''"></app-carousel>
+							<app-carousel [slides]="section.slides" [label]="section.label ?? ''"></app-carousel>
 						}
 					}	
 				</div>

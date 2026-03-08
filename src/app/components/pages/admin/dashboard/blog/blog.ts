@@ -85,7 +85,7 @@ export class Blog implements OnInit, OnDestroy {
           buffer = [];
         }
         inCarousel = true;
-        carouselLabel = matchStart[1] ?? '';
+        carouselLabel = matchStart[2] ?? '';
         carouselLines = [];
         buffer = [];
       } else if (matchEnd && inCarousel) {
@@ -98,7 +98,8 @@ export class Blog implements OnInit, OnDestroy {
             .map(l => {
               const [src, alt, caption] = l.split('|').map(s => s.trim());
               return { src, alt, caption };
-            }),
+            })
+            .filter(slide => !!slide.src && slide.src.trim().length > 0),
         });
         inCarousel = false;
         carouselLabel = '';
@@ -111,6 +112,15 @@ export class Blog implements OnInit, OnDestroy {
     }
 
     // flush
+    if (inCarousel) {
+      // unclosed carousel - treat as markdown
+      const header = carouselLabel ? `---carousel-start ${carouselLabel}---` : `---carousel-start---`;
+      buffer.push(header, ...carouselLines);
+      inCarousel = false;
+      carouselLabel = '';
+      carouselLines = [];
+    }
+
     if (!inCarousel && buffer.length > 0) {
       sections.push({ type: 'markdown', content: buffer.join('\n').trim() });
     }
