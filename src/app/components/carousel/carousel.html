@@ -15,18 +15,18 @@
     </div>
 
     @if (slides.length > 1) {
-    <button class="carousel-arrow carousel-arrow--prev" aria-label="Previous slide" [disabled]="currentIndex() === 0"
+    <button type="button" class="carousel-arrow carousel-arrow--prev" aria-label="Previous slide" [disabled]="currentIndex() === 0"
         (click)="previous()">
         <i-feather name="chevron-left" size="18"></i-feather>
     </button>
-    <button class="carousel-arrow carousel-arrow--next" aria-label="Next slide"
+    <button type="button" class="carousel-arrow carousel-arrow--next" aria-label="Next slide"
         [disabled]="currentIndex() === slides.length - 1" (click)="next()">
         <i-feather name="chevron-right" size="18"></i-feather>
     </button>
 
     <div class="carousel-dots">
         @for (slide of slides; track slide.src; let i = $index) {
-        <button class="carousel-dot" [class.is-active]="i === currentIndex()"
+        <button type="button" class="carousel-dot" [class.is-active]="i === currentIndex()"
             [attr.aria-label]="'Go to slide ' + (i + 1)" (click)="goTo(i)"></button>
         }
     </div>

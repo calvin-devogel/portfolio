@@ -4,12 +4,21 @@ export interface CarouselImage {
     caption?: string;
 }
 
-export interface BlogSection {
-    type: 'markdown' | 'carousel';
-    content?: string;
+export interface BaseBlogSection {
     label?: string;
-    slides?: CarouselImage[];
 }
+
+export interface MarkdownBlogSection extends BaseBlogSection{
+    type: 'markdown';
+    content: string;
+}
+
+export interface CarouselBlogSection extends BaseBlogSection {
+    type: 'carousel';
+    slides: CarouselImage[];
+}
+
+export type BlogSection = MarkdownBlogSection | CarouselBlogSection;
 
 export interface CreateBlogPost {
     title: string;

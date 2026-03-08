@@ -5,7 +5,6 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   signal,
-  computed,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FeatherModule } from 'angular-feather';
@@ -42,17 +41,21 @@ export class Carousel implements OnInit, OnDestroy{
   }
 
   previous() {
+    if (this.slides.length === 0) return;
     this.currentIndex.update(index => Math.max(0, index - 1));
     this.resetTimer();
   }
 
   next() {
+    if (this.slides.length === 0) return;
     this.currentIndex.update(index => Math.min(this.slides.length - 1, index + 1));
     this.resetTimer();
   }
 
   goTo(index: number) {
-    this.currentIndex.set(index);
+    if (this.slides.length === 0) return;
+    const clampedIndex = Math.max(0, Math.min(this.slides.length - 1, index));
+    this.currentIndex.set(clampedIndex);
     this.resetTimer();
   }
 
