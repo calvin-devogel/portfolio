@@ -24,4 +24,4 @@ npm audit || printf "\n${YELLOW}⚠${RESET} Audit found vulnerabilities (non-blo
 echo "\n→ Running tests...\n"
 ng test --watch=false || fail "Tests"
 
-echo "\n✓ Pre-push checks passed.\n"
+echo "\n${GREEN}✓${RESET} Pre-push checks passed.\n"
