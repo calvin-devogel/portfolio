@@ -58,6 +58,7 @@ RUN apk add --no-cache gettext
 USER 0
 
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY security_headers.conf /etc/nginx/security_headers.conf
 COPY --chown=nginx:nginx --from=build /usr/src/app/dist/*/browser /usr/share/nginx/html
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
