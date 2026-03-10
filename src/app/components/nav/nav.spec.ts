@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { importProvidersFrom } from '@angular/core';
+import { FeatherModule } from 'angular-feather';
+import { allIcons } from 'angular-feather/icons';
 import { Nav } from './nav';
+import { ActivatedRoute } from '@angular/router';
 
 describe('Nav', () => {
   let component: Nav;
@@ -8,7 +11,11 @@ describe('Nav', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Nav]
+      imports: [Nav],
+      providers: [
+        importProvidersFrom(FeatherModule.pick(allIcons)),
+        { provide: ActivatedRoute, useValue: { snapshot: { url: [{ path: '' }] } } }
+      ]
     })
     .compileComponents();
 

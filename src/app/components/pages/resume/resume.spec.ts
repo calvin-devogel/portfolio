@@ -4,6 +4,9 @@ import { ResumeService } from '../../../services/resume/resume-service';
 import { of } from 'rxjs';
 import { ResumeData } from '../../../interfaces/resume-data';
 import { provideRouter } from '@angular/router';
+import { importProvidersFrom } from '@angular/core';
+import { FeatherModule } from 'angular-feather';
+import { allIcons } from 'angular-feather/icons';
 
 describe('Resume', () => {
   let component: Resume;
@@ -51,7 +54,8 @@ describe('Resume', () => {
       imports: [Resume],
       providers: [
         { provide: ResumeService, useValue: mockResumeService },
-        provideRouter([])
+        provideRouter([]),
+        importProvidersFrom(FeatherModule.pick(allIcons))
       ]
     })
     .compileComponents();

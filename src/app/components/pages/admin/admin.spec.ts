@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { importProvidersFrom } from '@angular/core';
+import { FeatherModule } from 'angular-feather';
+import { allIcons } from 'angular-feather/icons';
 import { Admin } from './admin';
+import { provideRouter } from '@angular/router';
 
 describe('Admin', () => {
   let component: Admin;
@@ -8,7 +11,8 @@ describe('Admin', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Admin]
+      imports: [Admin],
+      providers: [importProvidersFrom(FeatherModule.pick(allIcons)), provideRouter([])]
     })
     .compileComponents();
 

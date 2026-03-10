@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { importProvidersFrom } from '@angular/core';
+import { FeatherModule } from 'angular-feather';
+import { allIcons } from 'angular-feather/icons';
 import { PageLayout } from './page-layout';
 
 describe('PageLayout', () => {
@@ -8,7 +10,10 @@ describe('PageLayout', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PageLayout]
+      imports: [PageLayout],
+      providers: [
+        importProvidersFrom(FeatherModule.pick(allIcons))
+      ]
     })
     .compileComponents();
 

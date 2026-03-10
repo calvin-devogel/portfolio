@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { importProvidersFrom } from '@angular/core';
+import { FeatherModule } from 'angular-feather';
+import { X } from 'angular-feather/icons';
 import { NotificationToast } from './notification-toast';
 
 describe('NotificationToast', () => {
@@ -8,7 +10,8 @@ describe('NotificationToast', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NotificationToast]
+      imports: [NotificationToast],
+      providers: [importProvidersFrom(FeatherModule.pick({ X }))]
     })
     .compileComponents();
 

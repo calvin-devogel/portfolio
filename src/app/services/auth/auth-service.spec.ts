@@ -67,7 +67,7 @@ describe('AuthService', () => {
     httpMock.expectOne('/api/check_auth');
 
     service.authenticate('user', 'wrongpass').subscribe(result => {
-      expect(result).toBeFalsy();
+      expect(result).toBe('failed');
     });
 
     const req = httpMock.expectOne('/api/login');

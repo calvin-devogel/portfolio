@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { importProvidersFrom } from '@angular/core';
+import { FeatherModule } from 'angular-feather';
+import { allIcons } from 'angular-feather/icons';
 import { Footer } from './footer';
 
 describe('Footer', () => {
@@ -8,7 +10,10 @@ describe('Footer', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Footer]
+      imports: [Footer],
+      providers: [
+        importProvidersFrom(FeatherModule.pick(allIcons))
+      ]
     })
     .compileComponents();
 
