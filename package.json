@@ -9,6 +9,7 @@
     "analyze": "ng build --configuration=production --stats-json && npx esbuild-visualizer --metadata=dist/my-angular-app/stats.json --open=true",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test-coverage": "ng test --coverage --no-watch && open-cli ./coverage/portfolio/index.html",
     "serve:ssr:portfolio": "node dist/portfolio/server/server.mjs",
     "lint": "ng lint"
   },
@@ -54,6 +55,7 @@
     "eslint": "^9.39.2",
     "jsdom": "^27.1.0",
     "ngx-markdown": "^21.1.0",
+    "open-cli": "^8.0.0",
     "png-to-ico": "^3.0.1",
     "prettier": "^3.8.1",
     "sharp": "^0.34.5",
