@@ -52,3 +52,12 @@ jobs:
                 cache-to: type=gha,mode=max
     
     # add a step for deploy (needs repo secrets for doctl deployment)
+    deploy:
+        name: Deploy
+        needs: docker-build
+        runs-on: ubuntu-latest
+        if: github.ref == 'refs/heads/main'
+        environment: production
+        steps:
+            - name: Deploy to production
+              run: echo "Add your deployment steps here"
