@@ -25,6 +25,6 @@ describe('App', () => {
   it('should render title', async () => {
     const fixture = TestBed.createComponent(App);
     const app = fixture.componentInstance;
-    expect((app as any).title()).toBe('portfolio');
+    expect((app as App).title()).toBe('portfolio');
   });
 });

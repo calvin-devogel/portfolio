@@ -12,7 +12,7 @@ import { MarkdownModule } from 'ngx-markdown';
 })
 export class App {
   private router = inject(Router);
-  protected readonly title = signal('portfolio');
+  readonly title = signal('portfolio');
   isNavigating = signal(false);
 
   constructor() {
