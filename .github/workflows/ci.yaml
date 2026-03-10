@@ -59,5 +59,10 @@ jobs:
         if: github.ref == 'refs/heads/main'
         environment: production
         steps:
-            - name: Deploy to production
-              run: echo "Add your deployment steps here"
+            - name: Authenticate with DigitalOcean
+              uses: digitalocean/action-doctl@v2
+              with:
+                token: ${{ secrets.DO_API_TOKEN }}
+
+            - name: Trigger deployment
+              run: doctl apps create-deployment ${{ secrets.DO_APP_ID }} --wait
