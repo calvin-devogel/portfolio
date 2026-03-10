@@ -14,8 +14,9 @@ export class AuthService {
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
   public isAuthenticating = signal(false);
   private platformId = inject(PLATFORM_ID);
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {
+  constructor() {
     if (isPlatformBrowser(this.platformId)) {
       this.checkAuthStatus();
       this.setupActivityTracking();

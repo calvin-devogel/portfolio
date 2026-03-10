@@ -8,7 +8,7 @@
                 <h1 class="title is-2 gradient-title mb-4">Hi, I'm Cal.</h1>
                 <p class="subtitle is-5 mb-4" style="max-width: 580px; line-height: 1.7;">
                     I'm an enthusiastic and curious Software Engineer with 4+ years of experience building
-                    robust, secure, and maintainable software. My main area of interest is in backend and API 
+                    robust, secure, and maintainable software. My main area of interest is in backend and API
                     development, but I'm a tinkerer at heart, and confident working across the stack.
                 </p>
                 <p class="mb-5" style="max-width: 520px; line-height: 1.75; opacity: 0.75;">
@@ -16,12 +16,13 @@
                     drop me a message — I'd love to chat about how I can contribute to your team.
                 </p>
                 <div class="buttons">
-                    <a class="button is-link is-medium" (click)="openContactModal()">
+                    <a class="button is-link is-medium" (click)="openContactModal()"
+                        (keypress.enter)="openContactModal()" aria-label="Contact form" tabindex="0">
                         <span class="icon"><i-feather name="mail" size="18"></i-feather></span>
                         <span>Get in Touch</span>
                     </a>
                     <a class="button is-medium" routerLink="/resume"
-                       style="border-radius: 50px; border: 2px solid rgba(92,122,107,0.35); font-weight: 700; background: transparent;">
+                        style="border-radius: 50px; border: 2px solid rgba(92,122,107,0.35); font-weight: 700; background: transparent;">
                         <span class="icon"><i-feather name="file-text" size="18"></i-feather></span>
                         <span>View Resume</span>
                     </a>

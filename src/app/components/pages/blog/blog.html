@@ -7,7 +7,7 @@
                     <div class="timeline-item" [class.is-active]="activeSlug() === post.slug">
                         <div class="timeline-marker"></div>
                         <div class="timeline-content">
-                            <a class="timeline-link" (click)="scrollToPost(post.slug)">
+                            <a class="timeline-link" (click)="scrollToPost(post.slug)" (keypress.enter)="scrollToPost(post.slug)" tabindex="0">
                                 {{ post.title }}
                             </a>
                             <p class="timeline-date">{{ post.created_at | date:'MMM d, yyyy' }}</p>

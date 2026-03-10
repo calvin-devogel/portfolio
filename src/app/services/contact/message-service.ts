@@ -51,7 +51,7 @@ export class MessageService {
     );
   }
 
-  getMessages(page: number = 0, pageSize: number = 10): Observable<MessagesPageResponse> {
+  getMessages(page = 0, pageSize = 10): Observable<MessagesPageResponse> {
     return this.http
       .get<RawMessagesPageResponse>('/api/admin/messages', {
         params: { page: page.toString(), page_size: pageSize.toString() },

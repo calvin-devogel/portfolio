@@ -27,7 +27,8 @@
 		<ul class="post-list">
 			@for (post of posts(); track post.post_id) {
 			<li class="post-list-item" [class.is-selected]="selectedPost()?.post_id === post.post_id"
-				(click)="selectPost(post)">
+				(click)="selectPost(post)" (keypress.enter)="selectPost(post)" tabindex="0"
+				aria-label="Select post titled {{ post.title }}">
 				<div class="post-list-title">{{ post.title }}</div>
 				<div class="post-list-meta">
 					<span class="post-status-dot" [class.is-published]="post.published"></span>
@@ -110,43 +111,47 @@
 		@if (editorMode() !== 'preview') {
 		<div class="editor-fields">
 			<div class="field">
-				<label class="label">Title</label>
+				<label class="label" for="post-title">Title</label>
 				<div class="control">
-					<input class="input" type="text" placeholder="Post title..." [ngModel]="formTitle()" (ngModelChange)="formTitle.set($event); autoSlug()" />
+					<input id="post-title" class="input" type="text" placeholder="Post title..." [ngModel]="formTitle()"
+						(ngModelChange)="formTitle.set($event); autoSlug()" />
 				</div>
 			</div>
 
 			<div class="field-row">
 				<div class="field">
-					<label class="label">Slug</label>
+					<label class="label" for="post-slug">Slug</label>
 					<div class="control">
-						<input class="input" type="text" placeholder="url-friendly-slug" [ngModel]="formSlug()" [disabled]="true" />
+						<input id="post-slug" class="input" type="text" placeholder="url-friendly-slug"
+							[ngModel]="formSlug()" [disabled]="true" />
 					</div>
 				</div>
 				<div class="field">
-					<label class="label">Author</label>
+					<label class="label" for="post-author">Author</label>
 					<div class="control">
-						<input class="input" type="text" placeholder="Author name" [ngModel]="formAuthor()" (ngModelChange)="formAuthor.set($event)" />
+						<input id="post-author" class="input" type="text" placeholder="Author name"
+							[ngModel]="formAuthor()" (ngModelChange)="formAuthor.set($event)" />
 					</div>
 				</div>
 			</div>
 
 			<div class="field">
-				<label class="label">Excerpt</label>
+				<label class="label" for="post-excerpt">Excerpt</label>
 				<div class="control">
-					<textarea class="textarea" rows="2" placeholder="Short summary shown in listings…"
+					<textarea id="post-excerpt" class="textarea" rows="2" placeholder="Short summary shown in listings…"
 						[ngModel]="formExcerpt()" (ngModelChange)="formExcerpt.set($event)"></textarea>
 				</div>
 			</div>
 
 			<div class="field editor-content-field">
-				<label class="label">
+				<label class="label" for="post-content">
 					Content
 					<span class="label-hint">Markdown supported</span>
 				</label>
 				<div class="control">
-					<textarea class="textarea editor-textarea" placeholder="Write your post in Markdown…"
-						[ngModel]="formRawContent()" (ngModelChange)="formRawContent.set($event)"></textarea>
+					<textarea id="post-content" class="textarea editor-textarea"
+						placeholder="Write your post in Markdown…" [ngModel]="formRawContent()"
+						(ngModelChange)="formRawContent.set($event)"></textarea>
 				</div>
 			</div>
 		</div>
@@ -167,11 +172,11 @@
 			<hr class="preview-divider" />
 			<div class="preview-content markdown-body">
 				@for (section of parsedSections(); track $index) {
-					@if (section.type === 'markdown') {
-						<markdown [data]="section.content"></markdown>
-					} @else if (section.type === 'carousel') {
-						<app-carousel [slides]="section.slides" [label]="section.label ?? ''"></app-carousel>
-					}
+				@if (section.type === 'markdown') {
+				<markdown [data]="section.content"></markdown>
+				} @else if (section.type === 'carousel') {
+				<app-carousel [slides]="section.slides" [label]="section.label ?? ''"></app-carousel>
+				}
 				}
 			</div>
 			}
@@ -187,22 +192,22 @@
 
 <ng-template #splitTitleBadge>
 	@if (isEditing()) {
-		<span class="publish-badge" [class.is-published]="selectedPost()!.published">
-			{{ selectedPost()!.published ? 'Published' : 'Draft' }}
-		</span>
+	<span class="publish-badge" [class.is-published]="selectedPost()!.published">
+		{{ selectedPost()!.published ? 'Published' : 'Draft' }}
+	</span>
 	}
 </ng-template>
 
 <ng-template #splitActions>
 	@if (isEditing()) {
-		<button class="pill-button is-muted" [disabled]="saving()" (click)="togglePublish()">
-			<i-feather [name]="selectedPost()!.published ? 'eye-off' : 'globe'" size="14"></i-feather>
-			{{ selectedPost()!.published ? 'Unpublish' : 'Publish' }}
-		</button>
-		<button class="pill-button is-danger" [disabled]="deleting()" (click)="deletePost()">
-			<i-feather name="trash-2" size="14"></i-feather>
-			Delete
-		</button>
+	<button class="pill-button is-muted" [disabled]="saving()" (click)="togglePublish()">
+		<i-feather [name]="selectedPost()!.published ? 'eye-off' : 'globe'" size="14"></i-feather>
+		{{ selectedPost()!.published ? 'Unpublish' : 'Publish' }}
+	</button>
+	<button class="pill-button is-danger" [disabled]="deleting()" (click)="deletePost()">
+		<i-feather name="trash-2" size="14"></i-feather>
+		Delete
+	</button>
 	}
 	<button class="pill-button is-primary" [disabled]="saving()" (click)="savePost()">
 		<i-feather name="save" size="14"></i-feather>
@@ -234,21 +239,21 @@
 			</div>
 			<div class="editor-fields">
 				<div class="field">
-					<label class="label">Title</label>
+					<label class="label" for="post-title">Title</label>
 					<div class="control">
-						<input class="input" type="text" placeholder="Post title..."
-							[ngModel]="formTitle()" (ngModelChange)="formTitle.set($event); autoSlug()"/>
+						<input id="post-title" class="input" type="text" placeholder="Post title..."
+							[ngModel]="formTitle()" (ngModelChange)="formTitle.set($event); autoSlug()" />
 					</div>
 				</div>
 				<div class="field editor-content-field">
-					<label class="label">
+					<label class="label" for="post-content">
 						Content
 						<span class="label-hint">Markdown supported</span>
 					</label>
 					<div class="control">
-						<textarea class="textarea editor-textarea"
-							placeholder="Write your post in Markdown…"
-							[ngModel]="formRawContent()" (ngModelChange)="formRawContent.set($event)"></textarea>
+						<textarea id="post-content" class="textarea editor-textarea"
+							placeholder="Write your post in Markdown…" [ngModel]="formRawContent()"
+							(ngModelChange)="formRawContent.set($event)"></textarea>
 					</div>
 				</div>
 			</div>
@@ -269,12 +274,12 @@
 				<hr class="preview-divider" />
 				<div class="preview-content markdown-body">
 					@for (section of parsedSections(); track $index) {
-						@if (section.type === 'markdown') {
-							<markdown [data]="section.content"></markdown>
-						} @else if (section.type === 'carousel') {
-							<app-carousel [slides]="section.slides" [label]="section.label ?? ''"></app-carousel>
-						}
-					}	
+					@if (section.type === 'markdown') {
+					<markdown [data]="section.content"></markdown>
+					} @else if (section.type === 'carousel') {
+					<app-carousel [slides]="section.slides" [label]="section.label ?? ''"></app-carousel>
+					}
+					}
 				</div>
 				}
 			</div>
@@ -282,13 +287,6 @@
 	</div>
 </ng-template>
 
-<app-modal-template
-	#splitModal
-	title="{{ formTitle() || 'Untitled Post' }}"
-	modalMaxWidth="1280px"
-	modalHeight="90vh"
-	[titleIconTemplate]="splitTitleIcon"
-	[titleBadgeTemplate]="splitTitleBadge"
-	[actionsTemplate]="splitActions"
-	[bodyTemplate]="splitBody"
-></app-modal-template>
+<app-modal-template #splitModal title="{{ formTitle() || 'Untitled Post' }}" modalMaxWidth="1280px" modalHeight="90vh"
+	[titleIconTemplate]="splitTitleIcon" [titleBadgeTemplate]="splitTitleBadge" [actionsTemplate]="splitActions"
+	[bodyTemplate]="splitBody"></app-modal-template>

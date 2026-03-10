@@ -10,7 +10,7 @@ import { BlogPost, CreateBlogPost, BlogPageResponse, RawBlogPageResponse } from 
 export class BlogService {
   private http = inject(HttpClient);
 
-  getPosts(page: number = 0, pageSize: number = 10, onPublished: boolean = false, slug?: string): Observable<BlogPageResponse> {
+  getPosts(page = 0, pageSize = 10, onPublished = false, slug?: string): Observable<BlogPageResponse> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'BlogPost-Page': page.toString(),

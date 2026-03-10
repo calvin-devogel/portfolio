@@ -28,8 +28,8 @@ export class Contact implements OnDestroy {
   @ViewChild('contactModal') contactModal!: ModalTemplate;
 
   contactForm: FormGroup;
-  isSubmitting: boolean = false;
-  submitSuccess: boolean = false;
+  isSubmitting = false;
+  submitSuccess = false;
 
   private subscription: Subscription = new Subscription();
 
@@ -95,7 +95,7 @@ export class Contact implements OnDestroy {
       },
       error: (error) => {
         this.isSubmitting = false;
-        let errorMessage: string = 'Failed to send message. Please try again.';
+        let errorMessage = 'Failed to send message. Please try again.';
 
         if (error.status === 429) {
           errorMessage = 'Rate limit exceeded. Please try again later.';

@@ -1,14 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { describe, it, expect, beforeEach, vi, type Mock } from 'vitest';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AuthService } from './services/auth/auth-service';
-import { CanActivateFn } from '@angular/router';
 
 import { authGuard } from './auth-guard';
 
 describe('authGuard', () => {
-  let authServiceMock: { isLoggedIn$: any };
+  let authServiceMock: { isLoggedIn$: Observable<boolean> };
   let routerMock: { createUrlTree: Mock };
 
   beforeEach(() => {
@@ -32,9 +31,9 @@ describe('authGuard', () => {
     authServiceMock.isLoggedIn$ = of(true);
 
     TestBed.runInInjectionContext(() => {
-      const result = authGuard({} as any, {} as any);
+      const result = authGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot);
 
-      (result as any).subscribe((res: boolean | UrlTree) => {
+      (result as Observable<boolean | UrlTree>).subscribe((res: boolean | UrlTree) => {
         expect(res).toBe(true);
         done();
       });
@@ -47,9 +46,9 @@ describe('authGuard', () => {
     authServiceMock.isLoggedIn$ = of(false);
 
     TestBed.runInInjectionContext(() => {
-      const result = authGuard({} as any, {} as any);
+      const result = authGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot);
 
-      (result as any).subscribe((res: boolean | UrlTree) => {
+      (result as Observable<boolean | UrlTree>).subscribe((res: boolean | UrlTree) => {
         expect(routerMock.createUrlTree).toHaveBeenCalledWith(['/login']);
         expect(res).toBe(dummyUrlTree);
         done();

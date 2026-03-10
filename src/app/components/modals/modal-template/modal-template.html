@@ -1,24 +1,21 @@
 <ng-template #modalTemplate>
-    <div class="modal-overlay" (click)="onBackdropClick()">
-        <div
-            class="modal-base"
-            [style.max-width]="modalMaxWidth()"
-            [style.height]="modalHeight()"
-            (click)="$event.stopPropagation()"
-        >
+    <div class="modal-overlay" (click)="onBackdropClick()" (keypress.enter)="onBackdropClick()" tabindex="0" role="button"
+        aria-label="Close modal">
+        <div class="modal-base" role="dialog" aria-modal="true" [style.max-width]="modalMaxWidth()"
+            [style.height]="modalHeight()" (click)="$event.stopPropagation()" (keypress.enter)="$event.stopPropagation()">
             <div class="modal-header">
                 <div class="modal-title">
                     @if (titleIconTemplate()) {
-                        <ng-container [ngTemplateOutlet]="titleIconTemplate()"></ng-container>
+                    <ng-container [ngTemplateOutlet]="titleIconTemplate()"></ng-container>
                     }
                     <span>{{ title() }}</span>
                     @if (titleBadgeTemplate()) {
-                        <ng-container [ngTemplateOutlet]="titleBadgeTemplate()"></ng-container>
+                    <ng-container [ngTemplateOutlet]="titleBadgeTemplate()"></ng-container>
                     }
                 </div>
                 <div class="modal-header-actions">
                     @if (actionsTemplate()) {
-                        <ng-container [ngTemplateOutlet]="actionsTemplate()"></ng-container>
+                    <ng-container [ngTemplateOutlet]="actionsTemplate()"></ng-container>
                     }
                     <button class="pill-button is-muted" (click)="closeModal()">
                         <i-feather name="x" size="14"></i-feather>
@@ -28,7 +25,7 @@
 
             <div class="modal-body">
                 @if (bodyTemplate()) {
-                    <ng-container [ngTemplateOutlet]="bodyTemplate()"></ng-container>
+                <ng-container [ngTemplateOutlet]="bodyTemplate()"></ng-container>
                 }
             </div>
         </div>

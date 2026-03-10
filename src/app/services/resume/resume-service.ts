@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { parse } from 'yaml';
 import { Observable, map } from 'rxjs';
@@ -9,7 +9,7 @@ import { ResumeData } from '../../interfaces/resume-data'
   providedIn: 'root',
 })
 export class ResumeService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   private resumeUrl = 'assets/resume.yaml';
 

@@ -1,4 +1,4 @@
-import { PersonSchema, WebPageSchema, BreadcrumbSchema, BlogPostingSchema } from '@interfaces/seo-data';
+import { PersonSchema, WebPageSchema, BlogPostingSchema } from '@interfaces/seo-data';
 import { BlogPost } from '@interfaces/blog-data';
 
 const BASE_URL = 'https://devogel.dev';

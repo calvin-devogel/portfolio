@@ -29,7 +29,6 @@ const angularApp = new AngularNodeAppEngine();
  */
 app.use((req, res, next) => {
   const isDev = process.env['NODE_ENV'] !== 'production';
-  const protocol = isDev ? 'http://localhost:* https:' : 'https:';
 
   const cspDirectives = isDev
     ? [

@@ -19,7 +19,7 @@ import { CarouselImage } from '@interfaces/blog-data';
 })
 export class Carousel implements OnInit, OnDestroy{
   @Input() slides: CarouselImage[] = [];
-  @Input() label: string = '';
+  @Input() label = '';
   @Input() autoPlayMs = 5000;
 
   currentIndex = signal(0);
