@@ -10,7 +10,7 @@ fail() {
 }
 
 echo "\n→ Checking formatting...\n"
-npx prettier --check . || fail "Formatting"
+NODE_NO_WARNINGS=1 npx prettier --check . || fail "Formatting"
 
 echo "\n→ Type checking...\n"
 npx tsc --noEmit || fail "Type check"
@@ -22,6 +22,6 @@ echo "\n→ Audit...\n"
 npm audit || printf "\n${YELLOW}⚠${RESET} Audit found vulnerabilities (non-blocking).\n" >&2
 
 echo "\n→ Running tests...\n"
-ng test -- --watch=false || fail "Tests"
+ng test --watch=false || fail "Tests"
 
 echo "\n✓ Pre-push checks passed.\n"
