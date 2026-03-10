@@ -1,5 +1,4 @@
 <div class="blog-dashboard">
-
 	<aside class="post-list-panel">
 		<div class="panel-header">
 			<span class="panel-title">Posts</span>
@@ -10,59 +9,78 @@
 		</div>
 
 		@if (loadingPosts()) {
-		<div class="list-loading">
-			<i-feather name="loader" size="20"></i-feather>
-			<span>Loading…</span>
-		</div>
+			<div class="list-loading">
+				<i-feather name="loader" size="20"></i-feather>
+				<span>Loading…</span>
+			</div>
 		}
 
 		@if (listError()) {
-		<div class="notification is-danger is-light is-small">{{ listError() }}</div>
+			<div class="notification is-danger is-light is-small">{{ listError() }}</div>
 		}
 
 		@if (!loadingPosts() && posts().length === 0 && !listError()) {
-		<div class="list-empty">No posts yet. Create one!</div>
+			<div class="list-empty">No posts yet. Create one!</div>
 		}
 
 		<ul class="post-list">
 			@for (post of posts(); track post.post_id) {
-			<li class="post-list-item" [class.is-selected]="selectedPost()?.post_id === post.post_id"
-				(click)="selectPost(post)" (keypress.enter)="selectPost(post)" tabindex="0"
-				aria-label="Select post titled {{ post.title }}">
-				<div class="post-list-title">{{ post.title }}</div>
-				<div class="post-list-meta">
-					<span class="post-status-dot" [class.is-published]="post.published"></span>
-					<span class="post-date">{{ formatDate(post.created_at) }}</span>
-				</div>
-			</li>
+				<li
+					class="post-list-item"
+					[class.is-selected]="selectedPost()?.post_id === post.post_id"
+					(click)="selectPost(post)"
+					(keypress.enter)="selectPost(post)"
+					tabindex="0"
+					aria-label="Select post titled {{ post.title }}"
+				>
+					<div class="post-list-title">{{ post.title }}</div>
+					<div class="post-list-meta">
+						<span class="post-status-dot" [class.is-published]="post.published"></span>
+						<span class="post-date">{{ formatDate(post.created_at) }}</span>
+					</div>
+				</li>
 			}
 		</ul>
 
 		<!-- Pagination -->
 		@if (totalPages() > 1) {
-		<div class="list-pagination">
-			<button class="button is-small" [disabled]="currentPage() === 0" (click)="prevPage()">
-				<i-feather name="chevron-left" size="14"></i-feather>
-			</button>
-			<span>{{ currentPage() + 1 }} / {{ totalPages() }}</span>
-			<button class="button is-small" [disabled]="currentPage() >= totalPages() - 1" (click)="nextPage()">
-				<i-feather name="chevron-right" size="14"></i-feather>
-			</button>
-		</div>
+			<div class="list-pagination">
+				<button
+					class="button is-small"
+					[disabled]="currentPage() === 0"
+					(click)="prevPage()"
+				>
+					<i-feather name="chevron-left" size="14"></i-feather>
+				</button>
+				<span>{{ currentPage() + 1 }} / {{ totalPages() }}</span>
+				<button
+					class="button is-small"
+					[disabled]="currentPage() >= totalPages() - 1"
+					(click)="nextPage()"
+				>
+					<i-feather name="chevron-right" size="14"></i-feather>
+				</button>
+			</div>
 		}
 	</aside>
 
 	<section class="editor-panel">
-
 		<!-- Editor Header -->
 		<div class="editor-header">
 			<div class="editor-tabs">
-				<button class="editor-tab" [class.is-active]="editorMode() === 'edit' || editorMode() === 'create'"
-					(click)="setMode(isEditing() ? 'edit' : 'create')">
+				<button
+					class="editor-tab"
+					[class.is-active]="editorMode() === 'edit' || editorMode() === 'create'"
+					(click)="setMode(isEditing() ? 'edit' : 'create')"
+				>
 					<i-feather name="edit-2" size="14"></i-feather>
 					Write
 				</button>
-				<button class="editor-tab" [class.is-active]="editorMode() === 'preview'" (click)="setMode('preview')">
+				<button
+					class="editor-tab"
+					[class.is-active]="editorMode() === 'preview'"
+					(click)="setMode('preview')"
+				>
 					<i-feather name="eye" size="14"></i-feather>
 					Preview
 				</button>
@@ -70,17 +88,28 @@
 
 			<div class="editor-actions">
 				@if (isEditing()) {
-				<span class="publish-badge" [class.is-published]="selectedPost()!.published">
-					{{ selectedPost()!.published ? 'Published' : 'Draft' }}
-				</span>
-				<button class="pill-button is-muted" [disabled]="saving()" (click)="togglePublish()">
-					<i-feather [name]="selectedPost()!.published ? 'eye-off' : 'globe'" size="14"></i-feather>
-					{{ selectedPost()!.published ? 'Unpublish' : 'Publish' }}
-				</button>
-				<button class="pill-button is-danger" [disabled]="deleting()" (click)="deletePost()">
-					<i-feather name="trash-2" size="14"></i-feather>
-					Delete
-				</button>
+					<span class="publish-badge" [class.is-published]="selectedPost()!.published">
+						{{ selectedPost()!.published ? 'Published' : 'Draft' }}
+					</span>
+					<button
+						class="pill-button is-muted"
+						[disabled]="saving()"
+						(click)="togglePublish()"
+					>
+						<i-feather
+							[name]="selectedPost()!.published ? 'eye-off' : 'globe'"
+							size="14"
+						></i-feather>
+						{{ selectedPost()!.published ? 'Unpublish' : 'Publish' }}
+					</button>
+					<button
+						class="pill-button is-danger"
+						[disabled]="deleting()"
+						(click)="deletePost()"
+					>
+						<i-feather name="trash-2" size="14"></i-feather>
+						Delete
+					</button>
 				}
 				<button class="pill-button" (click)="openSplitModal()" title="Split">
 					<i-feather name="columns" size="14"></i-feather>
@@ -93,14 +122,24 @@
 			</div>
 		</div>
 
-		<div class="editor-notification notification is-success is-light" [class.is-visible]="editorSuccess()">
+		<div
+			class="editor-notification notification is-success is-light"
+			[class.is-visible]="editorSuccess()"
+		>
 			<i-feather name="check-circle" size="14"></i-feather>
 			<span>{{ editorSuccess() }}</span>
-			<button class="notification-close" (click)="editorSuccess.set(null)" aria-label="Dismiss">
+			<button
+				class="notification-close"
+				(click)="editorSuccess.set(null)"
+				aria-label="Dismiss"
+			>
 				<i-feather name="x" size="13"></i-feather>
 			</button>
 		</div>
-		<div class="editor-notification notification is-danger is-light" [class.is-visible]="editorError()">
+		<div
+			class="editor-notification notification is-danger is-light"
+			[class.is-visible]="editorError()"
+		>
 			<i-feather name="alert-circle" size="14"></i-feather>
 			<span>{{ editorError() }}</span>
 			<button class="notification-close" (click)="editorError.set(null)" aria-label="Dismiss">
@@ -109,80 +148,110 @@
 		</div>
 
 		@if (editorMode() !== 'preview') {
-		<div class="editor-fields">
-			<div class="field">
-				<label class="label" for="post-title">Title</label>
-				<div class="control">
-					<input id="post-title" class="input" type="text" placeholder="Post title..." [ngModel]="formTitle()"
-						(ngModelChange)="formTitle.set($event); autoSlug()" />
-				</div>
-			</div>
-
-			<div class="field-row">
+			<div class="editor-fields">
 				<div class="field">
-					<label class="label" for="post-slug">Slug</label>
+					<label class="label" for="post-title">Title</label>
 					<div class="control">
-						<input id="post-slug" class="input" type="text" placeholder="url-friendly-slug"
-							[ngModel]="formSlug()" [disabled]="true" />
+						<input
+							id="post-title"
+							class="input"
+							type="text"
+							placeholder="Post title..."
+							[ngModel]="formTitle()"
+							(ngModelChange)="formTitle.set($event); autoSlug()"
+						/>
 					</div>
 				</div>
+
+				<div class="field-row">
+					<div class="field">
+						<label class="label" for="post-slug">Slug</label>
+						<div class="control">
+							<input
+								id="post-slug"
+								class="input"
+								type="text"
+								placeholder="url-friendly-slug"
+								[ngModel]="formSlug()"
+								[disabled]="true"
+							/>
+						</div>
+					</div>
+					<div class="field">
+						<label class="label" for="post-author">Author</label>
+						<div class="control">
+							<input
+								id="post-author"
+								class="input"
+								type="text"
+								placeholder="Author name"
+								[ngModel]="formAuthor()"
+								(ngModelChange)="formAuthor.set($event)"
+							/>
+						</div>
+					</div>
+				</div>
+
 				<div class="field">
-					<label class="label" for="post-author">Author</label>
+					<label class="label" for="post-excerpt">Excerpt</label>
 					<div class="control">
-						<input id="post-author" class="input" type="text" placeholder="Author name"
-							[ngModel]="formAuthor()" (ngModelChange)="formAuthor.set($event)" />
+						<textarea
+							id="post-excerpt"
+							class="textarea"
+							rows="2"
+							placeholder="Short summary shown in listings…"
+							[ngModel]="formExcerpt()"
+							(ngModelChange)="formExcerpt.set($event)"
+						></textarea>
+					</div>
+				</div>
+
+				<div class="field editor-content-field">
+					<label class="label" for="post-content">
+						Content
+						<span class="label-hint">Markdown supported</span>
+					</label>
+					<div class="control">
+						<textarea
+							id="post-content"
+							class="textarea editor-textarea"
+							placeholder="Write your post in Markdown…"
+							[ngModel]="formRawContent()"
+							(ngModelChange)="formRawContent.set($event)"
+						></textarea>
 					</div>
 				</div>
 			</div>
-
-			<div class="field">
-				<label class="label" for="post-excerpt">Excerpt</label>
-				<div class="control">
-					<textarea id="post-excerpt" class="textarea" rows="2" placeholder="Short summary shown in listings…"
-						[ngModel]="formExcerpt()" (ngModelChange)="formExcerpt.set($event)"></textarea>
-				</div>
-			</div>
-
-			<div class="field editor-content-field">
-				<label class="label" for="post-content">
-					Content
-					<span class="label-hint">Markdown supported</span>
-				</label>
-				<div class="control">
-					<textarea id="post-content" class="textarea editor-textarea"
-						placeholder="Write your post in Markdown…" [ngModel]="formRawContent()"
-						(ngModelChange)="formRawContent.set($event)"></textarea>
-				</div>
-			</div>
-		</div>
 		}
 
 		@if (editorMode() === 'preview') {
-		<div class="preview-pane">
-			@if (!formTitle() && !formRawContent()) {
-			<div class="preview-empty">Nothing to preview yet.</div>
-			} @else {
-			<h1 class="preview-title">{{ formTitle() }}</h1>
-			@if (formAuthor()) {
-			<p class="preview-author">by {{ formAuthor() }}</p>
-			}
-			@if (formExcerpt()) {
-			<p class="preview-excerpt">{{ formExcerpt() }}</p>
-			}
-			<hr class="preview-divider" />
-			<div class="preview-content markdown-body">
-				@for (section of parsedSections(); track $index) {
-				@if (section.type === 'markdown') {
-				<markdown [data]="section.content"></markdown>
-				} @else if (section.type === 'carousel') {
-				<app-carousel [slides]="section.slides" [label]="section.label ?? ''"></app-carousel>
-				}
+			<div class="preview-pane">
+				@if (!formTitle() && !formRawContent()) {
+					<div class="preview-empty">Nothing to preview yet.</div>
+				} @else {
+					<h1 class="preview-title">{{ formTitle() }}</h1>
+					@if (formAuthor()) {
+						<p class="preview-author">by {{ formAuthor() }}</p>
+					}
+					@if (formExcerpt()) {
+						<p class="preview-excerpt">{{ formExcerpt() }}</p>
+					}
+					<hr class="preview-divider" />
+					<div class="preview-content markdown-body">
+						@for (section of parsedSections(); track $index) {
+							@if (section.type === 'markdown') {
+								<markdown [data]="section.content"></markdown>
+							} @else if (section.type === 'carousel') {
+								<app-carousel
+									[slides]="section.slides"
+									[label]="section.label ?? ''"
+								></app-carousel>
+							}
+						}
+					</div>
 				}
 			</div>
-			}
-		</div>
 		}
-
 	</section>
 </div>
 
@@ -192,22 +261,25 @@
 
 <ng-template #splitTitleBadge>
 	@if (isEditing()) {
-	<span class="publish-badge" [class.is-published]="selectedPost()!.published">
-		{{ selectedPost()!.published ? 'Published' : 'Draft' }}
-	</span>
+		<span class="publish-badge" [class.is-published]="selectedPost()!.published">
+			{{ selectedPost()!.published ? 'Published' : 'Draft' }}
+		</span>
 	}
 </ng-template>
 
 <ng-template #splitActions>
 	@if (isEditing()) {
-	<button class="pill-button is-muted" [disabled]="saving()" (click)="togglePublish()">
-		<i-feather [name]="selectedPost()!.published ? 'eye-off' : 'globe'" size="14"></i-feather>
-		{{ selectedPost()!.published ? 'Unpublish' : 'Publish' }}
-	</button>
-	<button class="pill-button is-danger" [disabled]="deleting()" (click)="deletePost()">
-		<i-feather name="trash-2" size="14"></i-feather>
-		Delete
-	</button>
+		<button class="pill-button is-muted" [disabled]="saving()" (click)="togglePublish()">
+			<i-feather
+				[name]="selectedPost()!.published ? 'eye-off' : 'globe'"
+				size="14"
+			></i-feather>
+			{{ selectedPost()!.published ? 'Unpublish' : 'Publish' }}
+		</button>
+		<button class="pill-button is-danger" [disabled]="deleting()" (click)="deletePost()">
+			<i-feather name="trash-2" size="14"></i-feather>
+			Delete
+		</button>
 	}
 	<button class="pill-button is-primary" [disabled]="saving()" (click)="savePost()">
 		<i-feather name="save" size="14"></i-feather>
@@ -216,14 +288,20 @@
 </ng-template>
 
 <ng-template #splitBody>
-	<div class="editor-notification notification is-success is-light" [class.is-visible]="editorSuccess()">
+	<div
+		class="editor-notification notification is-success is-light"
+		[class.is-visible]="editorSuccess()"
+	>
 		<i-feather name="check-circle" size="14"></i-feather>
 		<span>{{ editorSuccess() }}</span>
 		<button class="notification-close" (click)="editorSuccess.set(null)">
 			<i-feather name="x" size="13"></i-feather>
 		</button>
 	</div>
-	<div class="editor-notification notification is-danger is-light" [class.is-visible]="editorError()">
+	<div
+		class="editor-notification notification is-danger is-light"
+		[class.is-visible]="editorError()"
+	>
 		<i-feather name="alert-circle" size="14"></i-feather>
 		<span>{{ editorError() }}</span>
 		<button class="notification-close" (click)="editorError.set(null)">
@@ -241,8 +319,14 @@
 				<div class="field">
 					<label class="label" for="post-title">Title</label>
 					<div class="control">
-						<input id="post-title" class="input" type="text" placeholder="Post title..."
-							[ngModel]="formTitle()" (ngModelChange)="formTitle.set($event); autoSlug()" />
+						<input
+							id="post-title"
+							class="input"
+							type="text"
+							placeholder="Post title..."
+							[ngModel]="formTitle()"
+							(ngModelChange)="formTitle.set($event); autoSlug()"
+						/>
 					</div>
 				</div>
 				<div class="field editor-content-field">
@@ -251,9 +335,13 @@
 						<span class="label-hint">Markdown supported</span>
 					</label>
 					<div class="control">
-						<textarea id="post-content" class="textarea editor-textarea"
-							placeholder="Write your post in Markdown…" [ngModel]="formRawContent()"
-							(ngModelChange)="formRawContent.set($event)"></textarea>
+						<textarea
+							id="post-content"
+							class="textarea editor-textarea"
+							placeholder="Write your post in Markdown…"
+							[ngModel]="formRawContent()"
+							(ngModelChange)="formRawContent.set($event)"
+						></textarea>
 					</div>
 				</div>
 			</div>
@@ -268,25 +356,35 @@
 			</div>
 			<div class="preview-pane">
 				@if (!formTitle() && !formRawContent()) {
-				<div class="preview-empty">Start writing to see a live preview.</div>
+					<div class="preview-empty">Start writing to see a live preview.</div>
 				} @else {
-				<h1 class="preview-title">{{ formTitle() }}</h1>
-				<hr class="preview-divider" />
-				<div class="preview-content markdown-body">
-					@for (section of parsedSections(); track $index) {
-					@if (section.type === 'markdown') {
-					<markdown [data]="section.content"></markdown>
-					} @else if (section.type === 'carousel') {
-					<app-carousel [slides]="section.slides" [label]="section.label ?? ''"></app-carousel>
-					}
-					}
-				</div>
+					<h1 class="preview-title">{{ formTitle() }}</h1>
+					<hr class="preview-divider" />
+					<div class="preview-content markdown-body">
+						@for (section of parsedSections(); track $index) {
+							@if (section.type === 'markdown') {
+								<markdown [data]="section.content"></markdown>
+							} @else if (section.type === 'carousel') {
+								<app-carousel
+									[slides]="section.slides"
+									[label]="section.label ?? ''"
+								></app-carousel>
+							}
+						}
+					</div>
 				}
 			</div>
 		</div>
 	</div>
 </ng-template>
 
-<app-modal-template #splitModal title="{{ formTitle() || 'Untitled Post' }}" modalMaxWidth="1280px" modalHeight="90vh"
-	[titleIconTemplate]="splitTitleIcon" [titleBadgeTemplate]="splitTitleBadge" [actionsTemplate]="splitActions"
-	[bodyTemplate]="splitBody"></app-modal-template>
+<app-modal-template
+	#splitModal
+	title="{{ formTitle() || 'Untitled Post' }}"
+	modalMaxWidth="1280px"
+	modalHeight="90vh"
+	[titleIconTemplate]="splitTitleIcon"
+	[titleBadgeTemplate]="splitTitleBadge"
+	[actionsTemplate]="splitActions"
+	[bodyTemplate]="splitBody"
+></app-modal-template>

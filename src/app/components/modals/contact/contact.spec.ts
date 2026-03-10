@@ -5,24 +5,21 @@ import { allIcons } from 'angular-feather/icons';
 import { Contact } from './contact';
 
 describe('Contact', () => {
-  let component: Contact;
-  let fixture: ComponentFixture<Contact>;
+	let component: Contact;
+	let fixture: ComponentFixture<Contact>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Contact],
-      providers: [
-        importProvidersFrom(FeatherModule.pick(allIcons))
-      ]
-    })
-    .compileComponents();
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			imports: [Contact],
+			providers: [importProvidersFrom(FeatherModule.pick(allIcons))],
+		}).compileComponents();
 
-    fixture = TestBed.createComponent(Contact);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
-  });
+		fixture = TestBed.createComponent(Contact);
+		component = fixture.componentInstance;
+		await fixture.whenStable();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

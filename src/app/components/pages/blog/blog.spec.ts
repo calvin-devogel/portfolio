@@ -9,37 +9,39 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('Blog', () => {
-  let component: Blog;
-  let fixture: ComponentFixture<Blog>;
+	let component: Blog;
+	let fixture: ComponentFixture<Blog>;
 
-  beforeEach(async () => {
-    vi.stubGlobal('IntersectionObserver', vi.fn(function() {
-      return {
-        observe: vi.fn(),
-        unobserve: vi.fn(),
-        disconnect: vi.fn()
-      };
-    }));
+	beforeEach(async () => {
+		vi.stubGlobal(
+			'IntersectionObserver',
+			vi.fn(function () {
+				return {
+					observe: vi.fn(),
+					unobserve: vi.fn(),
+					disconnect: vi.fn(),
+				};
+			}),
+		);
 
-    await TestBed.configureTestingModule({
-      imports: [Blog],
-      providers: [
-        importProvidersFrom(FeatherModule.pick(allIcons)),
-        provideRouter([]),
-        provideHttpClient(),
-        provideHttpClientTesting()
-      ]
-    })
-      .compileComponents();
+		await TestBed.configureTestingModule({
+			imports: [Blog],
+			providers: [
+				importProvidersFrom(FeatherModule.pick(allIcons)),
+				provideRouter([]),
+				provideHttpClient(),
+				provideHttpClientTesting(),
+			],
+		}).compileComponents();
 
-    fixture = TestBed.createComponent(Blog);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
-  });
+		fixture = TestBed.createComponent(Blog);
+		component = fixture.componentInstance;
+		await fixture.whenStable();
+	});
 
-  afterEach(() => vi.unstubAllGlobals());
+	afterEach(() => vi.unstubAllGlobals());
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

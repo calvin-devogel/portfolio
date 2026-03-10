@@ -1,24 +1,24 @@
 name: portfolio
 region: nyc
 services:
-  - name: portfolio
-    dockerfile_path: Dockerfile
-    source_dir: .
-    github:
-      branch: main
-      deploy_on_push: false
-      repo: calvin-devogel/portfolio
-    health_check:
-      http_path: /health_check
-    routes:
-      - path: /
-    envs:
-      - key: API_URL
-        scope: RUN_TIME
-        value: ${API_URL}
-    http_port: 8080
-    instance_count: 1
-    instance_size_slug: basic-xxs
+    - name: portfolio
+      dockerfile_path: Dockerfile
+      source_dir: .
+      github:
+          branch: main
+          deploy_on_push: false
+          repo: calvin-devogel/portfolio
+      health_check:
+          http_path: /health_check
+      routes:
+          - path: /
+      envs:
+          - key: API_URL
+            scope: RUN_TIME
+            value: ${API_URL}
+      http_port: 8080
+      instance_count: 1
+      instance_size_slug: basic-xxs
 domains:
-  - domain: devogel.dev
-    type: PRIMARY
+    - domain: devogel.dev
+      type: PRIMARY

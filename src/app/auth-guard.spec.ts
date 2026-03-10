@@ -7,52 +7,56 @@ import { AuthService } from './services/auth/auth-service';
 import { authGuard } from './auth-guard';
 
 describe('authGuard', () => {
-  let authServiceMock: { refreshAuthStatus: Mock };
-  let routerMock: { createUrlTree: Mock };
+	let authServiceMock: { refreshAuthStatus: Mock };
+	let routerMock: { createUrlTree: Mock };
 
-  beforeEach(() => {
-    authServiceMock = {
-      refreshAuthStatus: vi.fn(() => of(false))
-    };
+	beforeEach(() => {
+		authServiceMock = {
+			refreshAuthStatus: vi.fn(() => of(false)),
+		};
 
-    routerMock = {
-      createUrlTree: vi.fn()
-    };
+		routerMock = {
+			createUrlTree: vi.fn(),
+		};
 
-    TestBed.configureTestingModule({
-      providers: [
-        { provide: AuthService, useValue: authServiceMock },
-        { provide: Router, useValue: routerMock }
-      ]
-    });
-  });
+		TestBed.configureTestingModule({
+			providers: [
+				{ provide: AuthService, useValue: authServiceMock },
+				{ provide: Router, useValue: routerMock },
+			],
+		});
+	});
 
-  it('should allow access if the user is logged in', () => new Promise<void>(done => {
-    authServiceMock.refreshAuthStatus.mockReturnValue(of(true));
+	it('should allow access if the user is logged in', () =>
+		new Promise<void>((done) => {
+			authServiceMock.refreshAuthStatus.mockReturnValue(of(true));
 
-    TestBed.runInInjectionContext(() => {
-      const result = authGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot);
+			TestBed.runInInjectionContext(() => {
+				const result = authGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot);
 
-      (result as Observable<boolean | UrlTree>).subscribe((res: boolean | UrlTree) => {
-        expect(res).toBe(true);
-        done();
-      });
-    });
-  }));
+				(result as Observable<boolean | UrlTree>).subscribe((res: boolean | UrlTree) => {
+					expect(res).toBe(true);
+					done();
+				});
+			});
+		}));
 
-  it('should redirect if the user is not logged in', () => new Promise<void>(done => {
-    const dummyUrlTree = {} as UrlTree;
-    routerMock.createUrlTree.mockReturnValue(dummyUrlTree);
-    authServiceMock.refreshAuthStatus.mockReturnValue(of(false));
+	it('should redirect if the user is not logged in', () =>
+		new Promise<void>((done) => {
+			const dummyUrlTree = {} as UrlTree;
+			routerMock.createUrlTree.mockReturnValue(dummyUrlTree);
+			authServiceMock.refreshAuthStatus.mockReturnValue(of(false));
 
-    TestBed.runInInjectionContext(() => {
-      const result = authGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot);
+			TestBed.runInInjectionContext(() => {
+				const result = authGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot);
 
-      (result as Observable<boolean | UrlTree>).subscribe((res: boolean | UrlTree) => {
-        expect(routerMock.createUrlTree).toHaveBeenCalledWith(['/'], { queryParams: { returnUrl: undefined } });
-        expect(res).toBe(dummyUrlTree);
-        done();
-      });
-    })
-  }));
+				(result as Observable<boolean | UrlTree>).subscribe((res: boolean | UrlTree) => {
+					expect(routerMock.createUrlTree).toHaveBeenCalledWith(['/'], {
+						queryParams: { returnUrl: undefined },
+					});
+					expect(res).toBe(dummyUrlTree);
+					done();
+				});
+			});
+		}));
 });

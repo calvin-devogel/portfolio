@@ -6,22 +6,24 @@ import { FeatherModule } from 'angular-feather';
 import { Login } from '@components/modals/login/login';
 
 @Component({
-  selector: 'app-nav',
-  imports: [FeatherModule, RouterLink, RouterLinkActive, AsyncPipe, Login],
-  templateUrl: './nav.html',
-  styleUrls: ['./nav.scss'],
+	selector: 'app-nav',
+	imports: [FeatherModule, RouterLink, RouterLinkActive, AsyncPipe, Login],
+	templateUrl: './nav.html',
+	styleUrls: ['./nav.scss'],
 })
 export class Nav {
-  public authService = inject(AuthService);
-  private router = inject(Router);
-  @ViewChild('loginModal') loginModal!: Login;
+	public authService = inject(AuthService);
+	private router = inject(Router);
+	@ViewChild('loginModal') loginModal!: Login;
 
-  openLogin(): void { this.loginModal.openModal(); }
+	openLogin(): void {
+		this.loginModal.openModal();
+	}
 
-  logout() {
-    this.authService.logout().subscribe({
-      next: () => this.router.navigate(['/']),
-      error: (err) => console.error('Logout failed', err)
-    })
-  }
+	logout() {
+		this.authService.logout().subscribe({
+			next: () => this.router.navigate(['/']),
+			error: (err) => console.error('Logout failed', err),
+		});
+	}
 }

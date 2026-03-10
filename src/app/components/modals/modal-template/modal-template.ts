@@ -1,102 +1,97 @@
 import {
-  Component,
-  inject,
-  input,
-  output,
-  ApplicationRef,
-  EmbeddedViewRef,
-  TemplateRef,
-  ViewChild,
-  signal,
-  OnDestroy,
-  ViewEncapsulation,
+	Component,
+	inject,
+	input,
+	output,
+	ApplicationRef,
+	EmbeddedViewRef,
+	TemplateRef,
+	ViewChild,
+	signal,
+	OnDestroy,
+	ViewEncapsulation,
 } from '@angular/core';
 import { DOCUMENT, CommonModule } from '@angular/common';
 import { FeatherModule } from 'angular-feather';
 
 @Component({
-  selector: 'app-modal-template',
-  imports: [
-    CommonModule,
-    FeatherModule,
-  ],
-  templateUrl: './modal-template.html',
-  styleUrls: ['./modal-template.scss'],
-  encapsulation: ViewEncapsulation.None,
+	selector: 'app-modal-template',
+	imports: [CommonModule, FeatherModule],
+	templateUrl: './modal-template.html',
+	styleUrls: ['./modal-template.scss'],
+	encapsulation: ViewEncapsulation.None,
 })
 export class ModalTemplate implements OnDestroy {
-  private appRef = inject(ApplicationRef);
-  private document = inject(DOCUMENT);
+	private appRef = inject(ApplicationRef);
+	private document = inject(DOCUMENT);
 
-  title = input<string>('Modal');
-  closeOnBackdrop = input<boolean>(true);
-  modalMaxWidth = input<string>('600px');
-  modalHeight = input<string>('auto');
+	title = input<string>('Modal');
+	closeOnBackdrop = input<boolean>(true);
+	modalMaxWidth = input<string>('600px');
+	modalHeight = input<string>('auto');
 
-  titleIconTemplate = input<TemplateRef<void> | null>(null);
-  titleBadgeTemplate = input<TemplateRef<void> | null>(null);
-  actionsTemplate = input<TemplateRef<void> | null>(null);
-  bodyTemplate = input<TemplateRef<void> | null>(null);
+	titleIconTemplate = input<TemplateRef<void> | null>(null);
+	titleBadgeTemplate = input<TemplateRef<void> | null>(null);
+	actionsTemplate = input<TemplateRef<void> | null>(null);
+	bodyTemplate = input<TemplateRef<void> | null>(null);
 
-  opened = output<void>();
-  closed = output<void>();
+	opened = output<void>();
+	closed = output<void>();
 
-  @ViewChild('modalTemplate') modalTemplate!: TemplateRef<void>;
-  private modalViewRef: EmbeddedViewRef<void> | null = null;
-  private readonly ANIMATION_DURATION = 200;
-  private closeTimeoutId: ReturnType<typeof setTimeout> | null = null;
+	@ViewChild('modalTemplate') modalTemplate!: TemplateRef<void>;
+	private modalViewRef: EmbeddedViewRef<void> | null = null;
+	private readonly ANIMATION_DURATION = 200;
+	private closeTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
-  isModalOpen = signal(false);
+	isModalOpen = signal(false);
 
-  openModal(): void {
-    if (this.modalViewRef) return;
+	openModal(): void {
+		if (this.modalViewRef) return;
 
-    this.isModalOpen.set(true);
-    this.document.body.style.overflow = 'hidden';
+		this.isModalOpen.set(true);
+		this.document.body.style.overflow = 'hidden';
 
-    this.modalViewRef = this.modalTemplate.createEmbeddedView(void 0);
-    this.appRef.attachView(this.modalViewRef);
-    this.modalViewRef.rootNodes.forEach(node =>
-      this.document.body.appendChild(node)
-    );
+		this.modalViewRef = this.modalTemplate.createEmbeddedView(void 0);
+		this.appRef.attachView(this.modalViewRef);
+		this.modalViewRef.rootNodes.forEach((node) => this.document.body.appendChild(node));
 
-    this.opened.emit();
-  }
+		this.opened.emit();
+	}
 
-  closeModal() {
-    if (!this.modalViewRef || this.closeTimeoutId !== null) return;
-    
-    const overlay = this.modalViewRef.rootNodes[0] as HTMLElement;
-    const modal = overlay?.querySelector('.modal-base') as HTMLElement | null;
-    overlay?.classList.add('is-closing');
-    modal?.classList.add('is-closing');
+	closeModal() {
+		if (!this.modalViewRef || this.closeTimeoutId !== null) return;
 
-    this.closeTimeoutId = setTimeout(() => {
-      this.detachModal();
-      this.closeTimeoutId = null;
-      this.isModalOpen.set(false);
-      this.closed.emit();
-    }, this.ANIMATION_DURATION);
-  }
+		const overlay = this.modalViewRef.rootNodes[0] as HTMLElement;
+		const modal = overlay?.querySelector('.modal-base') as HTMLElement | null;
+		overlay?.classList.add('is-closing');
+		modal?.classList.add('is-closing');
 
-  private detachModal(): void {
-    if (!this.modalViewRef) return;
-    this.document.body.style.overflow = '';
-    this.appRef.detachView(this.modalViewRef);
-    this.modalViewRef.rootNodes.forEach(node => node.remove?.());
-    this.modalViewRef.destroy();
-    this.modalViewRef = null;
-  }
+		this.closeTimeoutId = setTimeout(() => {
+			this.detachModal();
+			this.closeTimeoutId = null;
+			this.isModalOpen.set(false);
+			this.closed.emit();
+		}, this.ANIMATION_DURATION);
+	}
 
-  onBackdropClick(): void {
-    if (this.closeOnBackdrop()) this.closeModal();
-  }
+	private detachModal(): void {
+		if (!this.modalViewRef) return;
+		this.document.body.style.overflow = '';
+		this.appRef.detachView(this.modalViewRef);
+		this.modalViewRef.rootNodes.forEach((node) => node.remove?.());
+		this.modalViewRef.destroy();
+		this.modalViewRef = null;
+	}
 
-  ngOnDestroy(): void {
-    if (this.closeTimeoutId !== null) {
-      clearTimeout(this.closeTimeoutId);
-      this.closeTimeoutId = null;
-    }
-    this.detachModal();
-  }
+	onBackdropClick(): void {
+		if (this.closeOnBackdrop()) this.closeModal();
+	}
+
+	ngOnDestroy(): void {
+		if (this.closeTimeoutId !== null) {
+			clearTimeout(this.closeTimeoutId);
+			this.closeTimeoutId = null;
+		}
+		this.detachModal();
+	}
 }

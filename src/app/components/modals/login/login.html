@@ -1,42 +1,65 @@
 <ng-template #loginBody>
-    <div class="login-wrapper p-4">
-        @if (step() === 'credentials') {
-        <form (ngSubmit)="onSubmit()">
-            <input class="input mb-4" type="text" placeholder="Username" [(ngModel)]="loginData.username"
-                name="username" autocomplete="username">
-            <input class="input mb-4" type="password" placeholder="Password" [(ngModel)]="loginData.password"
-                name="password" autocomplete="current-password">
-            <button class="button is-link is-fullwidth" [disabled]="authService.isAuthenticating()"
-                [class.is-loading]="authService.isAuthenticating()">
-                Login
-            </button>
-        </form>
-        } @else {
-        <form (ngSubmit)="onSubmit()">
-            <p class="mb-4">Enter the 6-digit code from your authenticator app.</p>
-            <div class="otp-inputs mb-4">
-                @for (_ of totpDigits; track $index; let i = $index) {
-                    <input #totpDigitInput
-                        class="otp-digit"
-                        type="text"
-                        inputmode="numeric"
-                        maxlength="1"
-                        [value]="totpDigits[i]"
-                        (input)="onTotpDigitInput(i, $event)"
-                        (keydown)="onTotpDigitKeydown(i, $event)"
-                        (paste)="onTotpDigitPaste($event)"
-                        autocomplete="one-time-code">
-                }
-            </div>
-            <button class="button is-link is-fullwidth"
-                [disabled]="authService.isAuthenticating() || totpCode.length !== 6"
-                [class.is-loading]="authService.isAuthenticating()">
-                Verify
-            </button>
-        </form>
-        }
-    </div>
+	<div class="login-wrapper p-4">
+		@if (step() === 'credentials') {
+			<form (ngSubmit)="onSubmit()">
+				<input
+					class="input mb-4"
+					type="text"
+					placeholder="Username"
+					[(ngModel)]="loginData.username"
+					name="username"
+					autocomplete="username"
+				/>
+				<input
+					class="input mb-4"
+					type="password"
+					placeholder="Password"
+					[(ngModel)]="loginData.password"
+					name="password"
+					autocomplete="current-password"
+				/>
+				<button
+					class="button is-link is-fullwidth"
+					[disabled]="authService.isAuthenticating()"
+					[class.is-loading]="authService.isAuthenticating()"
+				>
+					Login
+				</button>
+			</form>
+		} @else {
+			<form (ngSubmit)="onSubmit()">
+				<p class="mb-4">Enter the 6-digit code from your authenticator app.</p>
+				<div class="otp-inputs mb-4">
+					@for (_ of totpDigits; track $index; let i = $index) {
+						<input
+							#totpDigitInput
+							class="otp-digit"
+							type="text"
+							inputmode="numeric"
+							maxlength="1"
+							[value]="totpDigits[i]"
+							(input)="onTotpDigitInput(i, $event)"
+							(keydown)="onTotpDigitKeydown(i, $event)"
+							(paste)="onTotpDigitPaste($event)"
+							autocomplete="one-time-code"
+						/>
+					}
+				</div>
+				<button
+					class="button is-link is-fullwidth"
+					[disabled]="authService.isAuthenticating() || totpCode.length !== 6"
+					[class.is-loading]="authService.isAuthenticating()"
+				>
+					Verify
+				</button>
+			</form>
+		}
+	</div>
 </ng-template>
 
-<app-modal-template #loginModal [title]="step() === 'credentials' ? 'Admin Login' : 'Two-Factor Auth'"
-    modalMaxWidth="400px" [bodyTemplate]="loginBody"></app-modal-template>
+<app-modal-template
+	#loginModal
+	[title]="step() === 'credentials' ? 'Admin Login' : 'Two-Factor Auth'"
+	modalMaxWidth="400px"
+	[bodyTemplate]="loginBody"
+></app-modal-template>

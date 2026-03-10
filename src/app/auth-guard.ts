@@ -6,20 +6,24 @@ import { timeout } from 'rxjs/operators';
 import { AuthService } from './services/auth/auth-service';
 
 export const authGuard: CanActivateFn = (_route, state) => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
-  const platformId = inject(PLATFORM_ID);
+	const authService = inject(AuthService);
+	const router = inject(Router);
+	const platformId = inject(PLATFORM_ID);
 
-  if (!isPlatformBrowser(platformId)) {
-    // sus
-    return of(false);
-  }
+	if (!isPlatformBrowser(platformId)) {
+		// sus
+		return of(false);
+	}
 
-  return authService.refreshAuthStatus().pipe(
-    timeout(5000),
-    map((isLoggedIn) =>
-      isLoggedIn ? true : router.createUrlTree(['/'], { queryParams: { returnUrl: state.url } })
-    ),
-    catchError(() => of(router.createUrlTree(['/'], { queryParams: { returnUrl: state.url } })))
-  );
+	return authService.refreshAuthStatus().pipe(
+		timeout(5000),
+		map((isLoggedIn) =>
+			isLoggedIn
+				? true
+				: router.createUrlTree(['/'], { queryParams: { returnUrl: state.url } }),
+		),
+		catchError(() =>
+			of(router.createUrlTree(['/'], { queryParams: { returnUrl: state.url } })),
+		),
+	);
 };

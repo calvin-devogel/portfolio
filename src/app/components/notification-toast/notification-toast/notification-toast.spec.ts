@@ -5,22 +5,21 @@ import { X } from 'angular-feather/icons';
 import { NotificationToast } from './notification-toast';
 
 describe('NotificationToast', () => {
-  let component: NotificationToast;
-  let fixture: ComponentFixture<NotificationToast>;
+	let component: NotificationToast;
+	let fixture: ComponentFixture<NotificationToast>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [NotificationToast],
-      providers: [importProvidersFrom(FeatherModule.pick({ X }))]
-    })
-    .compileComponents();
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			imports: [NotificationToast],
+			providers: [importProvidersFrom(FeatherModule.pick({ X }))],
+		}).compileComponents();
 
-    fixture = TestBed.createComponent(NotificationToast);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
-  });
+		fixture = TestBed.createComponent(NotificationToast);
+		component = fixture.componentInstance;
+		await fixture.whenStable();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

@@ -6,22 +6,21 @@ import { Home } from './home';
 import { provideRouter } from '@angular/router';
 
 describe('Home', () => {
-  let component: Home;
-  let fixture: ComponentFixture<Home>;
+	let component: Home;
+	let fixture: ComponentFixture<Home>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Home],
-      providers: [importProvidersFrom(FeatherModule.pick(allIcons)), provideRouter([])]
-    })
-    .compileComponents();
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			imports: [Home],
+			providers: [importProvidersFrom(FeatherModule.pick(allIcons)), provideRouter([])],
+		}).compileComponents();
 
-    fixture = TestBed.createComponent(Home);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
-  });
+		fixture = TestBed.createComponent(Home);
+		component = fixture.componentInstance;
+		await fixture.whenStable();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

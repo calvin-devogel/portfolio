@@ -3,11 +3,11 @@ import { NotificationService } from '../../../services/notifications/notificatio
 import { FeatherModule } from 'angular-feather';
 
 @Component({
-  selector: 'app-notification-toast',
-  imports: [FeatherModule],
-  templateUrl: './notification-toast.html',
-  styleUrl: './notification-toast.scss',
+	selector: 'app-notification-toast',
+	imports: [FeatherModule],
+	templateUrl: './notification-toast.html',
+	styleUrl: './notification-toast.scss',
 })
 export class NotificationToast {
-  notificationService = inject(NotificationService);
+	notificationService = inject(NotificationService);
 }
