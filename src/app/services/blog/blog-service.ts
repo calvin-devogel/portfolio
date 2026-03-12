@@ -15,7 +15,7 @@ export class BlogService {
       'Content-Type': 'application/json',
       'BlogPost-Page': page.toString(),
       'BlogPost-Page-Size': pageSize.toString(),
-      'BlogPost-On-Published': onPublished.toString(),
+      'BlogPost-OnPublished': onPublished.toString(),
       'slug': slug ?? ''
     });
 
