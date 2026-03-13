@@ -26,7 +26,7 @@ export class BlogService {
 			'BlogPost-Page': page.toString(),
 			'BlogPost-Page-Size': pageSize.toString(),
 			'BlogPost-OnPublished': onPublished.toString(),
-			...(slug ? { 'BlogPost-Slug': slug } : {})
+			...(slug ? { 'BlogPost-Slug': slug } : {}),
 		});
 
 		return this.http
