@@ -87,6 +87,7 @@ export class Login implements OnDestroy {
 		this.totpDigitInputs.get(Math.min(chars.length - 1, 5))?.nativeElement.focus();
 	}
 
+	// you need proper error handling here!
 	private submitCredentials() {
 		const sub = this.authService
 			.authenticate(this.loginData.username, this.loginData.password)

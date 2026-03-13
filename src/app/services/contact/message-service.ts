@@ -1,29 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { MessageData, CreateMessageData } from '../../interfaces/message-data';
-
-interface MessageResponse {
-	message: string;
-	message_id: string;
-}
-
-interface MessagesPageResponse {
-	messages: MessageData[];
-	page: number;
-	page_size: number;
-	total_items: number;
-}
-
-interface RawMessagesPageResponse {
-	messages?: MessageData[];
-	page?: number;
-	page_size?: number;
-	total_items?: number;
-	total_count?: number;
-	total?: number;
-	error?: string;
-}
+import {
+	MessageResponse,
+	MessagesPageResponse,
+	RawMessagesPageResponse,
+	CreateMessageData,
+} from '@interfaces/message-data';
 
 @Injectable({
 	providedIn: 'root',

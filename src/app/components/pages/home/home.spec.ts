@@ -23,4 +23,12 @@ describe('Home', () => {
 	it('should create', () => {
 		expect(component).toBeTruthy();
 	});
+
+	describe('openContactModal', () => {
+		it('should open the contact modal', () => {
+			vi.spyOn(component.contactModal, 'openModal');
+			component.openContactModal();
+			expect(component.contactModal.openModal).toHaveBeenCalled();
+		});
+	})
 });

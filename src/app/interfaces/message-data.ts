@@ -12,3 +12,25 @@ export interface CreateMessageData {
 	email: string;
 	message_text: string;
 }
+
+export interface MessageResponse {
+	message: string;
+	message_id: string;
+}
+
+export interface MessagesPageResponse {
+	messages: MessageData[];
+	page: number;
+	page_size: number;
+	total_items: number;
+}
+
+export interface RawMessagesPageResponse {
+	messages?: MessageData[];
+	page?: number;
+	page_size?: number;
+	total_items?: number;
+	total_count?: number;
+	total?: number;
+	error?: string;
+}

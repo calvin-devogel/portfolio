@@ -2,11 +2,10 @@ import { Component, inject, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FeatherModule } from 'angular-feather';
-import { CreateMessageData } from '../../../interfaces/message-data';
-import { MessageService } from '../../../services/contact/message-service';
-import { NotificationService } from '../../../services/notifications/notification-service';
+import { CreateMessageData } from '@interfaces/message-data';
+import { MessageService } from '@services/contact/message-service';
+import { NotificationService } from '@services/notifications/notification-service';
 import { Subscription } from 'rxjs';
-import { SeoService } from '../../../services/seo/seo-service';
 import { ModalTemplate } from '@components/modals/modal-template/modal-template';
 
 @Component({
@@ -19,7 +18,6 @@ export class Contact implements OnDestroy {
 	private messageService: MessageService = inject(MessageService);
 	private notificationService: NotificationService = inject(NotificationService);
 	private formBuilder: FormBuilder = inject(FormBuilder);
-	private seoService: SeoService = inject(SeoService);
 	@ViewChild('contactModal') contactModal!: ModalTemplate;
 
 	contactForm: FormGroup;
