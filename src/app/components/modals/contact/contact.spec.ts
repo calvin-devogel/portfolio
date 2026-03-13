@@ -120,6 +120,7 @@ describe('Contact', () => {
 			fillValidForm();
 			component.onSubmit();
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const spy = vi.spyOn((component as any).subscription, 'unsubscribe');
 			component.ngOnDestroy();
 			expect(spy).toHaveBeenCalled();
@@ -215,7 +216,7 @@ describe('Contact', () => {
 		it('should call onSubmit when form is submitted', () => {
 			const spy = vi.spyOn(component, 'onSubmit');
 			component.openModal();
-			const form = document.querySelector('form');
+			// const form = document.querySelector('form');
 			component.onSubmit();
 			expect(spy).toHaveBeenCalled();
 		});

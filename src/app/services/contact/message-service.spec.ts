@@ -125,25 +125,30 @@ describe('MessageService', () => {
 
 	describe('generateIdempotencyKey', () => {
 		it('should generate a valid UUID v4', () => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const key = (service as any).generateIdempotencyKey();
 			expect(key).toMatch(idempotencyKeyRegex);
 		});
 
 		it('should return a new key on each call', () => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const key1 = (service as any).generateIdempotencyKey();
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const key2 = (service as any).generateIdempotencyKey();
 			expect(key1).not.toBe(key2);
 		});
 
 		it('should use Math.random fallback when crypto.randomUUID is unavailable', () => {
 			const originalRandomUUID = crypto.randomUUID;
-			// @ts-expect-error - Temporarily remove crypto.randomUUID to test fallback
-			crypto.randomUUID = undefined;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			(crypto as any).randomUUID = undefined;
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const key = (service as any).generateIdempotencyKey();
 			expect(key).toMatch(idempotencyKeyRegex);
 
-			crypto.randomUUID = originalRandomUUID;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			(crypto as any).randomUUID = originalRandomUUID;
 		});
 	});
 });
