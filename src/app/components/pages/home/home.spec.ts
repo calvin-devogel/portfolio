@@ -30,5 +30,5 @@ describe('Home', () => {
 			component.openContactModal();
 			expect(component.contactModal.openModal).toHaveBeenCalled();
 		});
-	})
+	});
 });

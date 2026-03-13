@@ -5,145 +5,145 @@ import { MessageService } from './message-service';
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 describe('MessageService', () => {
-    let service: MessageService;
-    let httpMock: HttpTestingController;
+	let service: MessageService;
+	let httpMock: HttpTestingController;
 
-    const idempotencyKeyRegex =
-        /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+	const idempotencyKeyRegex =
+		/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            providers: [MessageService, provideHttpClient(), provideHttpClientTesting()],
-        });
-        service = TestBed.inject(MessageService);
-        httpMock = TestBed.inject(HttpTestingController);
-    });
+	beforeEach(() => {
+		TestBed.configureTestingModule({
+			providers: [MessageService, provideHttpClient(), provideHttpClientTesting()],
+		});
+		service = TestBed.inject(MessageService);
+		httpMock = TestBed.inject(HttpTestingController);
+	});
 
-    afterEach(() => {
-        httpMock.verify(); // ensures no unexpected requests were made
-    });
+	afterEach(() => {
+		httpMock.verify(); // ensures no unexpected requests were made
+	});
 
-    it('should be created', () => {
-        expect(service).toBeTruthy();
-    });
+	it('should be created', () => {
+		expect(service).toBeTruthy();
+	});
 
-    describe('sendMessage', () => {
-        const mockMessage = {
-            sender_name: 'John Doe',
-            email: 'fake@email.com',
-            message_text: 'This is a test message.',
-        };
+	describe('sendMessage', () => {
+		const mockMessage = {
+			sender_name: 'John Doe',
+			email: 'fake@email.com',
+			message_text: 'This is a test message.',
+		};
 
-        it('should POST to /api/contact with correct body', () => {
-            const mockResponse = { message: 'sent', message_id: 'abc-123' };
+		it('should POST to /api/contact with correct body', () => {
+			const mockResponse = { message: 'sent', message_id: 'abc-123' };
 
-            service.sendMessage(mockMessage).subscribe((response) => {
-                expect(response).toEqual(mockResponse);
-            });
+			service.sendMessage(mockMessage).subscribe((response) => {
+				expect(response).toEqual(mockResponse);
+			});
 
-            const req = httpMock.expectOne('/api/contact');
-            expect(req.request.method).toBe('POST');
-            expect(req.request.body).toContain('email=fake%40email.com');
-            expect(req.request.body).toContain('sender_name=John+Doe');
-            expect(req.request.body).toContain('message_text=This+is+a+test+message.');
-            req.flush(mockResponse);
-        });
+			const req = httpMock.expectOne('/api/contact');
+			expect(req.request.method).toBe('POST');
+			expect(req.request.body).toContain('email=fake%40email.com');
+			expect(req.request.body).toContain('sender_name=John+Doe');
+			expect(req.request.body).toContain('message_text=This+is+a+test+message.');
+			req.flush(mockResponse);
+		});
 
-        it('should include a valid Idempotency-Key header', () => {
-            service.sendMessage(mockMessage).subscribe();
+		it('should include a valid Idempotency-Key header', () => {
+			service.sendMessage(mockMessage).subscribe();
 
-            const req = httpMock.expectOne('/api/contact');
-            expect(req.request.headers.get('Idempotency-Key')).toMatch(idempotencyKeyRegex);
-            req.flush({ message: 'sent', message_id: 'abc-123' });
-        });
-    });
+			const req = httpMock.expectOne('/api/contact');
+			expect(req.request.headers.get('Idempotency-Key')).toMatch(idempotencyKeyRegex);
+			req.flush({ message: 'sent', message_id: 'abc-123' });
+		});
+	});
 
-    describe('getMessages', () => {
-        it('should GET /api/admin/messages with default params and normalize response', () => {
-            const mockRaw = {
-                messages: [
-                    {
-                        message_id: '1',
-                        sender_name: 'Alice',
-                        email: 'a@b.com',
-                        message_text: 'Hi',
-                        created_at: '2026-01-01',
-                    },
-                ],
-                page: 0,
-                page_size: 10,
-                total_items: 1,
-            };
+	describe('getMessages', () => {
+		it('should GET /api/admin/messages with default params and normalize response', () => {
+			const mockRaw = {
+				messages: [
+					{
+						message_id: '1',
+						sender_name: 'Alice',
+						email: 'a@b.com',
+						message_text: 'Hi',
+						created_at: '2026-01-01',
+					},
+				],
+				page: 0,
+				page_size: 10,
+				total_items: 1,
+			};
 
-            service.getMessages().subscribe((response) => {
-                expect(response.messages.length).toBe(1);
-                expect(response.page).toBe(0);
-                expect(response.page_size).toBe(10);
-                expect(response.total_items).toBe(1);
-            });
+			service.getMessages().subscribe((response) => {
+				expect(response.messages.length).toBe(1);
+				expect(response.page).toBe(0);
+				expect(response.page_size).toBe(10);
+				expect(response.total_items).toBe(1);
+			});
 
-            const req = httpMock.expectOne((r) => r.url === '/api/admin/messages');
-            expect(req.request.method).toBe('GET');
-            expect(req.request.params.get('page')).toBe('0');
-            expect(req.request.params.get('page_size')).toBe('10');
-            req.flush(mockRaw);
-        });
+			const req = httpMock.expectOne((r) => r.url === '/api/admin/messages');
+			expect(req.request.method).toBe('GET');
+			expect(req.request.params.get('page')).toBe('0');
+			expect(req.request.params.get('page_size')).toBe('10');
+			req.flush(mockRaw);
+		});
 
-        it('should fall back to messages.length when total fields are missing', () => {
-            const mockRaw = {
-                messages: [
-                    {
-                        message_id: '1',
-                        sender_name: 'Alice',
-                        email: 'a@b.com',
-                        message_text: 'Hi',
-                        created_at: '2026-01-01',
-                    },
-                ],
-            };
+		it('should fall back to messages.length when total fields are missing', () => {
+			const mockRaw = {
+				messages: [
+					{
+						message_id: '1',
+						sender_name: 'Alice',
+						email: 'a@b.com',
+						message_text: 'Hi',
+						created_at: '2026-01-01',
+					},
+				],
+			};
 
-            service.getMessages().subscribe((response) => {
-                expect(response.total_items).toBe(1);
-            });
+			service.getMessages().subscribe((response) => {
+				expect(response.total_items).toBe(1);
+			});
 
-            const req = httpMock.expectOne((r) => r.url === '/api/admin/messages');
-            req.flush(mockRaw);
-        });
-    });
+			const req = httpMock.expectOne((r) => r.url === '/api/admin/messages');
+			req.flush(mockRaw);
+		});
+	});
 
-    describe('patchMessage', () => {
-        it('should PATCH /api/admin/messages with correct body and Idempotency-Key header', () => {
-            service.patchMessage('msg-123', true).subscribe();
+	describe('patchMessage', () => {
+		it('should PATCH /api/admin/messages with correct body and Idempotency-Key header', () => {
+			service.patchMessage('msg-123', true).subscribe();
 
-            const req = httpMock.expectOne('/api/admin/messages');
-            expect(req.request.method).toBe('PATCH');
-            expect(req.request.body).toEqual({ message_id: 'msg-123', read: true });
-            expect(req.request.headers.get('Idempotency-Key')).toMatch(idempotencyKeyRegex);
-            req.flush(null);
-        });
-    });
+			const req = httpMock.expectOne('/api/admin/messages');
+			expect(req.request.method).toBe('PATCH');
+			expect(req.request.body).toEqual({ message_id: 'msg-123', read: true });
+			expect(req.request.headers.get('Idempotency-Key')).toMatch(idempotencyKeyRegex);
+			req.flush(null);
+		});
+	});
 
-    describe('generateIdempotencyKey', () => {
-        it('should generate a valid UUID v4', () => {
-            const key = (service as any).generateIdempotencyKey();
-            expect(key).toMatch(idempotencyKeyRegex);
-        });
+	describe('generateIdempotencyKey', () => {
+		it('should generate a valid UUID v4', () => {
+			const key = (service as any).generateIdempotencyKey();
+			expect(key).toMatch(idempotencyKeyRegex);
+		});
 
-        it('should return a new key on each call', () => {
-            const key1 = (service as any).generateIdempotencyKey();
-            const key2 = (service as any).generateIdempotencyKey();
-            expect(key1).not.toBe(key2);
-        });
+		it('should return a new key on each call', () => {
+			const key1 = (service as any).generateIdempotencyKey();
+			const key2 = (service as any).generateIdempotencyKey();
+			expect(key1).not.toBe(key2);
+		});
 
-        it('should use Math.random fallback when crypto.randomUUID is unavailable', () => {
-            const originalRandomUUID = crypto.randomUUID;
-            // @ts-expect-error - Temporarily remove crypto.randomUUID to test fallback
-            crypto.randomUUID = undefined;
+		it('should use Math.random fallback when crypto.randomUUID is unavailable', () => {
+			const originalRandomUUID = crypto.randomUUID;
+			// @ts-expect-error - Temporarily remove crypto.randomUUID to test fallback
+			crypto.randomUUID = undefined;
 
-            const key = (service as any).generateIdempotencyKey();
-            expect(key).toMatch(idempotencyKeyRegex);
+			const key = (service as any).generateIdempotencyKey();
+			expect(key).toMatch(idempotencyKeyRegex);
 
-            crypto.randomUUID = originalRandomUUID;
-        });
-    });
+			crypto.randomUUID = originalRandomUUID;
+		});
+	});
 });
