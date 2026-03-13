@@ -3,9 +3,7 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-    "schematicCollections": [
-      "angular-eslint"
-    ]
+    "schematicCollections": ["angular-eslint"]
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -46,9 +44,7 @@
             "ssr": {
               "entry": "src/server.ts"
             },
-            "allowedCommonJsDependencies": [
-              "yaml"
-            ]
+            "allowedCommonJsDependencies": ["yaml"]
           },
           "configurations": {
             "production": {
@@ -109,10 +105,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }

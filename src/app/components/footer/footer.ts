@@ -10,5 +10,7 @@ import { Contact } from '@components/modals/contact/contact';
 export class Footer {
   @ViewChild('contactModal') contactModal!: Contact;
 
-  openContactModal(): void { this.contactModal.openModal(); }
+  openContactModal(): void {
+    this.contactModal.openModal();
+  }
 }

@@ -23,7 +23,7 @@ describe('ModalTemplate', () => {
 
   afterEach(() => {
     document.body.style.overflow = '';
-  })
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -35,7 +35,7 @@ describe('ModalTemplate', () => {
     fixture.detectChanges();
     expect(document.body.style.overflow).not.toBe(initialOverflow);
 
-    await new Promise<void>(resolve => {
+    await new Promise<void>((resolve) => {
       component.closed.subscribe(resolve);
       component.closeModal();
     });
@@ -59,14 +59,17 @@ describe('ModalTemplate', () => {
       component.onBackdropClick();
       fixture.detectChanges();
       expect(document.body.style.overflow).not.toBe(initialOverflow);
-      await new Promise<void>(resolve => { component.closed.subscribe(resolve); component.closeModal(); });
+      await new Promise<void>((resolve) => {
+        component.closed.subscribe(resolve);
+        component.closeModal();
+      });
     } else {
       // was false, now true, should close the modal on backdrop click
-      await new Promise<void>(resolve => {
+      await new Promise<void>((resolve) => {
         component.closed.subscribe(resolve);
         component.onBackdropClick();
-      })
+      });
       expect(document.body.style.overflow).toBe(initialOverflow);
     }
   });
-})
+});

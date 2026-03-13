@@ -7,7 +7,10 @@ import { MarkdownComponent, provideMarkdown } from 'ngx-markdown';
 import { Carousel } from '@components/carousel/carousel';
 import { PageLayout } from '@components/page-layout/page-layout';
 import { SeoService } from '@services/seo/seo-service';
-import { blogPostingSchema, breadCrumbSchema } from '@modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
+import {
+  blogPostingSchema,
+  breadCrumbSchema,
+} from '@modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
 
 @Component({
   selector: 'app-blog-individual',
@@ -69,7 +72,7 @@ export class BlogIndividual implements OnInit {
       error: () => {
         this.error.set(true);
         this.loading.set(false);
-      }
+      },
     });
   }
 }

@@ -1,34 +1,54 @@
 @if (label) {
-    <p class="carousel-label">{{ label }}</p>
+  <p class="carousel-label">{{ label }}</p>
 }
 
-<div class="carousel-wrap" tabindex="0" (keydown.arrowLeft)="previous()" (keydown.arrowRight)="next()">
-    <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex() * 100 + '%)'">
-        @for (slide of slides; track slide.src; let i = $index) {
-        <figure class="carousel-slide" [class.is-active]="i === currentIndex()">
-            <img [src]="slide.src" [alt]="slide.alt ?? ''" loading="lazy" />
-            @if (slide.caption) {
-            <figcaption class="carousel-caption">{{ slide.caption }}</figcaption>
-            }
-        </figure>
+<div
+  class="carousel-wrap"
+  tabindex="0"
+  (keydown.arrowLeft)="previous()"
+  (keydown.arrowRight)="next()"
+>
+  <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex() * 100 + '%)'">
+    @for (slide of slides; track slide.src; let i = $index) {
+      <figure class="carousel-slide" [class.is-active]="i === currentIndex()">
+        <img [src]="slide.src" [alt]="slide.alt ?? ''" loading="lazy" />
+        @if (slide.caption) {
+          <figcaption class="carousel-caption">{{ slide.caption }}</figcaption>
         }
-    </div>
+      </figure>
+    }
+  </div>
 
-    @if (slides.length > 1) {
-    <button type="button" class="carousel-arrow carousel-arrow--prev" aria-label="Previous slide" [disabled]="currentIndex() === 0"
-        (click)="previous()">
-        <i-feather name="chevron-left" size="18"></i-feather>
+  @if (slides.length > 1) {
+    <button
+      type="button"
+      class="carousel-arrow carousel-arrow--prev"
+      aria-label="Previous slide"
+      [disabled]="currentIndex() === 0"
+      (click)="previous()"
+    >
+      <i-feather name="chevron-left" size="18"></i-feather>
     </button>
-    <button type="button" class="carousel-arrow carousel-arrow--next" aria-label="Next slide"
-        [disabled]="currentIndex() === slides.length - 1" (click)="next()">
-        <i-feather name="chevron-right" size="18"></i-feather>
+    <button
+      type="button"
+      class="carousel-arrow carousel-arrow--next"
+      aria-label="Next slide"
+      [disabled]="currentIndex() === slides.length - 1"
+      (click)="next()"
+    >
+      <i-feather name="chevron-right" size="18"></i-feather>
     </button>
 
     <div class="carousel-dots">
-        @for (slide of slides; track slide.src; let i = $index) {
-        <button type="button" class="carousel-dot" [class.is-active]="i === currentIndex()"
-            [attr.aria-label]="'Go to slide ' + (i + 1)" (click)="goTo(i)"></button>
-        }
+      @for (slide of slides; track slide.src; let i = $index) {
+        <button
+          type="button"
+          class="carousel-dot"
+          [class.is-active]="i === currentIndex()"
+          [attr.aria-label]="'Go to slide ' + (i + 1)"
+          (click)="goTo(i)"
+        ></button>
+      }
     </div>
-    }
+  }
 </div>

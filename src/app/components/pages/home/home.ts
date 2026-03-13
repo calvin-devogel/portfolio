@@ -1,10 +1,13 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { PageLayout } from '@components/page-layout/page-layout';
-import { RouterLink } from "@angular/router";
+import { RouterLink } from '@angular/router';
 import { FeatherModule } from 'angular-feather';
 import { SeoService } from '@services/seo/seo-service';
 import { Contact } from '@components/modals/contact/contact';
-import { homeSchema, personSchema } from '@modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
+import {
+  homeSchema,
+  personSchema,
+} from '@modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +21,8 @@ export class Home implements OnInit {
   ngOnInit(): void {
     this.seoService.updateSeo({
       title: 'Calvin de Vogel | Portfolio',
-      description: "Hi, I'm Cal, a software engineer specializing in full-stack, cloud-native application development. Welcome to my portfolio, where I showcase my projects, experience, and passion for software development.",
+      description:
+        "Hi, I'm Cal, a software engineer specializing in full-stack, cloud-native application development. Welcome to my portfolio, where I showcase my projects, experience, and passion for software development.",
       canonicalUrl: 'https://devogel.dev',
       ogType: 'website',
       structuredData: [homeSchema, personSchema],
@@ -27,5 +31,7 @@ export class Home implements OnInit {
 
   @ViewChild('contactModal') contactModal!: Contact;
 
-  openContactModal(): void { this.contactModal.openModal(); }
+  openContactModal(): void {
+    this.contactModal.openModal();
+  }
 }

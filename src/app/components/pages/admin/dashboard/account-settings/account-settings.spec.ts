@@ -11,9 +11,8 @@ describe('AccountSettings', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AccountSettings],
-      providers: [importProvidersFrom(FeatherModule.pick(allIcons))]
-    })
-    .compileComponents();
+      providers: [importProvidersFrom(FeatherModule.pick(allIcons))],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AccountSettings);
     component = fixture.componentInstance;

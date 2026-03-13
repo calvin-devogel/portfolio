@@ -1,4 +1,4 @@
-import { 
+import {
   Component,
   Input,
   OnDestroy,
@@ -17,7 +17,7 @@ import { CarouselImage } from '@interfaces/blog-data';
   styleUrls: ['./carousel.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Carousel implements OnInit, OnDestroy{
+export class Carousel implements OnInit, OnDestroy {
   @Input() slides: CarouselImage[] = [];
   @Input() label = '';
   @Input() autoPlayMs = 5000;
@@ -29,9 +29,7 @@ export class Carousel implements OnInit, OnDestroy{
   ngOnInit() {
     if (this.slides.length > 1 && this.autoPlayMs > 0) {
       this.timer = setInterval(() => {
-        this.currentIndex.update(index =>
-          index < this.slides.length - 1 ? index + 1 : 0
-        );
+        this.currentIndex.update((index) => (index < this.slides.length - 1 ? index + 1 : 0));
       }, this.autoPlayMs);
     }
   }
@@ -42,13 +40,13 @@ export class Carousel implements OnInit, OnDestroy{
 
   previous() {
     if (this.slides.length === 0) return;
-    this.currentIndex.update(index => Math.max(0, index - 1));
+    this.currentIndex.update((index) => Math.max(0, index - 1));
     this.resetTimer();
   }
 
   next() {
     if (this.slides.length === 0) return;
-    this.currentIndex.update(index => Math.min(this.slides.length - 1, index + 1));
+    this.currentIndex.update((index) => Math.min(this.slides.length - 1, index + 1));
     this.resetTimer();
   }
 
@@ -63,9 +61,7 @@ export class Carousel implements OnInit, OnDestroy{
     clearInterval(this.timer);
     if (this.slides.length > 1 && this.autoPlayMs > 0) {
       this.timer = setInterval(() => {
-        this.currentIndex.update(index =>
-          index < this.slides.length - 1 ? index + 1 : 0
-        );
+        this.currentIndex.update((index) => (index < this.slides.length - 1 ? index + 1 : 0));
       }, this.autoPlayMs);
     }
   }

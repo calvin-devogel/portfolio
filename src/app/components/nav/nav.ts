@@ -16,12 +16,14 @@ export class Nav {
   private router = inject(Router);
   @ViewChild('loginModal') loginModal!: Login;
 
-  openLogin(): void { this.loginModal.openModal(); }
+  openLogin(): void {
+    this.loginModal.openModal();
+  }
 
   logout() {
     this.authService.logout().subscribe({
       next: () => this.router.navigate(['/']),
-      error: (err) => console.error('Logout failed', err)
-    })
+      error: (err) => console.error('Logout failed', err),
+    });
   }
 }

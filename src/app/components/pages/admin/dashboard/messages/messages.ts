@@ -1,10 +1,4 @@
-import { 
-  Component,
-  DestroyRef,
-  computed,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageService } from '@services/contact/message-service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -47,16 +41,16 @@ export class Messages {
     totalCount: 0,
     errorText: null,
     updatingIds: new Set<string>(),
-    refreshing: false
-  })
+    refreshing: false,
+  });
 
   status = computed(() => this.state().status);
-  messages = computed(() => this.state().messages)
+  messages = computed(() => this.state().messages);
   currentPage = computed(() => this.state().currentPage);
   totalPages = computed(() => {
     const { totalCount, pageSize } = this.state();
     if (!Number.isFinite(totalCount) || !Number.isFinite(pageSize) || pageSize <= 0) return 1;
-    return Math.max(1, Math.ceil(totalCount / pageSize))
+    return Math.max(1, Math.ceil(totalCount / pageSize));
   });
   hasNextPage = computed(() => this.currentPage() < this.totalPages());
   hasPreviousPage = computed(() => this.currentPage() > 0);
@@ -67,7 +61,7 @@ export class Messages {
     this.startAutoRefresh();
   }
 
-private patchState(patch: Partial<MesagePageState>): void {
+  private patchState(patch: Partial<MesagePageState>): void {
     this.state.update((state) => ({ ...state, ...patch }));
   }
 
@@ -119,7 +113,7 @@ private patchState(patch: Partial<MesagePageState>): void {
   markAsRead(message: MessageData): void {
     const id = message.message_id;
     const s = this.state();
-    
+
     if (message.read_message || s.updatingIds.has(id)) return;
 
     // optimistic update
@@ -128,9 +122,7 @@ private patchState(patch: Partial<MesagePageState>): void {
 
     this.patchState({
       updatingIds: optimisticSet,
-      messages: s.messages.map((m) =>
-        m.message_id === id ? { ...m, read_message: true } : m,
-      ),
+      messages: s.messages.map((m) => (m.message_id === id ? { ...m, read_message: true } : m)),
     });
 
     this.messageService
@@ -160,7 +152,7 @@ private patchState(patch: Partial<MesagePageState>): void {
   isMessageUpdating(messageId: string): boolean {
     return this.state().updatingIds.has(messageId);
   }
-  
+
   nextPage(): void {
     if (this.hasNextPage()) {
       this.loadMessages(this.currentPage() + 1);

@@ -1,60 +1,60 @@
 // brand colors
 
 :root {
-    --primary:          #5c7a6b;
-    --primary-dark:     #3d5c4e;
-    --secondary:        #c4724a;
-    --accent:           #8fa67a;
-    --secondary-light:  #c9b99a;
-    --warning:          #c9a84c;
-    --warning-light:    #e8c99a;
-    --danger:           #b45050;
-    --danger-light:     #d47878;
+  --primary: #5c7a6b;
+  --primary-dark: #3d5c4e;
+  --secondary: #c4724a;
+  --accent: #8fa67a;
+  --secondary-light: #c9b99a;
+  --warning: #c9a84c;
+  --warning-light: #e8c99a;
+  --danger: #b45050;
+  --danger-light: #d47878;
 
-    --gradient-1: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-    --gradient-2: linear-gradient(135deg, var(--accent) 0%, var(--secondary-light) 100%);
-    --gradient-3: linear-gradient(135deg, var(--secondary) 0%, var(--warning-light) 100%);
+  --gradient-1: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  --gradient-2: linear-gradient(135deg, var(--accent) 0%, var(--secondary-light) 100%);
+  --gradient-3: linear-gradient(135deg, var(--secondary) 0%, var(--warning-light) 100%);
 
-    // surfaces
-    --surface: rgba(255, 252, 248, 0.88);
-    --surface-dark: rgba(24, 28, 26, 0.88);
-    --surface-card: rgba(255, 252, 248, 0.97);
-    --surface-dark-opaque: rgba(24, 28, 26, 1);
+  // surfaces
+  --surface: rgba(255, 252, 248, 0.88);
+  --surface-dark: rgba(24, 28, 26, 0.88);
+  --surface-card: rgba(255, 252, 248, 0.97);
+  --surface-dark-opaque: rgba(24, 28, 26, 1);
 
-    // shadows and borders
-    --shadow-color: rgba(92, 122, 107, 0.18);
-    --border-subtle: rgba(92, 122, 107, 0.14);
-    --border-medium: rgba(92, 122, 107, 0.22);
-    --border-strong: rgba(92, 122, 107, 0.3);
+  // shadows and borders
+  --shadow-color: rgba(92, 122, 107, 0.18);
+  --border-subtle: rgba(92, 122, 107, 0.14);
+  --border-medium: rgba(92, 122, 107, 0.22);
+  --border-strong: rgba(92, 122, 107, 0.3);
 
-    // tints
-    --tint-xs: rgba(92, 122, 107, 0.04);
-    --tint-sm: rgba(92, 122, 107, 0.08);
-    --tint-md: rgba(92, 122, 107, 0.12);
-    --tint-lg: rgba(92, 122, 107, 0.18);
+  // tints
+  --tint-xs: rgba(92, 122, 107, 0.04);
+  --tint-sm: rgba(92, 122, 107, 0.08);
+  --tint-md: rgba(92, 122, 107, 0.12);
+  --tint-lg: rgba(92, 122, 107, 0.18);
 
-    // text
-    --text-muted: #888;
-    --text-faint: #aaa;
-    --text-body: #333;
+  // text
+  --text-muted: #888;
+  --text-faint: #aaa;
+  --text-body: #333;
 
-    // layout
-    --card-radius: 14px;
-    --nav-height: 3.25rem;
+  // layout
+  --card-radius: 14px;
+  --nav-height: 3.25rem;
 
-    @media (prefers-color-scheme: dark) {
-        --surface: rgba(28, 34, 30, 0.88);
-        --surface-card: rgba(22, 28, 24, 0.97);
-        --border-subtle: rgba(92, 122, 107, 0.22);
-        --border-medium: rgba(92, 122, 107, 0.30);
-        --border-strong: rgba(92, 122, 107, 0.45);
-        --tint-xs: rgba(92, 122, 107, 0.05);
-        --tint-sm: rgba(92, 122, 107, 0.10);
-        --tint-md: rgba(92, 122, 107, 0.15);
-        --tint-lg: rgba(92, 122, 107, 0.22);
-        --text-body: #d8d0c8;
-    }
+  @media (prefers-color-scheme: dark) {
+    --surface: rgba(28, 34, 30, 0.88);
+    --surface-card: rgba(22, 28, 24, 0.97);
+    --border-subtle: rgba(92, 122, 107, 0.22);
+    --border-medium: rgba(92, 122, 107, 0.3);
+    --border-strong: rgba(92, 122, 107, 0.45);
+    --tint-xs: rgba(92, 122, 107, 0.05);
+    --tint-sm: rgba(92, 122, 107, 0.1);
+    --tint-md: rgba(92, 122, 107, 0.15);
+    --tint-lg: rgba(92, 122, 107, 0.22);
+    --text-body: #d8d0c8;
+  }
 
-    scrollbar-width: thin; // firefox is washed man
-    scrollbar-color: var(--primary) transparent;
+  scrollbar-width: thin; // firefox is washed man
+  scrollbar-color: var(--primary) transparent;
 }

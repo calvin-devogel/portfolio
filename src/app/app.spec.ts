@@ -9,10 +9,7 @@ describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [
-        importProvidersFrom(FeatherModule.pick(allIcons)),
-        provideRouter([])
-      ]
+      providers: [importProvidersFrom(FeatherModule.pick(allIcons)), provideRouter([])],
     }).compileComponents();
   });
 

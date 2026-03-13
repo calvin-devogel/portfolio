@@ -11,11 +11,8 @@ describe('Footer', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Footer],
-      providers: [
-        importProvidersFrom(FeatherModule.pick(allIcons))
-      ]
-    })
-    .compileComponents();
+      providers: [importProvidersFrom(FeatherModule.pick(allIcons))],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Footer);
     component = fixture.componentInstance;

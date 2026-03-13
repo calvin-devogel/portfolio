@@ -11,11 +11,8 @@ describe('Contact', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Contact],
-      providers: [
-        importProvidersFrom(FeatherModule.pick(allIcons))
-      ]
-    })
-    .compileComponents();
+      providers: [importProvidersFrom(FeatherModule.pick(allIcons))],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Contact);
     component = fixture.componentInstance;

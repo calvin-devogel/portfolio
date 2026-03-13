@@ -20,7 +20,7 @@ describe('Resume', () => {
         summary: ['Professional summary'],
         skills: [
           { label: 'Languages', details: 'TypeScript, Python, Go' },
-          { label: 'Empty', details: '' }
+          { label: 'Empty', details: '' },
         ],
         experience: [
           {
@@ -29,8 +29,8 @@ describe('Resume', () => {
             position: 'Developer',
             start_date: '2020-01',
             end_date: '2022-01',
-            highlights: ['Built things']
-          }
+            highlights: ['Built things'],
+          },
         ],
         education: [
           {
@@ -38,16 +38,16 @@ describe('Resume', () => {
             area: 'CS',
             degree: 'BS',
             end_date: '2019-05',
-            highlights: []
-          }
-        ]
-      }
-    }
+            highlights: [],
+          },
+        ],
+      },
+    },
   };
 
   const mockResumeService = {
-    getResumeData: vi.fn().mockReturnValue(of(mockResumeData))
-  }
+    getResumeData: vi.fn().mockReturnValue(of(mockResumeData)),
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -55,10 +55,9 @@ describe('Resume', () => {
       providers: [
         { provide: ResumeService, useValue: mockResumeService },
         provideRouter([]),
-        importProvidersFrom(FeatherModule.pick(allIcons))
-      ]
-    })
-    .compileComponents();
+        importProvidersFrom(FeatherModule.pick(allIcons)),
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Resume);
     component = fixture.componentInstance;
@@ -92,5 +91,5 @@ describe('Resume', () => {
     expect(skillGroup?.['tags']?.length).toBe(3);
     expect(skillGroup?.['tags']).toEqual(['TypeScript', 'Python', 'Go']);
     expect(emptySkillGroup?.['tags']?.length).toBe(0);
-  })
+  });
 });

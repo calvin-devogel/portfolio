@@ -50,10 +50,9 @@ app.use((req, res, next) => {
         `connect-src 'self'`,
       ];
 
-  res.setHeader('Content-Security-Policy', cspDirectives.join('; ')
-  );
+  res.setHeader('Content-Security-Policy', cspDirectives.join('; '));
   next();
-})
+});
 
 /**
  * Serve static files from /browser
@@ -72,9 +71,7 @@ app.use(
 app.use((req, res, next) => {
   angularApp
     .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
+    .then((response) => (response ? writeResponseToNodeResponse(response, res) : next()))
     .catch(next);
 });
 

@@ -11,11 +11,8 @@ describe('Login', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Login],
-      providers: [
-        importProvidersFrom(FeatherModule.pick(allIcons))
-      ]
-    })
-    .compileComponents();
+      providers: [importProvidersFrom(FeatherModule.pick(allIcons))],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Login);
     component = fixture.componentInstance;

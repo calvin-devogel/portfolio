@@ -1,67 +1,67 @@
 .contact-wrapper {
-    max-width: 640px;
-    margin: 0 auto;
-    padding-bottom: 2rem;
-    padding-top: 1rem;
+  max-width: 640px;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+  padding-top: 1rem;
 
-    @media screen and (max-width: 768px) {
-        padding: 1.5rem 0.75rem 1rem;
-    }
+  @media screen and (max-width: 768px) {
+    padding: 1.5rem 0.75rem 1rem;
+  }
 }
 
 .contact-header {
-    text-align: center;
-    margin-bottom: 1rem;
+  text-align: center;
+  margin-bottom: 1rem;
 
-    .title {
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
+  .title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    color: #5a6b61;
+    font-size: 1rem;
+
+    @media (prefers-color-scheme: dark) {
+      color: #8fa67a;
     }
-
-    .subtitle {
-        color: #5a6b61;
-        font-size: 1rem;
-
-        @media (prefers-color-scheme: dark) {
-            color: #8fa67a;
-        }
-    }
+  }
 }
 
 .contact-card {
-    // overrides the default box side margins for this layout
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    padding: 2rem !important;
+  // overrides the default box side margins for this layout
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding: 2rem !important;
 
-    @media screen and (max-width: 768px) {
-        padding: 1.25rem !important;
-    }
+  @media screen and (max-width: 768px) {
+    padding: 1.25rem !important;
+  }
 }
 
 .field {
-    text-align: left;
+  text-align: left;
 
-    .label {
-        font-size: 0.95rem;
-        margin-bottom: 0.4rem;
+  .label {
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+  }
+
+  // align feather icons vertically inside input
+  .icon i-feather {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // override Bulma's blue focus color on input icons
+  .input:focus ~ .icon,
+  .input.is-danger ~ .icon {
+    color: var(--primary) !important;
+
+    i-feather {
+      color: var(--primary);
+      stroke: var(--primary);
     }
-
-    // align feather icons vertically inside input
-    .icon i-feather {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    // override Bulma's blue focus color on input icons
-    .input:focus ~ .icon,
-    .input.is-danger ~ .icon {
-        color: var(--primary) !important;
-
-        i-feather {
-            color: var(--primary);
-            stroke: var(--primary);
-        }
-    }
+  }
 }

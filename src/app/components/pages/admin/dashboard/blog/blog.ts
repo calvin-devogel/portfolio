@@ -1,14 +1,6 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  signal,
-  computed,
-  ViewChild,
-  OnDestroy,
-} from '@angular/core';
+import { Component, inject, OnInit, signal, computed, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BlogService } from '@services/blog/blog-service'
+import { BlogService } from '@services/blog/blog-service';
 import { FormsModule } from '@angular/forms';
 import { FeatherModule } from 'angular-feather';
 import { BlogPost, CreateBlogPost, BlogSection } from '@interfaces/blog-data';
@@ -20,14 +12,7 @@ type EditorMode = 'create' | 'edit' | 'preview';
 
 @Component({
   selector: 'app-blog',
-  imports: [
-    CommonModule,
-    FormsModule,
-    FeatherModule,
-    MarkdownComponent,
-    ModalTemplate,
-    Carousel
-  ],
+  imports: [CommonModule, FormsModule, FeatherModule, MarkdownComponent, ModalTemplate, Carousel],
   providers: [provideMarkdown()],
   templateUrl: './blog.html',
   styleUrls: ['./blog.scss', './splitModal.scss'],
@@ -90,16 +75,16 @@ export class Blog implements OnInit, OnDestroy {
         buffer = [];
       } else if (matchEnd && inCarousel) {
         sections.push({
-          type:'carousel',
+          type: 'carousel',
           label: carouselLabel || undefined,
           slides: carouselLines
-            .map(l => l.trim())
+            .map((l) => l.trim())
             .filter(Boolean)
-            .map(l => {
-              const [src, alt, caption] = l.split('|').map(s => s.trim());
+            .map((l) => {
+              const [src, alt, caption] = l.split('|').map((s) => s.trim());
               return { src, alt, caption };
             })
-            .filter(slide => !!slide.src && slide.src.trim().length > 0),
+            .filter((slide) => !!slide.src && slide.src.trim().length > 0),
         });
         inCarousel = false;
         carouselLabel = '';
@@ -114,7 +99,9 @@ export class Blog implements OnInit, OnDestroy {
     // flush
     if (inCarousel) {
       // unclosed carousel - treat as markdown
-      const header = carouselLabel ? `---carousel-start ${carouselLabel}---` : `---carousel-start---`;
+      const header = carouselLabel
+        ? `---carousel-start ${carouselLabel}---`
+        : `---carousel-start---`;
       buffer.push(header, ...carouselLines);
       inCarousel = false;
       carouselLabel = '';
@@ -125,20 +112,26 @@ export class Blog implements OnInit, OnDestroy {
       sections.push({ type: 'markdown', content: buffer.join('\n').trim() });
     }
 
-    return sections.filter(section => section.type === 'carousel' ? (section.slides?.length ?? 0) > 0 : !!section.content);
+    return sections.filter((section) =>
+      section.type === 'carousel' ? (section.slides?.length ?? 0) > 0 : !!section.content,
+    );
   }
 
   private sectionsToRaw(sections: BlogSection[]): string {
-    return sections.map(section => {
-      if (section.type === 'carousel') {
-        const header = section.label ? `---carousel-start ${section.label}---` : `---carousel-start---`;
-        const slideLines = (section.slides ?? [])
-          .map(slide => [slide.src, slide.alt ?? '', slide.caption ?? ''].join(' | '))
-          .join('\n');
-        return `${header}\n${slideLines}\n---carousel-end---`;
-      }
-      return section.content ?? '';
-    }).join('\n\n');
+    return sections
+      .map((section) => {
+        if (section.type === 'carousel') {
+          const header = section.label
+            ? `---carousel-start ${section.label}---`
+            : `---carousel-start---`;
+          const slideLines = (section.slides ?? [])
+            .map((slide) => [slide.src, slide.alt ?? '', slide.caption ?? ''].join(' | '))
+            .join('\n');
+          return `${header}\n${slideLines}\n---carousel-end---`;
+        }
+        return section.content ?? '';
+      })
+      .join('\n\n');
   }
 
   dirtyFields = computed(() => {
@@ -172,22 +165,24 @@ export class Blog implements OnInit, OnDestroy {
         this.loadingPosts.set(false);
       },
       error: (err) => {
-        this.listError.set('Failed to load posts: ' + (err.error?.error || err.message || 'Unknown error'));
+        this.listError.set(
+          'Failed to load posts: ' + (err.error?.error || err.message || 'Unknown error'),
+        );
         this.loadingPosts.set(false);
-      }
+      },
     });
   }
 
   prevPage(): void {
     if (this.currentPage() > 0) {
-      this.currentPage.update(page => page - 1);
+      this.currentPage.update((page) => page - 1);
       this.loadPosts();
     }
   }
 
   nextPage(): void {
     if (this.currentPage() < this.totalPages() - 1) {
-      this.currentPage.update(page => page + 1);
+      this.currentPage.update((page) => page + 1);
       this.loadPosts();
     }
   }
@@ -217,10 +212,7 @@ export class Blog implements OnInit, OnDestroy {
 
   autoSlug(): void {
     if (this.editorMode() === 'create') {
-      this.formSlug.set(this.formTitle()
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, '-'));
+      this.formSlug.set(this.formTitle().toLowerCase().trim().replace(/\s+/g, '-'));
     }
   }
 
@@ -251,16 +243,18 @@ export class Blog implements OnInit, OnDestroy {
         next: () => {
           const updated = { ...post!, ...payload };
           this.selectedPost.set(updated);
-          this.posts.update(list => 
-            list.map(p => p.post_id === updated.post_id ? updated : p)
+          this.posts.update((list) =>
+            list.map((p) => (p.post_id === updated.post_id ? updated : p)),
           );
           this.setSuccess(`Post "${updated.title}" updated successfully`);
           this.saving.set(false);
         },
         error: (err) => {
-          this.setError('Failed to update post: ' + (err.error?.error || err.message || 'Unknown error'));
+          this.setError(
+            'Failed to update post: ' + (err.error?.error || err.message || 'Unknown error'),
+          );
           this.saving.set(false);
-        }
+        },
       });
     } else {
       const payload: CreateBlogPost = {
@@ -278,9 +272,11 @@ export class Blog implements OnInit, OnDestroy {
           this.setSuccess(`Post "${payload.title}" created successfully`);
         },
         error: (err) => {
-          this.setError('Failed to create post: ' + (err.error?.error || err.message || 'Unknown error'));
+          this.setError(
+            'Failed to create post: ' + (err.error?.error || err.message || 'Unknown error'),
+          );
           this.saving.set(false);
-        }
+        },
       });
     }
   }
@@ -290,20 +286,18 @@ export class Blog implements OnInit, OnDestroy {
     if (!post) return;
     this.clearMessages();
     this.saving.set(true);
-    this.blogService.publishPost(post.post_id, !post.published ).subscribe({
+    this.blogService.publishPost(post.post_id, !post.published).subscribe({
       next: () => {
         const updated = { ...post, published: !post.published };
         this.selectedPost.set(updated);
-        this.posts.update(list =>
-          list.map(p => p.post_id === post.post_id ? updated : p)
-        );
+        this.posts.update((list) => list.map((p) => (p.post_id === post.post_id ? updated : p)));
         this.setSuccess(`Post ${updated.published ? 'published' : 'unpublished'}.`);
         this.saving.set(false);
       },
       error: () => {
         this.setError('Failed to update publish status.');
         this.saving.set(false);
-      }
+      },
     });
   }
 
@@ -314,7 +308,7 @@ export class Blog implements OnInit, OnDestroy {
     this.deleting.set(true);
     this.blogService.deletePost(post.post_id).subscribe({
       next: () => {
-        this.posts.update(list => list.filter(p => p.post_id !== post.post_id));
+        this.posts.update((list) => list.filter((p) => p.post_id !== post.post_id));
         this.deleting.set(false);
         this.closeSplitModal();
         this.newPost();
@@ -323,10 +317,10 @@ export class Blog implements OnInit, OnDestroy {
       error: () => {
         this.setError('Failed to delete post.');
         this.deleting.set(false);
-      }
+      },
     });
   }
-  
+
   // helpers
 
   openSplitModal(): void {
@@ -361,7 +355,11 @@ export class Blog implements OnInit, OnDestroy {
   }
 
   formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
+    return new Date(iso).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
   }
 
   // previewLines = computed(() => this.form.content.split('\n').map(l => l.trim()).filter(Boolean));

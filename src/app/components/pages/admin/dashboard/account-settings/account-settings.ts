@@ -1,4 +1,12 @@
-import { Component, inject, signal, OnInit, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  OnInit,
+  ViewChildren,
+  QueryList,
+  ElementRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FeatherModule } from 'angular-feather';
@@ -14,21 +22,25 @@ type PageState = 'loading' | 'disabled' | 'setup-pending' | 'enabled';
   templateUrl: './account-settings.html',
   styleUrl: './account-settings.scss',
 })
-export class AccountSettings implements OnInit{
+export class AccountSettings implements OnInit {
   private totpService = inject(TotpService);
   private notificationService = inject(NotificationService);
-  @ViewChildren('confirmDigitInput') private confirmDigitInputs!: QueryList<ElementRef<HTMLInputElement>>;
+  @ViewChildren('confirmDigitInput') private confirmDigitInputs!: QueryList<
+    ElementRef<HTMLInputElement>
+  >;
 
   state = signal<PageState>('loading');
   busy = signal(false);
   qrDataUrl = signal<string | null>(null);
   confirmDigits: string[] = Array(6).fill('');
-  get confirmCode(): string { return this.confirmDigits.join(''); }
+  get confirmCode(): string {
+    return this.confirmDigits.join('');
+  }
   disablePassword = '';
   disableStep = signal<'idle' | 'confirm'>('idle');
 
   ngOnInit() {
-    this.totpService.getStatus().subscribe(status => {
+    this.totpService.getStatus().subscribe((status) => {
       if (status === null) {
         this.notificationService.error('Failed to load account settings.');
         this.state.set('disabled');
@@ -40,7 +52,7 @@ export class AccountSettings implements OnInit{
 
   startSetup() {
     this.busy.set(true);
-    this.totpService.setup().subscribe(async uri => {
+    this.totpService.setup().subscribe(async (uri) => {
       this.busy.set(false);
       if (!uri) {
         this.notificationService.error('Failed to initiate 2FA setup.');
@@ -104,7 +116,7 @@ export class AccountSettings implements OnInit{
   confirmSetup() {
     if (this.confirmCode.length !== 6) return;
     this.busy.set(true);
-    this.totpService.confirm(this.confirmCode).subscribe(result => {
+    this.totpService.confirm(this.confirmCode).subscribe((result) => {
       this.busy.set(false);
       if (result === 'ok') {
         this.notificationService.success('Two-factor authentication enabled.');
@@ -117,7 +129,9 @@ export class AccountSettings implements OnInit{
       } else {
         this.notificationService.error('Invalid confirmation code. Please try again.');
         this.confirmDigits = Array(6).fill('');
-        this.confirmDigitInputs?.forEach(element => { element.nativeElement.value = '' })
+        this.confirmDigitInputs?.forEach((element) => {
+          element.nativeElement.value = '';
+        });
         this.confirmDigitInputs.get(0)?.nativeElement.focus();
       }
     });
@@ -126,7 +140,7 @@ export class AccountSettings implements OnInit{
   disableTotp() {
     if (!this.disablePassword) return;
     this.busy.set(true);
-    this.totpService.disable(this.disablePassword).subscribe(result => {
+    this.totpService.disable(this.disablePassword).subscribe((result) => {
       this.busy.set(false);
       if (result === 'ok') {
         this.notificationService.success('Two-factor authentication disabled.');
@@ -137,7 +151,9 @@ export class AccountSettings implements OnInit{
         this.notificationService.error('Incorrect password. Please try again.');
         this.disablePassword = '';
       } else {
-        this.notificationService.error('Failed to disable two-factor authentication. Please try again later.');
+        this.notificationService.error(
+          'Failed to disable two-factor authentication. Please try again later.',
+        );
       }
     });
   }

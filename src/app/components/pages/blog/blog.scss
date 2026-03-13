@@ -59,7 +59,10 @@
   height: 10px;
   border-radius: 50%;
   background: var(--primary);
-  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &.is-hollow {
     background: transparent;
@@ -160,8 +163,13 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }
 
 .skeleton-title,
@@ -182,7 +190,9 @@
   width: 100%;
   margin-bottom: 0.6rem;
 
-  &.short { width: 40%; }
+  &.short {
+    width: 40%;
+  }
 }
 
 // responsive

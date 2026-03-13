@@ -10,6 +10,4 @@ export type DashboardStatus = 'idle' | 'loading' | 'ready' | 'empty' | 'error';
   templateUrl: './admin.html',
   styleUrls: ['./admin.scss'],
 })
-export class Admin {
-
-}
+export class Admin {}

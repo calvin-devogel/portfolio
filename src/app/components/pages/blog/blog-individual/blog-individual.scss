@@ -1,155 +1,154 @@
 .post-page-wrap {
-	max-width: 780px;
-	margin: 2rem auto;
-	padding: 0 1.5rem;
+  max-width: 780px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
 }
 
 .post-article {
-	margin-left: 0 !important;
-	margin-right: 0 !important;
-	padding: 2.5rem;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding: 2.5rem;
 }
 
 .back-link {
-	display: inline-block;
-	margin-bottom: 1.5rem;
-	font-size: 0.88rem;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  font-size: 0.88rem;
 }
 
 .post-header {
-	margin-bottom: 2rem;
+  margin-bottom: 2rem;
 
-	.title {
-		margin-bottom: 0.75rem;
-	}
+  .title {
+    margin-bottom: 0.75rem;
+  }
 }
 
 .post-meta {
-	display: flex;
-	align-items: center;
-	gap: 0.85rem;
-	flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
 }
 
 .post-author {
-	font-size: 0.85rem;
-	color: var(--text-muted);
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 
 .post-divider {
-	border: none;
-	border-top: 2px solid;
-	border-image: var(--gradient-1) 1;
-	margin-bottom: 1.25rem;
-	opacity: 0.4;
+  border: none;
+  border-top: 2px solid;
+  border-image: var(--gradient-1) 1;
+  margin-bottom: 1.25rem;
+  opacity: 0.4;
 }
 
 .post-body {
-	font-size: 1rem;
-	line-height: 1.8;
-	color: var(--text-body);
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-body);
 
-	h2,
-	h3,
-	h4 {
-		color: var(--primary);
-		margin-top: 2rem;
-	}
+  h2,
+  h3,
+  h4 {
+    color: var(--primary);
+    margin-top: 2rem;
+  }
 
-	a {
-		color: var(--primary);
-		text-decoration: underline;
+  a {
+    color: var(--primary);
+    text-decoration: underline;
 
-		&:hover {
-			color: var(--secondary);
-		}
-	}
+    &:hover {
+      color: var(--secondary);
+    }
+  }
 
-	code {
-		background: rgba(92, 122, 107, 0.1);
-		padding: 0.1em 0.4em;
-		border-radius: 4px;
-		font-size: 0.9em;
-	}
+  code {
+    background: rgba(92, 122, 107, 0.1);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
 
-	pre {
-		background: rgba(24, 28, 26, 0.88);
-		color: #c9d6c1;
-		border-radius: 10px;
-		padding: 1.25rem;
-		overflow-x: auto;
-	}
+  pre {
+    background: rgba(24, 28, 26, 0.88);
+    color: #c9d6c1;
+    border-radius: 10px;
+    padding: 1.25rem;
+    overflow-x: auto;
+  }
 
-	blockquote {
-		border-left: 4px solid var(--primary);
-		padding-left: 1rem;
-		color: #666;
-		font-style: italic;
-	}
+  blockquote {
+    border-left: 4px solid var(--primary);
+    padding-left: 1rem;
+    color: #666;
+    font-style: italic;
+  }
 }
 
 .post-footer {
-	margin-top: 2.5rem;
-	padding-top: 1.5rem;
-	border-top: 1px solid rgba(92, 122, 107, 0.15);
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(92, 122, 107, 0.15);
 }
 
 .post-last-edited {
-	font-size: 0.85rem;
-	color: var(--text-muted);
-	margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
 }
 
 // skeleton
 
 .post-skeleton {
-	margin-left: 0 !important;
-	margin-right: 0 !important;
-	padding: 2.5rem;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding: 2.5rem;
 }
 
 @keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
 
-	0%,
-	100% {
-		opacity: 0.4;
-	}
-
-	50% {
-		opacity: 0.8;
-	}
+  50% {
+    opacity: 0.8;
+  }
 }
 
 .skeleton-title,
 .skeleton-meta,
 .skeleton-line {
-	background: rgba(92, 122, 107, 0.2);
-	border-radius: 6px;
-	animation: pulse 1.5s ease-in-out infinite;
-	margin-bottom: 0.75rem;
+  background: rgba(92, 122, 107, 0.2);
+  border-radius: 6px;
+  animation: pulse 1.5s ease-in-out infinite;
+  margin-bottom: 0.75rem;
 }
 
 .skeleton-title {
-	height: 2rem;
-	width: 75%;
+  height: 2rem;
+  width: 75%;
 
-	&.wide {
-		width: 90%;
-	}
+  &.wide {
+    width: 90%;
+  }
 }
 
 .skeleton-meta {
-	height: 1rem;
-	width: 30%;
-	margin-bottom: 1.5rem;
+  height: 1rem;
+  width: 30%;
+  margin-bottom: 1.5rem;
 }
 
 .skeleton-line {
-	height: 0.9rem;
+  height: 0.9rem;
 }
 
 @media screen and (max-width: 768px) {
-	.post-article {
-		padding: 1.5rem 1.25rem;
-	}
+  .post-article {
+    padding: 1.5rem 1.25rem;
+  }
 }

@@ -18,8 +18,8 @@ export const authGuard: CanActivateFn = (_route, state) => {
   return authService.refreshAuthStatus().pipe(
     timeout(5000),
     map((isLoggedIn) =>
-      isLoggedIn ? true : router.createUrlTree(['/'], { queryParams: { returnUrl: state.url } })
+      isLoggedIn ? true : router.createUrlTree(['/'], { queryParams: { returnUrl: state.url } }),
     ),
-    catchError(() => of(router.createUrlTree(['/'], { queryParams: { returnUrl: state.url } })))
+    catchError(() => of(router.createUrlTree(['/'], { queryParams: { returnUrl: state.url } }))),
   );
 };

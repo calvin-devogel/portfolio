@@ -7,6 +7,4 @@ import { Footer } from '../footer/footer';
   templateUrl: './page-layout.html',
   styleUrl: './page-layout.scss',
 })
-export class PageLayout {
-
-}
+export class PageLayout {}

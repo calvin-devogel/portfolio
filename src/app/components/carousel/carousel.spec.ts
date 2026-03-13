@@ -11,11 +11,8 @@ describe('Carousel', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Carousel],
-      providers: [
-        importProvidersFrom(FeatherModule.pick(allIcons))
-      ]
-    })
-    .compileComponents();
+      providers: [importProvidersFrom(FeatherModule.pick(allIcons))],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Carousel);
     component = fixture.componentInstance;

@@ -19,7 +19,10 @@ import { BlogService } from '@services/blog/blog-service';
 import { BlogPost } from '@interfaces/blog-data';
 import { PageLayout } from '@components/page-layout/page-layout';
 import { SeoService } from '@services/seo/seo-service';
-import { blogListSchema, personSchema } from '@modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
+import {
+  blogListSchema,
+  personSchema,
+} from '@modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
 
 @Component({
   selector: 'app-blog',
@@ -49,11 +52,12 @@ export class Blog implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.seoService.updateSeo({
       title: 'Calvin de Vogel | Blog',
-      description: 'Thoughts on software engineering and technology, plus project write-ups from Calvin de Vogel.',
+      description:
+        'Thoughts on software engineering and technology, plus project write-ups from Calvin de Vogel.',
       canonicalUrl: `https://devogel.dev/blog`,
       ogType: 'website',
-      structuredData: [blogListSchema, personSchema]
-    })
+      structuredData: [blogListSchema, personSchema],
+    });
     this.fetchPosts();
   }
 
@@ -73,15 +77,15 @@ export class Blog implements OnInit, AfterViewInit, OnDestroy {
     this.observer?.disconnect();
     this.observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries.find(e => e.isIntersecting);
+        const visible = entries.find((e) => e.isIntersecting);
         if (visible) {
           this.activeSlug.set(visible.target.id);
         }
       },
-      { rootMargin: '-30% 0px -60% 0px', threshold: 0}
+      { rootMargin: '-30% 0px -60% 0px', threshold: 0 },
     );
 
-    this.postCards.forEach(card => this.observer!.observe(card.nativeElement));
+    this.postCards.forEach((card) => this.observer!.observe(card.nativeElement));
   }
 
   fetchPosts() {
@@ -90,14 +94,14 @@ export class Blog implements OnInit, AfterViewInit, OnDestroy {
 
     this.blogService.getPosts(this.page, this.pageSize, true).subscribe({
       next: (response) => {
-        this.posts.update(posts => [...posts, ...response.data]);
+        this.posts.update((posts) => [...posts, ...response.data]);
         this.totalPages = response.pagination.total_pages;
         this.loading.set(false);
       },
       error: () => {
         this.error.set(true);
         this.loading.set(false);
-      }
+      },
     });
   }
 

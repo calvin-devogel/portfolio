@@ -1,86 +1,89 @@
 <app-page-layout>
-    <div left class="blog-sidebar pt-5 mt-6">
-        <h2 class="timeline-heading gradient-title">Posts</h2>
-        <div class="timeline">
-            @for (post of posts(); track post.post_id) {
-                @if (post.published) {
-                    <div class="timeline-item" [class.is-active]="activeSlug() === post.slug">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content">
-                            <a class="timeline-link" (click)="scrollToPost(post.slug)" (keypress.enter)="scrollToPost(post.slug)" tabindex="0">
-                                {{ post.title }}
-                            </a>
-                            <p class="timeline-date">{{ post.created_at | date:'MMM d, yyyy' }}</p>
-                        </div>
-                    </div>
-                }
-            }
+  <div left class="blog-sidebar pt-5 mt-6">
+    <h2 class="timeline-heading gradient-title">Posts</h2>
+    <div class="timeline">
+      @for (post of posts(); track post.post_id) {
+        @if (post.published) {
+          <div class="timeline-item" [class.is-active]="activeSlug() === post.slug">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <a
+                class="timeline-link"
+                (click)="scrollToPost(post.slug)"
+                (keypress.enter)="scrollToPost(post.slug)"
+                tabindex="0"
+              >
+                {{ post.title }}
+              </a>
+              <p class="timeline-date">{{ post.created_at | date: 'MMM d, yyyy' }}</p>
+            </div>
+          </div>
+        }
+      }
 
-            @if (hasMore()) {
-                <div class="timeline-item">
-                    <div class="timeline-marker is-hollow"></div>
-                    <div class="timeline-content">
-                        <button class="button is-small is-ghost load-more-button" (click)="loadMore()" [disabled]="loading()">
-                            {{ loading() ? 'Loading...' : "Load older posts"}}
-                        </button>
-                    </div>
-                </div>
-            }
+      @if (hasMore()) {
+        <div class="timeline-item">
+          <div class="timeline-marker is-hollow"></div>
+          <div class="timeline-content">
+            <button
+              class="button is-small is-ghost load-more-button"
+              (click)="loadMore()"
+              [disabled]="loading()"
+            >
+              {{ loading() ? 'Loading...' : 'Load older posts' }}
+            </button>
+          </div>
         </div>
+      }
     </div>
-    <div main class="mt-6 px-6 py-6">
-        <main class="blog-feed">
-            @if (loading() && posts().length === 0) {
-                <div class="skeleton-wrap">
-                    @for (i of [1,2,3]; track i) {
-                        <div class="box skeleton-card">
-                            <div class="skeleton-title"></div>
-                            <div class="skeleton-line"></div>
-                            <div class="skeleton-line short"></div>
-                        </div>
-                    }
-                </div>
-            }
+  </div>
+  <div main class="mt-6 px-6 py-6">
+    <main class="blog-feed">
+      @if (loading() && posts().length === 0) {
+        <div class="skeleton-wrap">
+          @for (i of [1, 2, 3]; track i) {
+            <div class="box skeleton-card">
+              <div class="skeleton-title"></div>
+              <div class="skeleton-line"></div>
+              <div class="skeleton-line short"></div>
+            </div>
+          }
+        </div>
+      }
 
-            @if (error()) {
-                <div class="notification is-danger">
-                    Failed to load posts. Please try again later.
-                </div>
-            }
+      @if (error()) {
+        <div class="notification is-danger">Failed to load posts. Please try again later.</div>
+      }
 
-            @for (post of posts(); track post.post_id) {
-                @if (post.published) {
-                    <article
-                        class="box blog-post-card animate-section"
-                        [id]="post.slug"
-                        #postCard
-                    >
-                        <div class="blog-post-header">
-                            <h2 class="title is-4 post-title">
-                                <a [routerLink]="['/blog', post.slug]" class="text-link">{{ post.title }}</a>
-                            </h2>
-                            <span class="tag date">{{ post.created_at | date:'MMM d, yyyy' }}</span>
-                        </div>
+      @for (post of posts(); track post.post_id) {
+        @if (post.published) {
+          <article class="box blog-post-card animate-section" [id]="post.slug" #postCard>
+            <div class="blog-post-header">
+              <h2 class="title is-4 post-title">
+                <a [routerLink]="['/blog', post.slug]" class="text-link">{{ post.title }}</a>
+              </h2>
+              <span class="tag date">{{ post.created_at | date: 'MMM d, yyyy' }}</span>
+            </div>
 
-                        <p class="post-excerpt">{{ post.excerpt }}</p>
+            <p class="post-excerpt">{{ post.excerpt }}</p>
 
-                        <div class="blog-post-footer">
-                            <span class="post-author">
-                                <span class="icon-text">
-                                    <span class="icon"><i class="fas fa-user"></i></span>
-                                    <span>{{ post.author }}</span>
-                                </span>
-                            </span>
-                            <a [routerLink]="['/blog', post.slug]" class="button is-link is-small">Read More</a>
-                        </div>
-                    </article>
-                }
-            }
+            <div class="blog-post-footer">
+              <span class="post-author">
+                <span class="icon-text">
+                  <span class="icon"><i class="fas fa-user"></i></span>
+                  <span>{{ post.author }}</span>
+                </span>
+              </span>
+              <a [routerLink]="['/blog', post.slug]" class="button is-link is-small">Read More</a>
+            </div>
+          </article>
+        }
+      }
 
-            @if (posts().length === 0 && !loading() && !error()) {
-                <div class="notification is-info">No posts yet. Check back soon!</div>
-            }
-        </main>
-    </div>
-    <div right></div>
+      @if (posts().length === 0 && !loading() && !error()) {
+        <div class="notification is-info">No posts yet. Check back soon!</div>
+      }
+    </main>
+  </div>
+  <div right></div>
 </app-page-layout>

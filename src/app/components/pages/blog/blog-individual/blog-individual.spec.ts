@@ -12,9 +12,8 @@ describe('BlogIndividual', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [BlogIndividual],
-      providers: [importProvidersFrom(FeatherModule.pick(allIcons)), provideRouter([])]
-    })
-    .compileComponents();
+      providers: [importProvidersFrom(FeatherModule.pick(allIcons)), provideRouter([])],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(BlogIndividual);
     component = fixture.componentInstance;

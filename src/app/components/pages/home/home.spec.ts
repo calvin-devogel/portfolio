@@ -12,9 +12,8 @@ describe('Home', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Home],
-      providers: [importProvidersFrom(FeatherModule.pick(allIcons)), provideRouter([])]
-    })
-    .compileComponents();
+      providers: [importProvidersFrom(FeatherModule.pick(allIcons)), provideRouter([])],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Home);
     component = fixture.componentInstance;

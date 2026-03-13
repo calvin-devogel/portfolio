@@ -16,10 +16,7 @@ import { FeatherModule } from 'angular-feather';
 
 @Component({
   selector: 'app-modal-template',
-  imports: [
-    CommonModule,
-    FeatherModule,
-  ],
+  imports: [CommonModule, FeatherModule],
   templateUrl: './modal-template.html',
   styleUrls: ['./modal-template.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -56,16 +53,14 @@ export class ModalTemplate implements OnDestroy {
 
     this.modalViewRef = this.modalTemplate.createEmbeddedView(void 0);
     this.appRef.attachView(this.modalViewRef);
-    this.modalViewRef.rootNodes.forEach(node =>
-      this.document.body.appendChild(node)
-    );
+    this.modalViewRef.rootNodes.forEach((node) => this.document.body.appendChild(node));
 
     this.opened.emit();
   }
 
   closeModal() {
     if (!this.modalViewRef || this.closeTimeoutId !== null) return;
-    
+
     const overlay = this.modalViewRef.rootNodes[0] as HTMLElement;
     const modal = overlay?.querySelector('.modal-base') as HTMLElement | null;
     overlay?.classList.add('is-closing');
@@ -83,7 +78,7 @@ export class ModalTemplate implements OnDestroy {
     if (!this.modalViewRef) return;
     this.document.body.style.overflow = '';
     this.appRef.detachView(this.modalViewRef);
-    this.modalViewRef.rootNodes.forEach(node => node.remove?.());
+    this.modalViewRef.rootNodes.forEach((node) => node.remove?.());
     this.modalViewRef.destroy();
     this.modalViewRef = null;
   }

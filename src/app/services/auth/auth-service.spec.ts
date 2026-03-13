@@ -9,11 +9,7 @@ describe('AuthService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        AuthService,
-        provideHttpClient(),
-        provideHttpClientTesting()
-      ]
+      providers: [AuthService, provideHttpClient(), provideHttpClientTesting()],
     });
     service = TestBed.inject(AuthService);
     httpMock = TestBed.inject(HttpTestingController);
@@ -29,7 +25,7 @@ describe('AuthService', () => {
     expect(req.request.method).toBe('GET');
     req.flush({}, { status: 200, statusText: 'OK' });
 
-    service.isLoggedIn$.subscribe(status => {
+    service.isLoggedIn$.subscribe((status) => {
       // come back to this
       if (status !== null) {
         expect(status)?.toBeTruthy();
@@ -41,7 +37,7 @@ describe('AuthService', () => {
     const req = httpMock.expectOne('/api/check_auth');
     req.flush({}, { status: 401, statusText: 'Unauthorized' });
 
-    service.isLoggedIn$.subscribe(status => {
+    service.isLoggedIn$.subscribe((status) => {
       if (status !== null) {
         expect(status).toBeFalsy();
       }
@@ -52,7 +48,7 @@ describe('AuthService', () => {
     // clear initial checkAuthStatus call
     httpMock.expectOne('/api/check_auth');
 
-    service.authenticate('user', 'pass').subscribe(result => {
+    service.authenticate('user', 'pass').subscribe((result) => {
       expect(result).toBeTruthy();
     });
 
@@ -66,7 +62,7 @@ describe('AuthService', () => {
     // clear initial checkAuthStatus call
     httpMock.expectOne('/api/check_auth');
 
-    service.authenticate('user', 'wrongpass').subscribe(result => {
+    service.authenticate('user', 'wrongpass').subscribe((result) => {
       expect(result).toBe('failed');
     });
 
@@ -83,7 +79,7 @@ describe('AuthService', () => {
     expect(req.request.method).toBe('POST');
     req.flush({});
 
-    service.isLoggedIn$.subscribe(status => {
+    service.isLoggedIn$.subscribe((status) => {
       if (status !== null) {
         expect(status).toBeFalsy();
       }

@@ -11,9 +11,8 @@ describe('Projects', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Projects],
-      providers: [importProvidersFrom(FeatherModule.pick(allIcons))]
-    })
-    .compileComponents();
+      providers: [importProvidersFrom(FeatherModule.pick(allIcons))],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Projects);
     component = fixture.componentInstance;

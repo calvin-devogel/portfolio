@@ -17,7 +17,7 @@ export class NotificationService {
     const id = crypto.randomUUID();
     const notification = { id, message, type };
 
-    this.notifications.update(notifs => [...notifs, notification]);
+    this.notifications.update((notifs) => [...notifs, notification]);
 
     if (duration > 0) {
       setTimeout(() => this.dismiss(id), duration);
@@ -25,7 +25,7 @@ export class NotificationService {
   }
 
   dismiss(id: string) {
-    this.notifications.update(notifs => notifs.filter(n => n.id !== id));
+    this.notifications.update((notifs) => notifs.filter((n) => n.id !== id));
   }
 
   error(message: string, duration = 5000) {

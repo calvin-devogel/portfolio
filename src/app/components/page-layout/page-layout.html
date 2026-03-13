@@ -1,14 +1,14 @@
 <div class="container hero is-fullheight is-fluid">
-    <div class="columns is-centered">
-        <div class="column">
-            <ng-content select="[left]"></ng-content>
-        </div>
-        <div class="column content is-four-fifths">
-            <ng-content select="[main]"></ng-content>
-        </div>
-        <div class="column">
-            <ng-content select="[right]"></ng-content>
-        </div>
+  <div class="columns is-centered">
+    <div class="column">
+      <ng-content select="[left]"></ng-content>
     </div>
-    <app-footer/>
+    <div class="column content is-four-fifths">
+      <ng-content select="[main]"></ng-content>
+    </div>
+    <div class="column">
+      <ng-content select="[right]"></ng-content>
+    </div>
+  </div>
+  <app-footer />
 </div>

@@ -1,25 +1,23 @@
 <div class="admin-layout">
+  <aside class="admin-blade">
+    <p class="blade-label">Dashboard</p>
+    <a class="blade-item" routerLink="/admin/messages" routerLinkActive="is-active">
+      <i-feather name="mail" size="18"></i-feather>
+      Messages
+    </a>
+    <a class="blade-item" routerLink="/admin/blog" routerLinkActive="is-active">
+      <i-feather name="edit-3" size="18"></i-feather>
+      Blog
+    </a>
+    <a class="blade-item" routerLink="/admin/account-settings" routerLinkActive="is-active">
+      <i-feather name="settings" size="18"></i-feather>
+      Account Settings
+    </a>
+  </aside>
 
-    <aside class="admin-blade">
-        <p class="blade-label">Dashboard</p>
-        <a class="blade-item" routerLink="/admin/messages" routerLinkActive="is-active">
-            <i-feather name="mail" size="18"></i-feather>
-            Messages
-        </a>
-        <a class="blade-item" routerLink="/admin/blog" routerLinkActive="is-active">
-            <i-feather name="edit-3" size="18"></i-feather>
-            Blog
-        </a>
-        <a class="blade-item" routerLink="/admin/account-settings" routerLinkActive="is-active">
-            <i-feather name="settings" size="18"></i-feather>
-            Account Settings
-        </a>
-    </aside>
-
-    <main class="admin-content">
-        <section class="animate-section">
-            <router-outlet/>
-        </section>
-    </main>
-
+  <main class="admin-content">
+    <section class="animate-section">
+      <router-outlet />
+    </section>
+  </main>
 </div>

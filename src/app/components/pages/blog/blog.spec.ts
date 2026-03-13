@@ -13,13 +13,16 @@ describe('Blog', () => {
   let fixture: ComponentFixture<Blog>;
 
   beforeEach(async () => {
-    vi.stubGlobal('IntersectionObserver', vi.fn(function() {
-      return {
-        observe: vi.fn(),
-        unobserve: vi.fn(),
-        disconnect: vi.fn()
-      };
-    }));
+    vi.stubGlobal(
+      'IntersectionObserver',
+      vi.fn(function () {
+        return {
+          observe: vi.fn(),
+          unobserve: vi.fn(),
+          disconnect: vi.fn(),
+        };
+      }),
+    );
 
     await TestBed.configureTestingModule({
       imports: [Blog],
@@ -27,10 +30,9 @@ describe('Blog', () => {
         importProvidersFrom(FeatherModule.pick(allIcons)),
         provideRouter([]),
         provideHttpClient(),
-        provideHttpClientTesting()
-      ]
-    })
-      .compileComponents();
+        provideHttpClientTesting(),
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Blog);
     component = fixture.componentInstance;

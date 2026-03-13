@@ -1,10 +1,19 @@
-import { Component, inject, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  ViewChild,
+  ViewChildren,
+  QueryList,
+  ElementRef,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth-service';
 import { NotificationService } from '../../../services/notifications/notification-service';
 import { Subscription } from 'rxjs';
-import { ModalTemplate } from "@components/modals/modal-template/modal-template";
+import { ModalTemplate } from '@components/modals/modal-template/modal-template';
 
 @Component({
   selector: 'app-login',
@@ -21,11 +30,13 @@ export class Login implements OnDestroy {
 
   loginData = { username: '', password: '' };
   totpDigits: string[] = Array(6).fill('');
-  get totpCode(): string { return this.totpDigits.join(''); }
+  get totpCode(): string {
+    return this.totpDigits.join('');
+  }
   step = signal<'credentials' | 'totp'>('credentials');
 
   private subscription: Subscription = new Subscription();
-  
+
   openModal() {
     this.step.set('credentials');
     this.totpDigits = Array(6).fill('');
@@ -75,22 +86,24 @@ export class Login implements OnDestroy {
   }
 
   private submitCredentials() {
-    const sub = this.authService.authenticate(this.loginData.username, this.loginData.password).subscribe(result => {
-      if (result === 'success') {
-        this.notificationService.success('Login successful!');
-        this.loginModal.closeModal();
-        this.router.navigate(['/admin']);
-      } else if (result === 'mfa_required') {
-        this.step.set('totp');
-      } else {
-        this.notificationService.error('Login failed. Please check your credentials.');
-      }
-    })
+    const sub = this.authService
+      .authenticate(this.loginData.username, this.loginData.password)
+      .subscribe((result) => {
+        if (result === 'success') {
+          this.notificationService.success('Login successful!');
+          this.loginModal.closeModal();
+          this.router.navigate(['/admin']);
+        } else if (result === 'mfa_required') {
+          this.step.set('totp');
+        } else {
+          this.notificationService.error('Login failed. Please check your credentials.');
+        }
+      });
     this.subscription.add(sub);
   }
 
   private submitTotp() {
-    const sub = this.authService.verifyTotp(this.totpCode).subscribe(success => {
+    const sub = this.authService.verifyTotp(this.totpCode).subscribe((success) => {
       if (success) {
         this.notificationService.success('Login successful!');
         this.loginModal.closeModal();
@@ -100,7 +113,7 @@ export class Login implements OnDestroy {
         this.totpDigits = Array(6).fill('');
         this.totpDigitInputs.get(0)?.nativeElement.focus();
       }
-    })
+    });
     this.subscription.add(sub);
   }
 }

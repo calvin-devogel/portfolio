@@ -14,10 +14,9 @@ describe('Nav', () => {
       imports: [Nav],
       providers: [
         importProvidersFrom(FeatherModule.pick(allIcons)),
-        { provide: ActivatedRoute, useValue: { snapshot: { url: [{ path: '' }] } } }
-      ]
-    })
-    .compileComponents();
+        { provide: ActivatedRoute, useValue: { snapshot: { url: [{ path: '' }] } } },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Nav);
     component = fixture.componentInstance;

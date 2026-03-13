@@ -11,9 +11,8 @@ describe('NotificationToast', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NotificationToast],
-      providers: [importProvidersFrom(FeatherModule.pick({ X }))]
-    })
-    .compileComponents();
+      providers: [importProvidersFrom(FeatherModule.pick({ X }))],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NotificationToast);
     component = fixture.componentInstance;

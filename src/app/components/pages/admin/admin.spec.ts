@@ -12,9 +12,8 @@ describe('Admin', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Admin],
-      providers: [importProvidersFrom(FeatherModule.pick(allIcons)), provideRouter([])]
-    })
-    .compileComponents();
+      providers: [importProvidersFrom(FeatherModule.pick(allIcons)), provideRouter([])],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Admin);
     component = fixture.componentInstance;

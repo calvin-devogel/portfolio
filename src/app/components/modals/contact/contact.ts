@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FeatherModule } from "angular-feather";
+import { FeatherModule } from 'angular-feather';
 import { CreateMessageData } from '../../../interfaces/message-data';
 import { MessageService } from '../../../services/contact/message-service';
 import { NotificationService } from '../../../services/notifications/notification-service';
@@ -11,12 +11,7 @@ import { ModalTemplate } from '@components/modals/modal-template/modal-template'
 
 @Component({
   selector: 'app-contact',
-  imports: [
-    ModalTemplate,
-    CommonModule,
-    FeatherModule,
-    ReactiveFormsModule
-  ],
+  imports: [ModalTemplate, CommonModule, FeatherModule, ReactiveFormsModule],
   templateUrl: './contact.html',
   styleUrls: ['./contact.scss'],
 })
@@ -35,29 +30,12 @@ export class Contact implements OnDestroy {
 
   constructor() {
     this.contactForm = this.formBuilder.group({
-      sender_name: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(100)
-        ]
-      ],
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.email
-        ]
-      ],
+      sender_name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      email: ['', [Validators.required, Validators.email]],
       message_text: [
         '',
-        [
-          Validators.required,
-          Validators.minLength(10),
-          Validators.maxLength(5000)
-        ]
-      ]
+        [Validators.required, Validators.minLength(10), Validators.maxLength(5000)],
+      ],
     });
   }
 
@@ -81,7 +59,7 @@ export class Contact implements OnDestroy {
     const formData: CreateMessageData = {
       sender_name: this.contactForm.value.sender_name,
       email: this.contactForm.value.email,
-      message_text: this.contactForm.value.message_text
+      message_text: this.contactForm.value.message_text,
     };
 
     const sub = this.messageService.sendMessage(formData).subscribe({
@@ -89,9 +67,7 @@ export class Contact implements OnDestroy {
         this.isSubmitting = false;
         this.submitSuccess = true;
         this.contactForm.reset();
-        this.notificationService.success(
-          'Message sent successfully! I\'ll get back to you soon.',
-        );
+        this.notificationService.success("Message sent successfully! I'll get back to you soon.");
       },
       error: (error) => {
         this.isSubmitting = false;
@@ -104,7 +80,7 @@ export class Contact implements OnDestroy {
         }
 
         this.notificationService.error(errorMessage);
-      }
+      },
     });
     this.subscription.add(sub);
   }
@@ -116,7 +92,13 @@ export class Contact implements OnDestroy {
     });
   }
 
-  get sender_name() { return this.contactForm.get('sender_name'); }
-  get email() { return this.contactForm.get('email'); }
-  get message_text() { return this.contactForm.get('message_text'); }
+  get sender_name() {
+    return this.contactForm.get('sender_name');
+  }
+  get email() {
+    return this.contactForm.get('email');
+  }
+  get message_text() {
+    return this.contactForm.get('message_text');
+  }
 }
