@@ -130,7 +130,7 @@ describe('Carousel', () => {
 			expect(slideElements.length).toBe(3);
 		});
 
-		it('renders the label when provided',() => {
+		it('renders the label when provided', () => {
 			fixture.componentRef.setInput('label', 'Test Carousel');
 			fixture.detectChanges();
 			const labelElement = fixture.nativeElement.querySelector('.carousel-label');
@@ -161,16 +161,20 @@ describe('Carousel', () => {
 			fixture.componentRef.setInput('slides', [...slides, slideWithCaption]);
 			fixture.detectChanges();
 
-			const captionElement = fixture.nativeElement.querySelector('.carousel-slide figcaption');
+			const captionElement = fixture.nativeElement.querySelector(
+				'.carousel-slide figcaption',
+			);
 			expect(captionElement).toBeTruthy();
 			expect(captionElement.textContent).toContain('Caption D');
-		})
+		});
 
 		it('omits figcaption when a slide does not have a caption', () => {
 			fixture.componentRef.setInput('slides', slides);
 			fixture.detectChanges();
 
-			const captionElement = fixture.nativeElement.querySelector('.carousel-slide figcaption');
+			const captionElement = fixture.nativeElement.querySelector(
+				'.carousel-slide figcaption',
+			);
 			expect(captionElement).toBeNull();
 		});
 
@@ -187,7 +191,7 @@ describe('Carousel', () => {
 		it('shows arrows and dots for multiple slides', () => {
 			fixture.componentRef.setInput('slides', slides);
 			fixture.detectChanges();
-			
+
 			const arrowElements = fixture.nativeElement.querySelectorAll('.carousel-arrow');
 			const dotElements = fixture.nativeElement.querySelectorAll('.carousel-dot');
 			expect(arrowElements.length).toBe(2);
@@ -242,7 +246,7 @@ describe('Carousel', () => {
 			fixture.detectChanges();
 			expect(component.currentIndex()).toBe(0);
 		});
-		
+
 		it('clicking a dot goes to the corresponding slide', () => {
 			fixture.componentRef.setInput('slides', slides);
 			fixture.detectChanges();
