@@ -1,0 +1,27 @@
+#!/bin/sh
+RED='\033[31m'
+YELLOW='\033[33m'
+GREEN='\033[32m'
+RESET='\033[0m'
+
+fail() {
+    printf "\n${RED}✗${RESET} $1 failed. Push aborted.\n" >&2
+    exit 1
+}
+
+echo "\n→ Checking formatting...\n"
+NODE_NO_WARNINGS=1 npx prettier --check . || fail "Formatting"
+
+echo "\n→ Type checking...\n"
+npx tsc --noEmit || fail "Type check"
+
+echo "\n→ Linting...\n"
+ng lint || fail "Linting"
+
+echo "\n→ Audit...\n"
+npm audit || printf "\n${YELLOW}⚠${RESET} Audit found vulnerabilities (non-blocking).\n" >&2
+
+echo "\n→ Running tests...\n"
+ng test --watch=false || fail "Tests"
+
+echo "\n${GREEN}✓${RESET} Pre-push checks passed.\n"

@@ -1,29 +1,29 @@
 .otp-inputs {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
+	display: flex;
+	gap: 0.5rem;
+	justify-content: center;
 }
 
 .otp-digit {
-  width: 2.75rem;
-  height: 3rem;
-  text-align: center;
-  font-size: 1.25rem;
-  font-weight: 600;
-  font-family: inherit;
-  color: var(--text-body);
-  padding: 0;
-  border: 1.5px solid var(--border-medium);
-  border-radius: 8px;
-  background: var(--tint-xs);
-  caret-color: var(--primary);
-  transition:
-    border-color 0.15s,
-    box-shadow 0.15s;
+	width: 2.75rem;
+	height: 3rem;
+	text-align: center;
+	font-size: 1.25rem;
+	font-weight: 600;
+	font-family: inherit;
+	color: var(--text-body);
+	padding: 0;
+	border: 1.5px solid var(--border-medium);
+	border-radius: 8px;
+	background: var(--tint-xs);
+	caret-color: var(--primary);
+	transition:
+		border-color 0.15s,
+		box-shadow 0.15s;
 
-  &:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(92, 122, 107, 0.15);
-  }
+	&:focus {
+		outline: none;
+		border-color: var(--primary);
+		box-shadow: 0 0 0 3px rgba(92, 122, 107, 0.15);
+	}
 }

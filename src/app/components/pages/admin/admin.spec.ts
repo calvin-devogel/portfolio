@@ -6,21 +6,21 @@ import { Admin } from './admin';
 import { provideRouter } from '@angular/router';
 
 describe('Admin', () => {
-  let component: Admin;
-  let fixture: ComponentFixture<Admin>;
+	let component: Admin;
+	let fixture: ComponentFixture<Admin>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Admin],
-      providers: [importProvidersFrom(FeatherModule.pick(allIcons)), provideRouter([])],
-    }).compileComponents();
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			imports: [Admin],
+			providers: [importProvidersFrom(FeatherModule.pick(allIcons)), provideRouter([])],
+		}).compileComponents();
 
-    fixture = TestBed.createComponent(Admin);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
-  });
+		fixture = TestBed.createComponent(Admin);
+		component = fixture.componentInstance;
+		await fixture.whenStable();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

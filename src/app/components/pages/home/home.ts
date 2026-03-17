@@ -5,33 +5,33 @@ import { FeatherModule } from 'angular-feather';
 import { SeoService } from '@services/seo/seo-service';
 import { Contact } from '@components/modals/contact/contact';
 import {
-  homeSchema,
-  personSchema,
+	homeSchema,
+	personSchema,
 } from '@modules/structured-data.schemas.ts/structured-data.schemas.ts-module';
 
 @Component({
-  selector: 'app-home',
-  imports: [PageLayout, RouterLink, FeatherModule, Contact],
-  templateUrl: './home.html',
-  styleUrls: ['./home.scss'],
+	selector: 'app-home',
+	imports: [PageLayout, RouterLink, FeatherModule, Contact],
+	templateUrl: './home.html',
+	styleUrls: ['./home.scss'],
 })
 export class Home implements OnInit {
-  private seoService = inject(SeoService);
+	private seoService = inject(SeoService);
 
-  ngOnInit(): void {
-    this.seoService.updateSeo({
-      title: 'Calvin de Vogel | Portfolio',
-      description:
-        "Hi, I'm Cal, a software engineer specializing in full-stack, cloud-native application development. Welcome to my portfolio, where I showcase my projects, experience, and passion for software development.",
-      canonicalUrl: 'https://devogel.dev',
-      ogType: 'website',
-      structuredData: [homeSchema, personSchema],
-    });
-  }
+	ngOnInit(): void {
+		this.seoService.updateSeo({
+			title: 'Calvin de Vogel | Portfolio',
+			description:
+				"Hi, I'm Cal, a software engineer specializing in full-stack, cloud-native application development. Welcome to my portfolio, where I showcase my projects, experience, and passion for software development.",
+			canonicalUrl: 'https://devogel.dev',
+			ogType: 'website',
+			structuredData: [homeSchema, personSchema],
+		});
+	}
 
-  @ViewChild('contactModal') contactModal!: Contact;
+	@ViewChild('contactModal') contactModal!: Contact;
 
-  openContactModal(): void {
-    this.contactModal.openModal();
-  }
+	openContactModal(): void {
+		this.contactModal.openModal();
+	}
 }

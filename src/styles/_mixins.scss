@@ -3,81 +3,81 @@
 // panel/card surface
 // used in: blog panels, admin blade, project cards, contact card
 @mixin panel($radius: var(--card-radius)) {
-  background: var(--surface);
-  border-radius: $radius;
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 2px 16px var(--shadow-color);
+	background: var(--surface);
+	border-radius: $radius;
+	border: 1px solid var(--border-subtle);
+	box-shadow: 0 2px 16px var(--shadow-color);
 }
 
 // flex helpers
 @mixin flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 @mixin flex-between {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 // text truncation
 
 @mixin truncate {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 // pills
 // used in: .pill-button, .tag, .date, .project-link
 
 @mixin pill-base($size: 0.8rem) {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.3rem 0.75rem;
-  border: 1px solid var(--border-subtle);
-  border-radius: 50px;
-  background: transparent;
-  font-size: $size;
-  font-weight: 600;
-  cursor: pointer;
-  line-height: 1;
-  transition:
-    background 0.15s ease,
-    color 0.15s ease,
-    border-color 0.15s ease,
-    opacity 0.15s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	padding: 0.3rem 0.75rem;
+	border: 1px solid var(--border-subtle);
+	border-radius: 50px;
+	background: transparent;
+	font-size: $size;
+	font-weight: 600;
+	cursor: pointer;
+	line-height: 1;
+	transition:
+		background 0.15s ease,
+		color 0.15s ease,
+		border-color 0.15s ease,
+		opacity 0.15s ease;
 }
 
 // upper label
 // used by: .label, .blade-label, .split-pane-label
 
 @mixin upper-label($size: 0.78rem, $opacity: 1) {
-  font-size: $size;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--primary);
-  opacity: $opacity;
+	font-size: $size;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--primary);
+	opacity: $opacity;
 }
 
 // gradient text
 
 @mixin gradient-text($gradient: var(--gradient-1)) {
-  background: $gradient;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+	background: $gradient;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
 }
 
 // scrollable column
 
 @mixin scroll-column {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	overflow: hidden;
 }

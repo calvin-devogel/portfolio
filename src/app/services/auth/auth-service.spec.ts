@@ -4,85 +4,233 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { AuthService } from './auth-service';
 
 describe('AuthService', () => {
-  let service: AuthService;
-  let httpMock: HttpTestingController;
+	let service: AuthService;
+	let httpMock: HttpTestingController;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [AuthService, provideHttpClient(), provideHttpClientTesting()],
-    });
-    service = TestBed.inject(AuthService);
-    httpMock = TestBed.inject(HttpTestingController);
-  });
+	beforeEach(() => {
+		TestBed.configureTestingModule({
+			providers: [AuthService, provideHttpClient(), provideHttpClientTesting()],
+		});
+		service = TestBed.inject(AuthService);
+		httpMock = TestBed.inject(HttpTestingController);
+	});
 
-  afterEach(() => {
-    httpMock.verify();
-  });
+	afterEach(() => {
+		httpMock.verify();
+		localStorage.clear();
+		vi.restoreAllMocks();
+	});
 
-  it('should check auth status on initialization (success)', () => {
-    // the constructor calls checkAuthStatus right away
-    const req = httpMock.expectOne('/api/check_auth');
-    expect(req.request.method).toBe('GET');
-    req.flush({}, { status: 200, statusText: 'OK' });
+	it('should check auth status on initialization (success)', () => {
+		// the constructor calls checkAuthStatus right away
+		const req = httpMock.expectOne('/api/check_auth');
+		expect(req.request.method).toBe('GET');
+		req.flush({}, { status: 200, statusText: 'OK' });
 
-    service.isLoggedIn$.subscribe((status) => {
-      // come back to this
-      if (status !== null) {
-        expect(status)?.toBeTruthy();
-      }
-    });
-  });
+		service.isLoggedIn$.subscribe((status) => {
+			// come back to this
+			if (status !== null) {
+				expect(status)?.toBeTruthy();
+			}
+		});
+	});
 
-  it('should check auth status on initialization (failure)', () => {
-    const req = httpMock.expectOne('/api/check_auth');
-    req.flush({}, { status: 401, statusText: 'Unauthorized' });
+	it('should check auth status on initialization (failure)', () => {
+		const req = httpMock.expectOne('/api/check_auth');
+		req.flush({}, { status: 401, statusText: 'Unauthorized' });
 
-    service.isLoggedIn$.subscribe((status) => {
-      if (status !== null) {
-        expect(status).toBeFalsy();
-      }
-    });
-  });
+		service.isLoggedIn$.subscribe((status) => {
+			if (status !== null) {
+				expect(status).toBeFalsy();
+			}
+		});
+	});
 
-  it('should authenticate user successfully', () => {
-    // clear initial checkAuthStatus call
-    httpMock.expectOne('/api/check_auth');
+	it('should authenticate user successfully', () => {
+		// clear initial checkAuthStatus call
+		httpMock.expectOne('/api/check_auth');
 
-    service.authenticate('user', 'pass').subscribe((result) => {
-      expect(result).toBeTruthy();
-    });
+		service.authenticate('user', 'pass').subscribe((result) => {
+			expect(result).toBeTruthy();
+		});
 
-    const req = httpMock.expectOne('/api/login');
-    expect(req.request.method).toBe('POST');
-    expect(req.request.body).toContain('username=user&password=pass');
-    req.flush({}, { status: 200, statusText: 'OK' });
-  });
+		const req = httpMock.expectOne('/api/login');
+		expect(req.request.method).toBe('POST');
+		expect(req.request.body).toContain('username=user&password=pass');
+		req.flush({}, { status: 200, statusText: 'OK' });
+	});
 
-  it('should handle authentication failure', () => {
-    // clear initial checkAuthStatus call
-    httpMock.expectOne('/api/check_auth');
+	it('should handle authentication failure', () => {
+		// clear initial checkAuthStatus call
+		httpMock.expectOne('/api/check_auth');
 
-    service.authenticate('user', 'wrongpass').subscribe((result) => {
-      expect(result).toBe('failed');
-    });
+		service.authenticate('user', 'wrongpass').subscribe((result) => {
+			expect(result).toBe('failed');
+		});
 
-    const req = httpMock.expectOne('/api/login');
-    req.flush({}, { status: 401, statusText: 'Unauthorized' });
-  });
+		const req = httpMock.expectOne('/api/login');
+		req.flush({}, { status: 401, statusText: 'Unauthorized' });
+	});
 
-  it('should logout and update state', () => {
-    httpMock.expectOne('/api/check_auth');
+	it('should logout and update state', () => {
+		httpMock.expectOne('/api/check_auth');
 
-    service.logout().subscribe();
+		service.logout().subscribe();
 
-    const req = httpMock.expectOne('/api/logout');
-    expect(req.request.method).toBe('POST');
-    req.flush({});
+		const req = httpMock.expectOne('/api/logout');
+		expect(req.request.method).toBe('POST');
+		req.flush({});
 
-    service.isLoggedIn$.subscribe((status) => {
-      if (status !== null) {
-        expect(status).toBeFalsy();
-      }
-    });
-  });
+		service.isLoggedIn$.subscribe((status) => {
+			if (status !== null) {
+				expect(status).toBeFalsy();
+			}
+		});
+	});
+
+	it('should return mfa_required when login responds with 202', () => {
+		httpMock.expectOne('/api/check_auth');
+
+		let capturedResult: string | undefined;
+		service.authenticate('user', 'pass').subscribe((result) => {
+			capturedResult = result;
+		});
+
+		const req = httpMock.expectOne('/api/login');
+		req.flush({}, { status: 202, statusText: 'Accepted' });
+
+		expect(capturedResult).toBe('mfa_required');
+	});
+
+	it('should return failed and clear login state on network error during authenticate', () => {
+		httpMock.expectOne('/api/check_auth');
+
+		let capturedResult: string | undefined;
+		service.authenticate('user', 'pass').subscribe((result) => {
+			capturedResult = result;
+		});
+
+		const req = httpMock.expectOne('/api/login');
+		// deprecated method, can still simulate network error
+		req.error(new ProgressEvent('Network error'));
+
+		expect(capturedResult).toBe('failed');
+		service.isLoggedIn$.subscribe((status) => {
+			if (status !== null) {
+				expect(status).toBeFalsy();
+			}
+		});
+	});
+
+	it('should set isAuthenticating to true while authenticating and reset on success', () => {
+		httpMock.expectOne('/api/check_auth');
+
+		expect(service.isAuthenticating()).toBeFalsy();
+
+		service.authenticate('user', 'pass').subscribe();
+		expect(service.isAuthenticating()).toBeTruthy();
+
+		const req = httpMock.expectOne('/api/login');
+		req.flush({}, { status: 200, statusText: 'OK' });
+
+		expect(service.isAuthenticating()).toBeFalsy();
+	});
+
+	it('should reset isAuthenticating to false on authentication failure', () => {
+		httpMock.expectOne('/api/check_auth');
+
+		service.authenticate('user', 'pass').subscribe();
+		expect(service.isAuthenticating()).toBeTruthy();
+
+		const req = httpMock.expectOne('/api/login');
+		req.flush({}, { status: 401, statusText: 'Unauthorized' });
+
+		expect(service.isAuthenticating()).toBeFalsy();
+	});
+
+	it('should verify TOTP successfully and update login state', () => {
+		httpMock.expectOne('/api/check_auth');
+
+		let capturedResult: boolean | undefined;
+		service.verifyTotp('123456').subscribe((result) => {
+			capturedResult = result;
+		});
+
+		const req = httpMock.expectOne('/api/verify_totp');
+		expect(req.request.method).toBe('POST');
+		expect(req.request.body).toEqual({ code: '123456' });
+		req.flush({}, { status: 200, statusText: 'OK' });
+
+		expect(capturedResult).toBeTruthy();
+
+		service.isLoggedIn$.subscribe((status) => {
+			if (status !== null) {
+				expect(status).toBeTruthy();
+			}
+		});
+	});
+
+	it('should return false when verifyTotp receives an error response', () => {
+		httpMock.expectOne('/api/check_auth');
+
+		let capturedResult: boolean | undefined;
+		service.verifyTotp('bad-code').subscribe((result) => {
+			capturedResult = result;
+		});
+
+		const req = httpMock.expectOne('/api/verify_totp');
+		req.flush({ message: 'Unauthorized' }, { status: 401, statusText: 'Unauthorized' });
+
+		expect(capturedResult).toBeFalsy();
+	});
+
+	it('should return false when verifyTotp encounters a network error', () => {
+		httpMock.expectOne('/api/check_auth');
+
+		let capturedResult: boolean | undefined;
+		service.verifyTotp('123456').subscribe((result) => {
+			capturedResult = result;
+		});
+
+		const req = httpMock.expectOne('/api/verify_totp');
+		req.error(new ProgressEvent('Network error'));
+
+		expect(capturedResult).toBeFalsy();
+	});
+
+	it('should set isAuthenticating to true while verifying TOTP and reset on success', () => {
+		httpMock.expectOne('/api/check_auth');
+
+		service.verifyTotp('123456').subscribe();
+		expect(service.isAuthenticating()).toBeTruthy();
+
+		const req = httpMock.expectOne('/api/verify_totp');
+		req.flush({}, { status: 200, statusText: 'OK' });
+
+		expect(service.isAuthenticating()).toBeFalsy();
+	});
+
+	it('should update localStorage to false on logout', () => {
+		httpMock.expectOne('/api/check_auth');
+		const spy = vi.spyOn(Storage.prototype, 'setItem');
+		service.logout().subscribe();
+		const req = httpMock.expectOne('/api/logout');
+		req.flush({});
+
+		expect(spy).toHaveBeenCalledWith('isLoggedIn', 'false');
+	});
+
+	it('should return true from refreshAuthStatus on network error', () => {
+		httpMock.expectOne('/api/check_auth');
+
+		let capturedResult: boolean | undefined;
+		service.refreshAuthStatus().subscribe((result) => {
+			capturedResult = result;
+		});
+
+		const req = httpMock.expectOne('/api/check_auth');
+		req.error(new ProgressEvent('Network error'));
+
+		expect(capturedResult).toBe(false);
+	});
 });
