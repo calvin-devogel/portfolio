@@ -1,60 +1,60 @@
 # yaml-language-server: $schema=https://www.schemastore.org/any.json
 cv:
-    name: Calvin de Vogel
-    location: Madison, WI
-    sections:
-        summary:
-            - Detail-oriented Software Engineer with 4+ years of technical and operational experience seeking a Software Engineering role. Proven ability to deliver robust, maintainable code, coordinate cross-functional projects, and translate complex business requirements into practical and effective solutions.
-        skills:
-            - label: Languages
-              details: TypeScript, C#, Rust, SQL, Python
-            - label: Infrastructure
-              details: Docker, DigitalOcean, Azure, Terraform, Cloudflare
-            - label: Tools/Frameworks
-              details: Angular, Node.js, Actix Web, .NET, PostgreSQL, CI/CD, Agile, Jira, Git
+  name: Calvin de Vogel
+  location: Madison, WI
+  sections:
+    summary:
+      - Detail-oriented Software Engineer with 4+ years of technical and operational experience seeking a Software Engineering role. Proven ability to deliver robust, maintainable code, coordinate cross-functional projects, and translate complex business requirements into practical and effective solutions.
+    skills:
+      - label: Languages
+        details: TypeScript, C#, Rust, SQL, Python
+      - label: Infrastructure
+        details: Docker, DigitalOcean, Azure, Terraform, Cloudflare
+      - label: Tools/Frameworks
+        details: Angular, Node.js, Actix Web, .NET, PostgreSQL, CI/CD, Agile, Jira, Git
 
-        experience:
-            - company: PCI Pharma Services
-              position: Visual Inspection Technician II
-              location: Madison, WI
-              start_date: 2024-02
-              summary:
-              highlights:
-                  - Responsible for visual inspection, sampling, and packaging of finished drug product vials
-                  - Serves as team subject matter expert for sampling procedures, and team representative for the 5S working group
-                  - Oversees inventory control processes, ensuring physical inventory logs and digital SAP B1 records are in alignment
-                  - Follows written procedures and Good Documentation Practices (GDP) to certify records are compliant with company standards and other regulations.
-                  - Record inspection data and analyze defect trends, coordinating with Quality, Engineering, and Manufacturing departments to determine corrective action and lower future defect rates.
-            - company: Kalderos, Inc.
-              position: Software Engineering Intern
-              location: Chicago, Il - Remote
-              start_date: 2019-05
-              end_date: 2023-08
-              summary:
-              highlights:
-                  - Built and maintained a system that automated the syncing of customer information between proprietary database and Salesforce, saving upwards of 20 hours per month.
-                  - Developed a semi-annual process to upload Covered Entity records sourced from state Medicaid program FOIA requests.
-                  - Implemented an internal dashboard page that tracked requests from Sales and Marketing teams to update customer data using React and a C# backend.
-            - company: UW Madison Computer Systems Lab
-              position: Student Sysadmin
-              location: Madison, WI
-              start_date: 2016-05
-              end_date: 2019-05
-              summary:
-              highlights:
-                  - Supported students and faculty in determining project technology requirements, and assisted with installation and maintenance of said resources.
-                  - Performed regular software updates across departmental machines, as well as maintenance and relocation of CS Department hardware.
-                  - Worked with users and team members to troubleshoot and resolve technical issues.
-                  - Leveraged a department ticketing system to track and record progress on projects and technical issues, and communicate with users and stakeholders.
-        education:
-            - institution: University of Wisconsin-Madison
-              area: Computer Science
-              degree: BS
-              end_date: 2023-08
-              highlights:
-                  - organization: President of the UW-Madison Fencing Club (2017-2018)
-                    details: Responsible for communicating with USA Fencing and UW Madison RecSports to maintain compliance, schedule competitions, organize travel, and allocate funding.
-                  - organization: NOBE UW-Madison Chapter Board Member (2015-2016)
-                    details: Worked with local businesses to organize fundraisers, and developed and scheduled inter-organization networking events.
-              summary: |
-                  Relevant Coursework: Operating Systems, Algorithms, Software Engineering, Matrix Methods for Machine Learning, Linear Algebra, Combinatorics
+    experience:
+      - company: PCI Pharma Services
+        position: Visual Inspection Technician II
+        location: Madison, WI
+        start_date: 2024-02
+        summary:
+        highlights:
+          - Responsible for visual inspection, sampling, and packaging of finished drug product vials
+          - Serves as team subject matter expert for sampling procedures, and team representative for the 5S working group
+          - Oversees inventory control processes, ensuring physical inventory logs and digital SAP B1 records are in alignment
+          - Follows written procedures and Good Documentation Practices (GDP) to certify records are compliant with company standards and other regulations.
+          - Record inspection data and analyze defect trends, coordinating with Quality, Engineering, and Manufacturing departments to determine corrective action and lower future defect rates.
+      - company: Kalderos, Inc.
+        position: Software Engineering Intern
+        location: Chicago, Il - Remote
+        start_date: 2019-05
+        end_date: 2023-08
+        summary:
+        highlights:
+          - Built and maintained a system that automated the syncing of customer information between proprietary database and Salesforce, saving upwards of 20 hours per month.
+          - Developed a semi-annual process to upload Covered Entity records sourced from state Medicaid program FOIA requests.
+          - Implemented an internal dashboard page that tracked requests from Sales and Marketing teams to update customer data using React and a C# backend.
+      - company: UW Madison Computer Systems Lab
+        position: Student Sysadmin
+        location: Madison, WI
+        start_date: 2016-05
+        end_date: 2019-05
+        summary:
+        highlights:
+          - Supported students and faculty in determining project technology requirements, and assisted with installation and maintenance of said resources.
+          - Performed regular software updates across departmental machines, as well as maintenance and relocation of CS Department hardware.
+          - Worked with users and team members to troubleshoot and resolve technical issues.
+          - Leveraged a department ticketing system to track and record progress on projects and technical issues, and communicate with users and stakeholders.
+    education:
+      - institution: University of Wisconsin-Madison
+        area: Computer Science
+        degree: BS
+        end_date: 2023-08
+        highlights:
+          - organization: President of the UW-Madison Fencing Club (2017-2018)
+            details: Responsible for communicating with USA Fencing and UW Madison RecSports to maintain compliance, schedule competitions, organize travel, and allocate funding.
+          - organization: NOBE UW-Madison Chapter Board Member (2015-2016)
+            details: Worked with local businesses to organize fundraisers, and developed and scheduled inter-organization networking events.
+        summary: |
+          Relevant Coursework: Operating Systems, Algorithms, Software Engineering, Matrix Methods for Machine Learning, Linear Algebra, Combinatorics
