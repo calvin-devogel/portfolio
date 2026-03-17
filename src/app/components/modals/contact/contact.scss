@@ -55,8 +55,8 @@
 	}
 
 	// override Bulma's blue focus color on input icons
-	.input:focus~.icon,
-	.input.is-danger~.icon {
+	.input:focus ~ .icon,
+	.input.is-danger ~ .icon {
 		color: var(--primary) !important;
 
 		i-feather {

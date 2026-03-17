@@ -389,7 +389,7 @@ describe('AccountSettings', () => {
 
 			it('should call startSetup when Enable 2FA is clicked', () => {
 				// eslint-disable-next-line @typescript-eslint/no-empty-function
-				vi.spyOn(component, 'startSetup').mockImplementation(() => { });
+				vi.spyOn(component, 'startSetup').mockImplementation(() => {});
 				fixture.nativeElement.querySelector('.pill-button').click();
 				expect(component.startSetup).toHaveBeenCalled();
 			});
@@ -421,7 +421,7 @@ describe('AccountSettings', () => {
 
 			it('should call startDisable when Disable 2FA is clicked', () => {
 				// eslint-disable-next-line @typescript-eslint/no-empty-function
-				vi.spyOn(component, 'startDisable').mockImplementation(() => { });
+				vi.spyOn(component, 'startDisable').mockImplementation(() => {});
 				fixture.nativeElement.querySelector('.pill-button').click();
 				expect(component.startDisable).toHaveBeenCalled();
 			});
@@ -476,7 +476,7 @@ describe('AccountSettings', () => {
 
 				it('should call disableTotp when the Confirm Disable button is clicked', () => {
 					// eslint-disable-next-line @typescript-eslint/no-empty-function
-					vi.spyOn(component, 'disableTotp').mockImplementation(() => { });
+					vi.spyOn(component, 'disableTotp').mockImplementation(() => {});
 					component.disablePassword = 'secret';
 					fixture.detectChanges();
 					fixture.nativeElement.querySelector('button[type="submit"]').click();
@@ -485,7 +485,7 @@ describe('AccountSettings', () => {
 
 				it('should call cancelDisable when Cancel is clicked', () => {
 					// eslint-disable-next-line @typescript-eslint/no-empty-function
-					vi.spyOn(component, 'cancelDisable').mockImplementation(() => { });
+					vi.spyOn(component, 'cancelDisable').mockImplementation(() => {});
 					fixture.nativeElement.querySelector('button[type="button"]').click();
 					expect(component.cancelDisable).toHaveBeenCalled();
 				});

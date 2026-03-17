@@ -60,10 +60,10 @@ export class BlogService {
 							total_pages:
 								Number.isFinite(normalizedPageSize) && normalizedPageSize > 0
 									? Math.ceil(
-										(Number.isFinite(normalizedTotal)
-											? normalizedTotal
-											: data.length) / normalizedPageSize,
-									)
+											(Number.isFinite(normalizedTotal)
+												? normalizedTotal
+												: data.length) / normalizedPageSize,
+										)
 									: 0,
 						},
 					};

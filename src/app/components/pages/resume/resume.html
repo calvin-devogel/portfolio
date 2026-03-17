@@ -2,119 +2,119 @@
 	<div left></div>
 	<div main class="hero hero-body" aria-label="Resume page content">
 		@if (resumeData(); as resumeData) {
-		<section class="animate-section" aria-labelledby="summary-heading">
-			<div class="box mt-6 py-6 px-6 is-shadowless">
-				<h2 id="summary-heading" class="title is-3 gradient-title mb-4">Summary</h2>
-				<p class="resume-item">{{ resumeData.cv.sections.summary }}</p>
-			</div>
-		</section>
+			<section class="animate-section" aria-labelledby="summary-heading">
+				<div class="box mt-6 py-6 px-6 is-shadowless">
+					<h2 id="summary-heading" class="title is-3 gradient-title mb-4">Summary</h2>
+					<p class="resume-item">{{ resumeData.cv.sections.summary }}</p>
+				</div>
+			</section>
 
-		<section class="mt-1 animate-section" aria-labelledby="skills-heading">
-			<div class="box px-6 py-6 is-shadowless">
-				<h2 id="skills-heading" class="title is-4 gradient-title">Skills</h2>
-				<div class="columns is-multiline resume-item">
-					@for (skill of resumeData.cv.sections.skills; track skill) {
-					<div class="column is-12-mobile is-6-tablet">
-						<h5 class="subtitle is-6 mb-2">
-							<strong>{{ skill.label }}</strong>
-						</h5>
-						<div class="tags">
-							@for (tag of skill.tags; track tag) {
-							<span class="tag is-info">{{ tag }}</span>
-							}
-						</div>
+			<section class="mt-1 animate-section" aria-labelledby="skills-heading">
+				<div class="box px-6 py-6 is-shadowless">
+					<h2 id="skills-heading" class="title is-4 gradient-title">Skills</h2>
+					<div class="columns is-multiline resume-item">
+						@for (skill of resumeData.cv.sections.skills; track skill) {
+							<div class="column is-12-mobile is-6-tablet">
+								<h5 class="subtitle is-6 mb-2">
+									<strong>{{ skill.label }}</strong>
+								</h5>
+								<div class="tags">
+									@for (tag of skill.tags; track tag) {
+										<span class="tag is-info">{{ tag }}</span>
+									}
+								</div>
+							</div>
+						}
 					</div>
+				</div>
+			</section>
+
+			<section class="mt-1 animate-section" aria-labelledby="experience-heading">
+				<div class="box py-6 px-6 is-shadowless">
+					<h2 id="experience-heading" class="title is-4 gradient-title mb-5">
+						Experience
+					</h2>
+					@for (job of resumeData.cv.sections.experience; track job; let last = $last) {
+						<div class="mb-6 resume-item" [class.mb-0]="last">
+							<div class="level mb-2 is-align-items-start">
+								<div class="level-left">
+									<div>
+										<h3 class="title is-5 mb-1">{{ job.company }}</h3>
+										<h4 class="subtitle is-6 has-text-grey">
+											{{ job.position }} &bull; {{ job.location }}
+										</h4>
+									</div>
+								</div>
+								<div class="level-right">
+									<span class="tag date is-family-monospace">
+										{{ job.start_date }} - {{ job.end_date || 'Present' }}
+									</span>
+								</div>
+							</div>
+
+							<div class="content">
+								<ul>
+									@for (highlight of job.highlights; track highlight) {
+										<li>{{ highlight }}</li>
+									}
+								</ul>
+							</div>
+						</div>
 					}
 				</div>
-			</div>
-		</section>
+			</section>
 
-		<section class="mt-1 animate-section" aria-labelledby="experience-heading">
-			<div class="box py-6 px-6 is-shadowless">
-				<h2 id="experience-heading" class="title is-4 gradient-title mb-5">
-					Experience
-				</h2>
-				@for (job of resumeData.cv.sections.experience; track job; let last = $last) {
-				<div class="mb-6 resume-item" [class.mb-0]="last">
-					<div class="level mb-2 is-align-items-start">
-						<div class="level-left">
-							<div>
-								<h3 class="title is-5 mb-1">{{ job.company }}</h3>
-								<h4 class="subtitle is-6 has-text-grey">
-									{{ job.position }} &bull; {{ job.location }}
-								</h4>
+			<section class="mt-1 animate-section" aria-labelledby="education-heading">
+				<div class="box px-6 py-6 is-shadowless">
+					<h3 id="education-heading" class="title is-4 gradient-title mb-5">Education</h3>
+					@for (
+						educationItem of resumeData.cv.sections.education;
+						track educationItem;
+						let last = $last
+					) {
+						<div class="mb-5 resume-item" [class.mb-0]="last">
+							<div class="level mb-1 is-align-items-start">
+								<div class="level-left">
+									<div>
+										<h3 class="title is-5 mb-1">
+											{{ educationItem.institution }}
+										</h3>
+										<h4 class="subtitle is-6 has-text-grey">
+											{{ educationItem.degree }} in {{ educationItem.area }}
+										</h4>
+									</div>
+								</div>
+								<div class="level-right">
+									<span class="tag date is-family-monospace">{{
+										educationItem.end_date
+									}}</span>
+								</div>
+							</div>
+
+							<div class="content">
+								@if (educationItem.summary) {
+									<p>{{ educationItem.summary }}</p>
+								}
+								@if (
+									educationItem.highlights && educationItem.highlights.length > 0
+								) {
+									<ul>
+										@for (
+											highlight of educationItem.highlights;
+											track highlight
+										) {
+											<li>
+												<strong>{{ highlight.organization }}:</strong>
+												{{ highlight.details }}
+											</li>
+										}
+									</ul>
+								}
 							</div>
 						</div>
-						<div class="level-right">
-							<span class="tag date is-family-monospace">
-								{{ job.start_date }} - {{ job.end_date || 'Present' }}
-							</span>
-						</div>
-					</div>
-
-					<div class="content">
-						<ul>
-							@for (highlight of job.highlights; track highlight) {
-							<li>{{ highlight }}</li>
-							}
-						</ul>
-					</div>
+					}
 				</div>
-				}
-			</div>
-		</section>
-
-		<section class="mt-1 animate-section" aria-labelledby="education-heading">
-			<div class="box px-6 py-6 is-shadowless">
-				<h3 id="education-heading" class="title is-4 gradient-title mb-5">Education</h3>
-				@for (
-				educationItem of resumeData.cv.sections.education;
-				track educationItem;
-				let last = $last
-				) {
-				<div class="mb-5 resume-item" [class.mb-0]="last">
-					<div class="level mb-1 is-align-items-start">
-						<div class="level-left">
-							<div>
-								<h3 class="title is-5 mb-1">
-									{{ educationItem.institution }}
-								</h3>
-								<h4 class="subtitle is-6 has-text-grey">
-									{{ educationItem.degree }} in {{ educationItem.area }}
-								</h4>
-							</div>
-						</div>
-						<div class="level-right">
-							<span class="tag date is-family-monospace">{{
-								educationItem.end_date
-								}}</span>
-						</div>
-					</div>
-
-					<div class="content">
-						@if (educationItem.summary) {
-						<p>{{ educationItem.summary }}</p>
-						}
-						@if (
-						educationItem.highlights && educationItem.highlights.length > 0
-						) {
-						<ul>
-							@for (
-							highlight of educationItem.highlights;
-							track highlight
-							) {
-							<li>
-								<strong>{{ highlight.organization }}:</strong>
-								{{ highlight.details }}
-							</li>
-							}
-						</ul>
-						}
-					</div>
-				</div>
-				}
-			</div>
-		</section>
+			</section>
 		}
 	</div>
 </app-page-layout>

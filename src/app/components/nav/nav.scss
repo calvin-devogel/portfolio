@@ -13,10 +13,10 @@
 	right: 0;
 	z-index: 9999;
 
-  @media (prefers-color-scheme: dark) {
-    background: rgba(21, 26, 23, 0.85) !important;
-    border-bottom-color: var(--border-medium);
-  }
+	@media (prefers-color-scheme: dark) {
+		background: rgba(21, 26, 23, 0.85) !important;
+		border-bottom-color: var(--border-medium);
+	}
 
 	.navbar-item {
 		color: #3d5248;
@@ -29,11 +29,11 @@
 		gap: 0.4rem;
 		align-self: stretch;
 
-    &:hover {
-      background: var(--tint-md) !important;
-      color: var(--primary) !important;
-      border-radius: 0px !important;
-    }
+		&:hover {
+			background: var(--tint-md) !important;
+			color: var(--primary) !important;
+			border-radius: 0px !important;
+		}
 
 		// text color only used in nav, add a var?
 		@media (prefers-color-scheme: dark) {

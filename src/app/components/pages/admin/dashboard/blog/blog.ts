@@ -254,7 +254,7 @@ export class Blog implements OnInit, OnDestroy {
 				error: (err) => {
 					this.setError(
 						'Failed to update post: ' +
-						(err.error?.error || err.message || 'Unknown error'),
+							(err.error?.error || err.message || 'Unknown error'),
 					);
 					this.saving.set(false);
 				},
@@ -277,7 +277,7 @@ export class Blog implements OnInit, OnDestroy {
 				error: (err) => {
 					this.setError(
 						'Failed to create post: ' +
-						(err.error?.error || err.message || 'Unknown error'),
+							(err.error?.error || err.message || 'Unknown error'),
 					);
 					this.saving.set(false);
 				},
