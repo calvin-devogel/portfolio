@@ -1,6 +1,5 @@
 import { Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { FeatherModule } from 'angular-feather';
 import { FormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { scan } from 'rxjs/operators';
@@ -8,7 +7,7 @@ import { ChatService, ChatMessage } from '@services/chat/chat-service';
 
 @Component({
 	selector: 'app-chat',
-	imports: [CommonModule, FormsModule, FeatherModule],
+	imports: [CommonModule, FormsModule],
 	templateUrl: './chat.html',
 	styleUrl: './chat.scss',
 })
