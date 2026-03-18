@@ -7,6 +7,7 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 // should include a timestamp?
 export interface ChatMessage {
 	userId: string;
+	username: string;
 	text: string;
 	timestamp: Date;
 }
@@ -35,8 +36,8 @@ export class ChatService implements OnDestroy {
 			.withAutomaticReconnect()
 			.build();
 
-		this.connection.on('ReceiveMessage', (userId: string, text: string) => {
-			this.messages$.next({ userId, text, timestamp: new Date() });
+		this.connection.on('ReceiveMessage', (userId: string, username: string, text: string) => {
+			this.messages$.next({ userId, username, text, timestamp: new Date() });
 		});
 
 		await this.connection.start();
