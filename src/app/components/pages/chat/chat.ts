@@ -12,7 +12,7 @@ import { ChatService, ChatMessage } from '@services/chat/chat-service';
 	templateUrl: './chat.html',
 	styleUrl: './chat.scss',
 })
-export class Chat implements OnInit{
+export class Chat implements OnInit {
 	private chatService = inject(ChatService);
 	private platformId = inject(PLATFORM_ID);
 
@@ -23,11 +23,14 @@ export class Chat implements OnInit{
 	// a message_id: UUID
 	messages = toSignal(
 		this.chatService.messages$.pipe(
-			scan((acc: ChatMessage[], message: ChatMessage) => [...acc, message], [] as ChatMessage[])
+			scan(
+				(acc: ChatMessage[], message: ChatMessage) => [...acc, message],
+				[] as ChatMessage[],
+			),
 		),
-		{ initialValue: [] as ChatMessage[] }
+		{ initialValue: [] as ChatMessage[] },
 	);
-	
+
 	newMessage = signal('');
 	loadingMessages = signal(false);
 
@@ -38,7 +41,5 @@ export class Chat implements OnInit{
 		this.chatService.connect().then(() => {
 			this.loadingMessages.set(false);
 		});
-
-		
 	}
 }
