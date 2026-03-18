@@ -12,7 +12,7 @@ export interface ChatMessage {
 }
 
 @Injectable({
-	providedIn: 'root'
+	providedIn: 'root',
 })
 export class ChatService implements OnDestroy {
 	private platformId = inject(PLATFORM_ID);
@@ -22,13 +22,13 @@ export class ChatService implements OnDestroy {
 	public messages$ = new Subject<ChatMessage>();
 
 	async connect(): Promise<void> {
-		if(!isPlatformBrowser(this.platformId)) return;
-		if(this.connection) return;
+		if (!isPlatformBrowser(this.platformId)) return;
+		if (this.connection) return;
 
 		// get the short-term auth token
 		const { token } = await lastValueFrom(
-			this.http.get<{ token: string }>('/api/chat_token', { withCredentials: true })
-		).then(res => res!);
+			this.http.get<{ token: string }>('/api/chat_token', { withCredentials: true }),
+		).then((res) => res!);
 
 		this.connection = new HubConnectionBuilder()
 			.withUrl('/chathub', { accessTokenFactory: () => token })
