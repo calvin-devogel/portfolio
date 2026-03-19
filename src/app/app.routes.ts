@@ -24,6 +24,11 @@ export const routes: Routes = [
 			),
 	},
 	{
+		path: 'chat',
+		loadComponent: () => import('@components/pages/chat/chat').then((m) => m.Chat),
+		canActivate: [authGuard],
+	},
+	{
 		path: 'admin',
 		loadComponent: () => import('@components/pages/admin/admin').then((m) => m.Admin),
 		canActivate: [authGuard],

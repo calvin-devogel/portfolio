@@ -21,14 +21,22 @@ export type AuthResult = 'success' | 'mfa_required' | 'failed';
 	providedIn: 'root',
 })
 export class AuthService {
-	private isLoggedInSubject = new BehaviorSubject<boolean | null>(null);
-	public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 	public isAuthenticating = signal(false);
 	private platformId = inject(PLATFORM_ID);
 	private http = inject(HttpClient);
 
+	private get cachedIsLoggedIn(): boolean | null {
+		if (!isPlatformBrowser(this.platformId)) return null;
+		const cached = localStorage.getItem('isLoggedIn');
+		return cached === null ? null : cached === 'true';
+	}
+
+	private isLoggedInSubject = new BehaviorSubject<boolean | null>(null);
+	public isLoggedIn$ = this.isLoggedInSubject.asObservable();
+
 	constructor() {
 		if (isPlatformBrowser(this.platformId)) {
+			this.isLoggedInSubject.next(this.cachedIsLoggedIn ?? false);
 			this.checkAuthStatus();
 			this.setupActivityTracking();
 		}

@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { BlogService } from './blog-service';
-import { BlogPost, BlogPageResponse, CreateBlogPost } from '../../interfaces/blog-data';
+import { BlogPost, BlogPageResponse, CreateBlogPost } from '@interfaces/blog-data';
 
 const mockPost: BlogPost = {
 	post_id: 'abc-123',

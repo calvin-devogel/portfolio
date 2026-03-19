@@ -22,6 +22,10 @@ export const serverRoutes: ServerRoute[] = [
 		renderMode: RenderMode.Client,
 	},
 	{
+		path: 'chat',
+		renderMode: RenderMode.Client,
+	},
+	{
 		path: 'admin',
 		renderMode: RenderMode.Client,
 	},

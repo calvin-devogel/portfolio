@@ -10,8 +10,8 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../services/auth/auth-service';
-import { NotificationService } from '../../../services/notifications/notification-service';
+import { AuthService } from '@services/auth/auth-service';
+import { NotificationService } from '@services/notifications/notification-service';
 import { Subscription } from 'rxjs';
 import { ModalTemplate } from '@components/modals/modal-template/modal-template';
 

@@ -1,0 +1,59 @@
+@use 'styles/mixins' as *;
+
+.chat-container {
+	display: flex;
+	flex-direction: column;
+	height: calc(100vh - var(--nav-height) - 6rem);
+}
+
+.message-list {
+	flex: 1;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	padding-right: 0.5rem;
+}
+
+.chat-message {
+	display: flex;
+
+	&.is-mine {
+		justify-content: flex-end;
+	}
+
+	.bubble {
+		@include panel(12px);
+		max-width: 70%;
+		padding: 0.6rem 1rem;
+
+		.username {
+			font-size: 0.75rem;
+			font-weight: 700;
+			opacity: 0.6;
+			display: block;
+		}
+
+		.text {
+			margin: 0.2rem 0 0.3rem;
+		}
+
+		.timestamp {
+			font-size: 0.7rem;
+			opacity: 0.45;
+		}
+	}
+
+	&.is-mine .bubble {
+		background: var(--tint-md);
+		border-color: var(--border-medium);
+	}
+}
+
+.chat-input {
+	display: flex;
+	gap: 0.5rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--border-subtle);
+	margin-top: 0.75rem;
+}

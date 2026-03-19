@@ -7,7 +7,7 @@ import {
 	CreateBlogPost,
 	BlogPageResponse,
 	RawBlogPageResponse,
-} from '../../interfaces/blog-data';
+} from '@interfaces/blog-data';
 
 @Injectable({
 	providedIn: 'root',
