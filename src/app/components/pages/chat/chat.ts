@@ -1,17 +1,24 @@
-import { Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import {
+	Component,
+	inject,
+	OnInit,
+	PLATFORM_ID,
+	signal,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { scan } from 'rxjs/operators';
 import { ChatService, ChatMessage, ChatUser } from '@services/chat/chat-service';
-import { PageLayout } from '@components/page-layout/page-layout';
 import { FeatherModule } from 'angular-feather';
 
 @Component({
 	selector: 'app-chat',
-	imports: [CommonModule, FormsModule, PageLayout, FeatherModule],
+	imports: [CommonModule, FormsModule, FeatherModule],
 	templateUrl: './chat.html',
-	styleUrl: './chat.scss',
+	styleUrls: ['./chat.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Chat implements OnInit {
 	private chatService = inject(ChatService);

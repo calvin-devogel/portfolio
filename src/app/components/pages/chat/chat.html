@@ -1,49 +1,57 @@
-<app-page-layout>
-	<div main class="chat-page px-4 py-6 mt-6">
-		<div class="box chat-container">
-			<h2 class="title is-4 mb-4">Live Chat</h2>
+<div class="container hero is-fullheight is-fluid">
+	<div class="columns is-centered">
+		<div class="column"></div>
+		<div class="column content is-four-fifths">
+			<div main class="chat-page px-4 py-6 mt-6">
+				<div class="box chat-container">
+					<h2 class="title is-4 mb-4">Live Chat</h2>
 
-			<div class="message-list" #messageList>
-				@if (loadingMessages()) {
-					<p class="has-text-centered has-text-grey py-6">Connecting...</p>
-				} @else if (messages().length === 0) {
-					<p class="has-text-centered has-text-grey py-6">No messages yet - say hi!</p>
-				} @else {
-					@for (message of messages(); track message.timestamp) {
-						<div
-							class="chat-message"
-							[class.is-mine]="message.userId === currentUser()?.userId"
+					<div class="message-list" #messageList>
+						@if (loadingMessages()) {
+							<p class="has-text-centered has-text-grey py-6">Connecting...</p>
+						} @else if (messages().length === 0) {
+							<p class="has-text-centered has-text-grey py-6">
+								No messages yet - say hi!
+							</p>
+						} @else {
+							@for (message of messages(); track message.timestamp) {
+								<div
+									class="chat-message"
+									[class.is-mine]="message.userId === currentUser()?.userId"
+								>
+									<div class="bubble">
+										<span class="username">{{ message.username }}</span>
+										<p class="text">{{ message.text }}</p>
+										<span class="timestamp">{{
+											message.timestamp | date: 'shortTime'
+										}}</span>
+									</div>
+								</div>
+							}
+						}
+					</div>
+
+					<div class="chat-input">
+						<input
+							class="input"
+							type="text"
+							placeholder="Type your message..."
+							[(ngModel)]="newMessage"
+							(keydown.enter)="send()"
+							[disabled]="loadingMessages()"
+						/>
+						<button
+							class="pill-button is-link"
+							(click)="send()"
+							[disabled]="!newMessage().trim() || loadingMessages()"
 						>
-							<div class="bubble">
-								<span class="username">{{ message.username }}</span>
-								<p class="text">{{ message.text }}</p>
-								<span class="timestamp">{{
-									message.timestamp | date: 'shortTime'
-								}}</span>
-							</div>
-						</div>
-					}
-				}
-			</div>
-
-			<div class="chat-input">
-				<input
-					class="input"
-					type="text"
-					placeholder="Type your message..."
-					[(ngModel)]="newMessage"
-					(keydown.enter)="send()"
-					[disabled]="loadingMessages()"
-				/>
-				<button
-					class="pill-button is-link"
-					(click)="send()"
-					[disabled]="!newMessage().trim() || loadingMessages()"
-				>
-					<i-feather name="Send" class="icon is-small mr-1" />
-					Send
-				</button>
+							<i-feather name="Send" class="icon is-small mr-1" />
+							Send
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
+		<div class="column"></div>
 	</div>
-</app-page-layout>
+</div>
