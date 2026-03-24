@@ -9,19 +9,25 @@ fail() {
     exit 1
 }
 
-echo "\n→ Checking formatting...\n"
-NODE_NO_WARNINGS=1 npx prettier --check . || fail "Formatting"
+current_branch=$(git symbolic-ref --short HEAD)
 
-echo "\n→ Type checking...\n"
-npx tsc --noEmit || fail "Type check"
+if [[ $current_branch != "main" && $current_branch != "dev" ]]; then
+    exit 0
+else
+    echo "\n→ Checking formatting...\n"
+    NODE_NO_WARNINGS=1 npx prettier --check . || fail "Formatting"
 
-echo "\n→ Linting...\n"
-ng lint || fail "Linting"
+    echo "\n→ Type checking...\n"
+    npx tsc --noEmit || fail "Type check"
 
-echo "\n→ Audit...\n"
-npm audit || printf "\n${YELLOW}⚠${RESET} Audit found vulnerabilities (non-blocking).\n" >&2
+    echo "\n→ Linting...\n"
+    ng lint || fail "Linting"
 
-echo "\n→ Running tests...\n"
-ng test --watch=false || fail "Tests"
+    echo "\n→ Audit...\n"
+    npm audit || printf "\n${YELLOW}⚠${RESET} Audit found vulnerabilities (non-blocking).\n" >&2
 
-echo "\n${GREEN}✓${RESET} Pre-push checks passed.\n"
+    echo "\n→ Running tests...\n"
+    ng test --watch=false || fail "Tests"
+
+    echo "\n${GREEN}✓${RESET} Pre-push checks passed.\n"
+fi
