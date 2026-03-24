@@ -1,7 +1,7 @@
 import { Injectable, PLATFORM_ID, inject, OnDestroy, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Subject, lastValueFrom, BehaviorSubject } from 'rxjs';
+import { lastValueFrom, BehaviorSubject, ReplaySubject } from 'rxjs';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 // should include a timestamp?
@@ -25,7 +25,7 @@ export class ChatService implements OnDestroy {
 	private http = inject(HttpClient);
 	private connection: HubConnection | null = null;
 
-	public messages$ = new Subject<ChatMessage>();
+	public messages$ = new ReplaySubject<ChatMessage>(100);
 	public activeUsers$ = new BehaviorSubject<ChatUser[]>([]);
 	public currentUser = signal<ChatUser | null>(null);
 

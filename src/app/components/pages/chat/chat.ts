@@ -2,9 +2,13 @@ import {
 	Component,
 	inject,
 	OnInit,
+	AfterViewChecked,
 	PLATFORM_ID,
 	signal,
 	ChangeDetectionStrategy,
+	ViewChild,
+	ElementRef,
+	effect,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,9 +24,11 @@ import { FeatherModule } from 'angular-feather';
 	styleUrls: ['./chat.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Chat implements OnInit {
+export class Chat implements OnInit, AfterViewChecked {
 	private chatService = inject(ChatService);
 	private platformId = inject(PLATFORM_ID);
+
+	@ViewChild('messageList') messageList!: ElementRef<HTMLElement>;
 
 	// think about this: a message needs
 	// from: (a user id, associated with a name)
@@ -44,6 +50,22 @@ export class Chat implements OnInit {
 
 	newMessage = signal('');
 	loadingMessages = signal(false);
+	private pendingScroll = false;
+	private scrollBehavior: ScrollBehavior = 'instant';
+
+	constructor() {
+		effect(() => {
+			if (this.messages().length > 0) this.pendingScroll = true;
+		});
+	}
+
+	ngAfterViewChecked(): void {
+		if (this.pendingScroll && isPlatformBrowser(this.platformId)) {
+			this.messageList?.nativeElement.scrollTo({ top: this.messageList.nativeElement.scrollHeight });
+			this.pendingScroll = false;
+			this.scrollBehavior = 'smooth';
+		}
+	}
 
 	ngOnInit(): void {
 		if (!isPlatformBrowser(this.platformId)) return;

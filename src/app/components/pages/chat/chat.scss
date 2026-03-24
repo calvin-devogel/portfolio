@@ -1,52 +1,85 @@
 @use 'styles/mixins' as *;
 
+// viewport-filling shell to prevent body scroll
+.chat-outer {
+	position: fixed;
+	top: var(--nav-height);
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+}
+
+// center column with full height
+.chat-page {
+	width: 100%;
+	max-width: 960px;
+	display: flex;
+	flex-direction: column;
+	padding: 1.5rem 1rem;
+}
+
+// chat card
 .chat-container {
 	display: flex;
 	flex-direction: column;
-	height: calc(100vh - var(--nav-height) - 6rem);
+	flex: 1;
+	min-height: 0;
 }
 
 .message-list {
 	flex: 1;
 	overflow-y: auto;
+	min-height: 0;
 	display: flex;
 	flex-direction: column;
-	gap: 0.5rem;
-	padding-right: 0.5rem;
+	padding-right: 0.25rem;
+	padding-bottom: 0.5rem;
+	mask-image: linear-gradient(
+		to bottom,
+		transparent 0,
+		black 1rem,
+		black calc(100% - 1rem),
+		transparent 100%
+	);
 }
 
-.chat-message {
-	display: flex;
+.chat-message{
+	padding: 0.7rem 0;
+	border-bottom: 1px solid var(--border-subtle);
 
-	&.is-mine {
-		justify-content: flex-end;
+	&:last-child {
+		border-bottom: none;
 	}
 
-	.bubble {
-		@include panel(12px);
-		max-width: 70%;
-		padding: 0.6rem 1rem;
-
-		.username {
-			font-size: 0.75rem;
-			font-weight: 700;
-			opacity: 0.6;
-			display: block;
-		}
-
-		.text {
-			margin: 0.2rem 0 0.3rem;
-		}
-
-		.timestamp {
-			font-size: 0.7rem;
-			opacity: 0.45;
-		}
+	.message-meta {
+		display: flex;
+		align-items: baseline;
+		gap: 0.5rem;
+		margin-bottom: 0.3rem;
 	}
 
-	&.is-mine .bubble {
-		background: var(--tint-md);
-		border-color: var(--border-medium);
+	.username {
+		font-size: 0.78rem;
+		font-weight: 700;
+		color: var(--text-muted);
+	}
+
+	&.is-mine .username {
+		color: var(--primary);
+	}
+
+	.timestamp {
+		font-size: 0.7rem;
+		color: var(--text-faint);
+		margin-left: auto;
+	}
+
+	.text {
+		margin: 0;
+		line-height: 1.5;
 	}
 }
 
