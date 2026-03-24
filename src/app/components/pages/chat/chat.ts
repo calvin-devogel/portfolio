@@ -61,7 +61,9 @@ export class Chat implements OnInit, AfterViewChecked {
 
 	ngAfterViewChecked(): void {
 		if (this.pendingScroll && isPlatformBrowser(this.platformId)) {
-			this.messageList?.nativeElement.scrollTo({ top: this.messageList.nativeElement.scrollHeight });
+			this.messageList?.nativeElement.scrollTo({
+				top: this.messageList.nativeElement.scrollHeight,
+			});
 			this.pendingScroll = false;
 			this.scrollBehavior = 'smooth';
 		}

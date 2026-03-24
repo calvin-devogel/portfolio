@@ -7,9 +7,7 @@
 				@if (loadingMessages()) {
 					<p class="has-text-centered has-text-grey py-6">Connecting...</p>
 				} @else if (messages().length === 0) {
-					<p class="has-text-centered has-text-grey py-6">
-						No messages yet - say hi!
-					</p>
+					<p class="has-text-centered has-text-grey py-6">No messages yet - say hi!</p>
 				} @else {
 					@for (message of messages(); track message.timestamp) {
 						<div
@@ -22,7 +20,7 @@
 									<!-- pipes! -->
 									{{ message.timestamp | date: 'shortTime' }}
 								</span>
-							</div>		
+							</div>
 							<div class="text">{{ message.text }}</div>
 						</div>
 					}
@@ -44,7 +42,12 @@
 					(click)="send()"
 					[disabled]="!newMessage().trim() || loadingMessages()"
 				>
-					<i-feather name="Send" class="icon is-small mr-1" size="16" aria-hidden="true"/>
+					<i-feather
+						name="Send"
+						class="icon is-small mr-1"
+						size="16"
+						aria-hidden="true"
+					/>
 					Send
 				</button>
 			</div>
