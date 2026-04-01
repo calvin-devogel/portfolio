@@ -6,6 +6,7 @@ import { AccountSettings } from '@components/pages/admin/dashboard/account-setti
 import { authGuard } from './auth-guard';
 import { Messages } from '@components/pages/admin/dashboard/messages/messages';
 import { Blog as AdminBlog } from '@components/pages/admin/dashboard/blog/blog';
+import { Users } from '@components/pages/admin/dashboard/users/users';
 
 export const routes: Routes = [
 	{ path: '', component: Home, pathMatch: 'full' },
@@ -38,6 +39,7 @@ export const routes: Routes = [
 			{ path: 'messages', component: Messages },
 			{ path: 'blog', component: AdminBlog },
 			{ path: 'account-settings', component: AccountSettings },
+			{ path: 'users', component: Users }
 		],
 	},
 	{ path: '**', redirectTo: '', pathMatch: 'full' },
