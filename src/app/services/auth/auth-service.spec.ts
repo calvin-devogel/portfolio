@@ -151,7 +151,7 @@ describe('AuthService', () => {
 	it('should verify TOTP successfully and update login state', () => {
 		httpMock.expectOne('/api/check_auth');
 
-		let capturedResult: boolean | undefined;
+		let capturedResult: string | undefined;
 		service.verifyTotp('123456').subscribe((result) => {
 			capturedResult = result;
 		});
@@ -161,7 +161,7 @@ describe('AuthService', () => {
 		expect(req.request.body).toEqual({ code: '123456' });
 		req.flush({}, { status: 200, statusText: 'OK' });
 
-		expect(capturedResult).toBeTruthy();
+		expect(capturedResult).toBe('success');
 
 		service.isLoggedIn$.subscribe((status) => {
 			if (status !== null) {
@@ -170,10 +170,10 @@ describe('AuthService', () => {
 		});
 	});
 
-	it('should return false when verifyTotp receives an error response', () => {
+	it('should return failed when verifyTotp receives an error response', () => {
 		httpMock.expectOne('/api/check_auth');
 
-		let capturedResult: boolean | undefined;
+		let capturedResult: string | undefined;
 		service.verifyTotp('bad-code').subscribe((result) => {
 			capturedResult = result;
 		});
@@ -181,13 +181,13 @@ describe('AuthService', () => {
 		const req = httpMock.expectOne('/api/verify_totp');
 		req.flush({ message: 'Unauthorized' }, { status: 401, statusText: 'Unauthorized' });
 
-		expect(capturedResult).toBeFalsy();
+		expect(capturedResult).toBe('failed');
 	});
 
-	it('should return false when verifyTotp encounters a network error', () => {
+	it('should return failed when verifyTotp encounters a network error', () => {
 		httpMock.expectOne('/api/check_auth');
 
-		let capturedResult: boolean | undefined;
+		let capturedResult: string | undefined;
 		service.verifyTotp('123456').subscribe((result) => {
 			capturedResult = result;
 		});
@@ -195,7 +195,7 @@ describe('AuthService', () => {
 		const req = httpMock.expectOne('/api/verify_totp');
 		req.error(new ProgressEvent('Network error'));
 
-		expect(capturedResult).toBeFalsy();
+		expect(capturedResult).toBe('failed');
 	});
 
 	it('should set isAuthenticating to true while verifying TOTP and reset on success', () => {
@@ -232,5 +232,130 @@ describe('AuthService', () => {
 		req.error(new ProgressEvent('Network error'));
 
 		expect(capturedResult).toBe(false);
+	});
+
+	describe('authenticate', () => {
+		it('should return must_change_password_required when body contains the flag', () => {
+			httpMock.expectOne('/api/check_auth');
+
+			let capturedResult: string | undefined;
+			service.authenticate('user', 'pass').subscribe((result) => {
+				capturedResult = result;
+			});
+
+			const req = httpMock.expectOne('/api/login');
+			req.flush({ must_change_password: true }, { status: 200, statusText: 'OK' });
+
+			expect(capturedResult).toBe('must_change_password_required');
+		});
+
+		it('should return success when 200 body does not contain the flag', () => {
+			httpMock.expectOne('/api/check_auth');
+
+			let capturedResult: string | undefined;
+			service.authenticate('user', 'pass').subscribe((result) => {
+				capturedResult = result;
+			});
+
+			const req = httpMock.expectOne('/api/login');
+			req.flush({}, { status: 200, statusText: 'OK' });
+
+			expect(capturedResult).toBe('success');
+		});
+	});
+
+	describe('changePassword', () => {
+		it('should return ok on 202', () => {
+			httpMock.expectOne('/api/check_auth');
+
+			let capturedResult: string | undefined;
+			service.changePassword('old', 'new').subscribe((result) => {
+				capturedResult = result;
+			});
+
+			const req = httpMock.expectOne('/api/change_password');
+			expect(req.request.method).toBe('POST');
+			expect(req.request.body).toEqual({ current_password: 'old', new_password: 'new' });
+			req.flush({}, { status: 200, statusText: 'OK' });
+
+			expect(capturedResult).toBe('ok');
+		});
+
+		it('should return wrong_password on 401', () => {
+			httpMock.expectOne('/api/check_auth');
+
+			let capturedResult: string | undefined;
+			service.changePassword('wrong', 'new').subscribe((result) => {
+				capturedResult = result;
+			});
+
+			const req = httpMock.expectOne('/api/change_password');
+			req.flush('Unauthorized', { status: 401, statusText: 'Unauthorized' });
+
+			expect(capturedResult).toBe('wrong_password');
+		});
+
+		it('should return error on 500', () => {
+			httpMock.expectOne('/api/check_auth');
+
+			let capturedResult: string | undefined;
+			service.changePassword('old', 'new').subscribe((result) => {
+				capturedResult = result;
+			});
+
+			const req = httpMock.expectOne('/api/change_password');
+			req.flush('Server error', { status: 500, statusText: 'Internal Server Error' });
+
+			expect(capturedResult).toBe('error');
+		});
+	});
+
+	describe('acceptInvitation', () => {
+		it('should return ok on 200', () => {
+			httpMock.expectOne('/api/check_auth');
+
+			let capturedResult: string | undefined;
+			service.acceptInvitation('token', 'user', 'pass').subscribe((result) => {
+				capturedResult = result;
+			});
+
+			const req = httpMock.expectOne('/api/accept');
+			expect(req.request.body).toEqual({
+				token: 'token',
+				username: 'user',
+				password: 'pass',
+			});
+			req.flush({}, { status: 200, statusText: 'OK' });
+
+			expect(capturedResult).toBe('ok');
+		});
+
+		it('should return invalid on 400', () => {
+			httpMock.expectOne('/api/check_auth');
+
+			let capturedResult: string | undefined;
+			service.acceptInvitation('badtoken', 'user', 'pass').subscribe((result) => {
+				capturedResult = result;
+			});
+
+			const req = httpMock.expectOne('/api/accept');
+			req.flush('Bad Request', { status: 400, statusText: 'Bad Request' });
+
+			expect(capturedResult).toBe('invalid');
+		});
+
+		it('should return error on 500', () => {
+			httpMock.expectOne('/api/check_auth');
+
+			let capturedResult: string | undefined;
+			service.acceptInvitation('token', 'user', 'pass').subscribe((result) => {
+				capturedResult = result;
+			});
+
+			const req = httpMock.expectOne('/api/accept');
+			req.flush('Server error', { status: 500, statusText: 'Internal Server Error' });
+
+			expect(capturedResult).toBe('error');
+		});
 	});
 });

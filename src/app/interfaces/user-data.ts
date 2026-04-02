@@ -1,16 +1,16 @@
 export interface UserData {
-    user_id: string;
-    username: string;
-    role: 'admin' | 'user' | 'chat_user';
-    must_change_password: boolean;
+	user_id: string;
+	username: string;
+	role: 'admin' | 'user' | 'chat_user';
+	must_change_password: boolean;
 }
 
 export interface CreateUserData {
-    email: string;
+	email: string;
 }
 
 export interface CreateUserResponse {
-    success: boolean;
-    message: string;
-    link: string;
+	success: boolean;
+	message: string;
+	link: string;
 }

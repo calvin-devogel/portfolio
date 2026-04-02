@@ -17,7 +17,8 @@ export class UserService {
 	private http = inject(HttpClient);
 
 	getUsers(): Observable<UserData[] | null> {
-		return this.http.get<UserData[]>('/api/admin/users', { withCredentials: true })
+		return this.http
+			.get<UserData[]>('/api/admin/users', { withCredentials: true })
 			.pipe(catchError(() => of(null)));
 	}
 	// need to add idempotency key header just like messageService
@@ -27,20 +28,40 @@ export class UserService {
 			'Idempotency-Key': generateUUID(),
 		});
 		return this.http
-			.post<CreateUserResponse>('/api/admin/create_user', { email, role: ROLE_MAP['user'] }, {
-			headers,
-			withCredentials: true
-		})
+			.post<CreateUserResponse>(
+				'/api/admin/create_user',
+				{ email, role: ROLE_MAP['user'] },
+				{
+					headers,
+					withCredentials: true,
+				},
+			)
 			.pipe(catchError(() => of(null)));
 	}
 
 	setRole(userId: string, role: 'admin' | 'user' | 'chat_user'): Observable<boolean> {
-		return this.http.patch(`/api/admin/users/${userId}/role`, { role }, { withCredentials: true, observe: 'response' })
-			.pipe(map(() => true), catchError(() => of(false)));
+		return this.http
+			.patch(
+				`/api/admin/users/${userId}/role`,
+				{ role },
+				{ withCredentials: true, observe: 'response' },
+			)
+			.pipe(
+				map(() => true),
+				catchError(() => of(false)),
+			);
 	}
 
 	resetPassword(userId: string): Observable<boolean> {
-		return this.http.post(`/api/admin/users/${userId}/reset_password`, {}, { withCredentials: true, observe: 'response' })
-			.pipe(map(() => true), catchError(() => of(false)));
+		return this.http
+			.post(
+				`/api/admin/users/${userId}/reset_password`,
+				{},
+				{ withCredentials: true, observe: 'response' },
+			)
+			.pipe(
+				map(() => true),
+				catchError(() => of(false)),
+			);
 	}
 }

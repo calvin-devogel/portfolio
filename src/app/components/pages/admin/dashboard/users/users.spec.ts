@@ -1,13 +1,13 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { importProvidersFrom } from "@angular/core";
-import { FeatherModule } from "angular-feather";
-import { allIcons } from "angular-feather/icons";
-import { describe, it, expect, beforeEach, afterEach, vi, type Mock } from "vitest";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { importProvidersFrom } from '@angular/core';
+import { FeatherModule } from 'angular-feather';
+import { allIcons } from 'angular-feather/icons';
+import { describe, it, expect, beforeEach, afterEach, vi, type Mock } from 'vitest';
 import { of } from 'rxjs';
-import { UserService } from "@services/admin/user-service";
-import { Users } from "./users";
-import { NotificationService } from "@services/notifications/notification-service";
-import { UserData, CreateUserResponse } from "@interfaces/user-data";
+import { UserService } from '@services/admin/user-service';
+import { Users } from './users';
+import { NotificationService } from '@services/notifications/notification-service';
+import { UserData, CreateUserResponse } from '@interfaces/user-data';
 
 const mockUsers: UserData[] = [
 	{ user_id: '1', username: 'alice', role: 'admin', must_change_password: false },
@@ -89,7 +89,9 @@ describe('Users', () => {
 			await fixture.whenStable();
 
 			expect(component.inviteLink()).toBe(mockResponse.link);
-			expect(notificationServiceMock.success).toHaveBeenCalledWith('Invitation created successfully');
+			expect(notificationServiceMock.success).toHaveBeenCalledWith(
+				'Invitation created successfully',
+			);
 		});
 
 		it('should clear inviteEmail after a successful invite', async () => {
@@ -107,7 +109,7 @@ describe('Users', () => {
 
 			expect(userServiceMock.createUser).not.toHaveBeenCalled();
 			expect(notificationServiceMock.error).toHaveBeenCalledWith(
-				'Please enter a valid email address'
+				'Please enter a valid email address',
 			);
 		});
 
@@ -129,7 +131,9 @@ describe('Users', () => {
 			component.sendInvite();
 			await fixture.whenStable();
 
-			expect(notificationServiceMock.error).toHaveBeenCalledWith('Failed to create invitation');
+			expect(notificationServiceMock.error).toHaveBeenCalledWith(
+				'Failed to create invitation',
+			);
 		});
 	});
 
@@ -163,21 +167,31 @@ describe('Users', () => {
 		afterEach(() => vi.restoreAllMocks());
 
 		it('should write the invitelink to clipboard and show success notification', async () => {
-			component.state.update((s) => ({ ...s, inviteLink: 'https://example.com/invite/token' }));
+			component.state.update((s) => ({
+				...s,
+				inviteLink: 'https://example.com/invite/token',
+			}));
 			component.copyInviteLink();
 			await fixture.whenStable();
 
 			expect(writeTextMock).toHaveBeenCalledWith('https://example.com/invite/token');
-			expect(notificationServiceMock.success).toHaveBeenCalledWith('Invite link copied to clipboard');
+			expect(notificationServiceMock.success).toHaveBeenCalledWith(
+				'Invite link copied to clipboard',
+			);
 		});
 
 		it('should show an error notification when the clipboard write fails', async () => {
 			writeTextMock.mockRejectedValue(new Error('Permission denied'));
-			component.state.update((s) => ({ ...s, inviteLink: 'https://example.com/invite/token' }));
+			component.state.update((s) => ({
+				...s,
+				inviteLink: 'https://example.com/invite/token',
+			}));
 			component.copyInviteLink();
 			await fixture.whenStable();
 
-			expect(notificationServiceMock.error).toHaveBeenCalledWith('Failed to copy invite link');
+			expect(notificationServiceMock.error).toHaveBeenCalledWith(
+				'Failed to copy invite link',
+			);
 		});
 
 		it('should show an error notification when there is no invie link', async () => {
@@ -192,7 +206,7 @@ describe('Users', () => {
 		it('should update the user role and show a success notification', async () => {
 			userServiceMock.setRole.mockReturnValue(of(true));
 			const user = mockUsers[1];
-			const event = { target: { value: 'chat_user' }} as unknown as Event;
+			const event = { target: { value: 'chat_user' } } as unknown as Event;
 
 			component.onRoleChange(user, event);
 			await fixture.whenStable();
@@ -207,7 +221,7 @@ describe('Users', () => {
 		it('should revert the user role and show an error notification on failure', async () => {
 			userServiceMock.setRole.mockReturnValue(of(false));
 			const user = mockUsers[1];
-			const event = { target: { value: 'admin' }} as unknown as Event;
+			const event = { target: { value: 'admin' } } as unknown as Event;
 
 			component.onRoleChange(user, event);
 			await fixture.whenStable();
@@ -221,7 +235,7 @@ describe('Users', () => {
 
 		it('should do nothing when the selected role matches the current role', () => {
 			const user = mockUsers[0];
-			const event = { target: { value: 'admin' }} as unknown as Event;
+			const event = { target: { value: 'admin' } } as unknown as Event;
 
 			component.onRoleChange(user, event);
 			expect(userServiceMock.setRole).not.toHaveBeenCalled();

@@ -42,7 +42,7 @@ export class Users {
 	});
 
 	status = computed(() => this.state().status);
-	users = computed(() => this.state().users)
+	users = computed(() => this.state().users);
 	inviteLink = computed(() => this.state().inviteLink);
 	inviteBusy = computed(() => this.state().inviteBusy);
 
@@ -75,7 +75,7 @@ export class Users {
 				},
 				error: () => {
 					this.patchState({ status: 'error', errorText: 'Failed to load users' });
-				}
+				},
 			});
 	}
 
@@ -93,7 +93,9 @@ export class Users {
 			.subscribe({
 				next: (response) => {
 					if (!response?.success) {
-						this.notificationService.error(response?.message || 'Failed to create invitation');
+						this.notificationService.error(
+							response?.message || 'Failed to create invitation',
+						);
 						this.patchState({ inviteBusy: false });
 						return;
 					}
@@ -104,7 +106,7 @@ export class Users {
 				error: () => {
 					this.notificationService.error('Failed to create invitation');
 					this.patchState({ inviteBusy: false });
-				}
+				},
 			});
 	}
 
@@ -118,11 +120,14 @@ export class Users {
 			this.notificationService.error('No invite link to copy');
 			return;
 		}
-		navigator.clipboard.writeText(link).then(() => {
-			this.notificationService.success('Invite link copied to clipboard');
-		}).catch(() => {
-			this.notificationService.error('Failed to copy invite link');
-		});
+		navigator.clipboard
+			.writeText(link)
+			.then(() => {
+				this.notificationService.success('Invite link copied to clipboard');
+			})
+			.catch(() => {
+				this.notificationService.error('Failed to copy invite link');
+			});
 	}
 
 	isRoleUpdating(userId: string): boolean {
@@ -143,9 +148,9 @@ export class Users {
 
 		this.patchState({
 			updatingRoleIds: updatingIds,
-			users: this.state().users?.map((u) =>
-				u.user_id === user.user_id ? { ...u, role } : u
-			) ?? null,
+			users:
+				this.state().users?.map((u) => (u.user_id === user.user_id ? { ...u, role } : u)) ??
+				null,
 		});
 
 		this.userService
@@ -160,9 +165,10 @@ export class Users {
 				} else {
 					this.patchState({
 						updatingRoleIds: nextIds,
-						users: this.state().users?.map((u) =>
-							u.user_id === user.user_id ? { ...u, role: prev } : u
-						) ?? null,
+						users:
+							this.state().users?.map((u) =>
+								u.user_id === user.user_id ? { ...u, role: prev } : u,
+							) ?? null,
 					});
 					this.notificationService.error(`Failed to update role to ${role}`);
 				}
@@ -187,13 +193,14 @@ export class Users {
 					this.notificationService.success(`Password reset for ${user.username}.`);
 					this.patchState({
 						users: this.state().users?.map((u) =>
-							u.user_id === user.user_id ? { ...u, must_change_password: true } : u
+							u.user_id === user.user_id ? { ...u, must_change_password: true } : u,
 						),
 					});
 				} else {
-					this.notificationService.error(`Failed to reset password for ${user.username}.`);
+					this.notificationService.error(
+						`Failed to reset password for ${user.username}.`,
+					);
 				}
-
 			});
 	}
 }

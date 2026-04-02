@@ -34,7 +34,7 @@ export const serverRoutes: ServerRoute[] = [
 		renderMode: RenderMode.Client,
 	},
 	{
-		path: 'admin/account-settings',
+		path: 'admin/account_settings',
 		renderMode: RenderMode.Client,
 	},
 	{

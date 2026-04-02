@@ -30,6 +30,21 @@ export const routes: Routes = [
 		canActivate: [authGuard],
 	},
 	{
+		path: 'change_password',
+		loadComponent: () =>
+			import('@components/pages/change-password/change-password').then(
+				(m) => m.ChangePassword,
+			),
+		canActivate: [authGuard],
+	},
+	{
+		path: 'invitation/accept',
+		loadComponent: () =>
+			import('@components/pages/accept-invitation/accept-invitation').then(
+				(m) => m.AcceptInvitation,
+			),
+	},
+	{
 		path: 'admin',
 		loadComponent: () => import('@components/pages/admin/admin').then((m) => m.Admin),
 		canActivate: [authGuard],
@@ -38,8 +53,8 @@ export const routes: Routes = [
 			{ path: '', redirectTo: 'messages', pathMatch: 'full' },
 			{ path: 'messages', component: Messages },
 			{ path: 'blog', component: AdminBlog },
-			{ path: 'account-settings', component: AccountSettings },
-			{ path: 'users', component: Users }
+			{ path: 'account_settings', component: AccountSettings },
+			{ path: 'users', component: Users },
 		],
 	},
 	{ path: '**', redirectTo: '', pathMatch: 'full' },
