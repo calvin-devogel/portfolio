@@ -28,6 +28,7 @@ export const routes: Routes = [
 		path: 'chat',
 		loadComponent: () => import('@components/pages/chat/chat').then((m) => m.Chat),
 		canActivate: [authGuard],
+		data: { roles: ['chat_user', 'admin'] },
 	},
 	{
 		path: 'change_password',
@@ -36,6 +37,7 @@ export const routes: Routes = [
 				(m) => m.ChangePassword,
 			),
 		canActivate: [authGuard],
+		data: { roles: ['user', 'chat_user', 'admin'] },
 	},
 	{
 		path: 'invitation/accept',
@@ -49,6 +51,7 @@ export const routes: Routes = [
 		loadComponent: () => import('@components/pages/admin/admin').then((m) => m.Admin),
 		canActivate: [authGuard],
 		canActivateChild: [authGuard],
+		data: { roles: ['admin'] },
 		children: [
 			{ path: '', redirectTo: 'messages', pathMatch: 'full' },
 			{ path: 'messages', component: Messages },

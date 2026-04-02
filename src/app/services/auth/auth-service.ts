@@ -33,10 +33,13 @@ export class AuthService {
 
 	private isLoggedInSubject = new BehaviorSubject<boolean | null>(null);
 	public isLoggedIn$ = this.isLoggedInSubject.asObservable();
+	private userRoleSubject = new BehaviorSubject<string | null>(null);
+	public userRole$ = this.userRoleSubject.asObservable();
 
 	constructor() {
 		if (isPlatformBrowser(this.platformId)) {
 			this.isLoggedInSubject.next(this.cachedIsLoggedIn ?? false);
+			this.userRoleSubject.next(localStorage.getItem('userRole'));
 			this.checkAuthStatus();
 			this.setupActivityTracking();
 		}
@@ -67,14 +70,23 @@ export class AuthService {
 
 	public refreshAuthStatus(): Observable<boolean> {
 		return this.http
-			.get('/api/check_auth', { observe: 'response', withCredentials: true })
+			.get<string>('/api/check_auth', { observe: 'response', withCredentials: true })
 			.pipe(
-				map((response) => response.status === 200),
-				catchError(() => of(false)),
-				tap((isLoggedIn) => {
-					this.isLoggedInSubject.next(isLoggedIn);
-					localStorage.setItem('isLoggedIn', String(isLoggedIn));
+				map((response) => {
+					return {
+						isLoggedIn: response.status === 200,
+						role: response.status === 200 ? (response.body as string) : null,
+					};
 				}),
+				catchError(() => of({ isLoggedIn: false, role: null as string | null })),
+				tap(({ isLoggedIn, role }) => {
+					this.isLoggedInSubject.next(isLoggedIn);
+					this.userRoleSubject.next(role);
+					localStorage.setItem('isLoggedIn', isLoggedIn.toString());
+					if (role) localStorage.setItem('userRole', role);
+					else localStorage.removeItem('userRole');
+				}),
+				map(({ isLoggedIn }) => isLoggedIn),
 			);
 	}
 
