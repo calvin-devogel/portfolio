@@ -10,8 +10,8 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../services/auth/auth-service';
-import { NotificationService } from '../../../services/notifications/notification-service';
+import { AuthService } from '@services/auth/auth-service';
+import { NotificationService } from '@services/notifications/notification-service';
 import { Subscription } from 'rxjs';
 import { ModalTemplate } from '@components/modals/modal-template/modal-template';
 
@@ -96,6 +96,9 @@ export class Login implements OnDestroy {
 					this.notificationService.success('Login successful!');
 					this.loginModal.closeModal();
 					this.router.navigate(['/admin']);
+				} else if (result === 'must_change_password_required') {
+					this.loginModal.closeModal();
+					this.router.navigate(['/change_password']);
 				} else if (result === 'mfa_required') {
 					this.step.set('totp');
 				} else {
@@ -106,13 +109,16 @@ export class Login implements OnDestroy {
 	}
 
 	private submitTotp() {
-		const sub = this.authService.verifyTotp(this.totpCode).subscribe((success) => {
-			if (success) {
+		const sub = this.authService.verifyTotp(this.totpCode).subscribe((result) => {
+			if (result === 'success') {
 				this.notificationService.success('Login successful!');
 				this.loginModal.closeModal();
 				this.router.navigate(['/admin']);
+			} else if (result === 'must_change_password_required') {
+				this.loginModal.closeModal();
+				this.router.navigate(['/change_password']);
 			} else {
-				this.notificationService.error('Invalid TOTP code. Please try again.');
+				this.notificationService.error('Error or invalid TOTP code. Please try again.');
 				this.totpDigits = Array(6).fill('');
 				this.totpDigitInputs.get(0)?.nativeElement.focus();
 			}

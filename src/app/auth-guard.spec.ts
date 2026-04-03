@@ -7,12 +7,13 @@ import { AuthService } from './services/auth/auth-service';
 import { authGuard } from './auth-guard';
 
 describe('authGuard', () => {
-	let authServiceMock: { refreshAuthStatus: Mock };
+	let authServiceMock: { refreshAuthStatus: Mock; userRole$: Observable<string | null> };
 	let routerMock: { createUrlTree: Mock };
 
 	beforeEach(() => {
 		authServiceMock = {
 			refreshAuthStatus: vi.fn(() => of(false)),
+			userRole$: of(null),
 		};
 
 		routerMock = {

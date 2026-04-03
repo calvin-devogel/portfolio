@@ -1,0 +1,77 @@
+<div class="container mt-5">
+	<div class="box is-shadowless" style="max-width: 480px; margin: 0 auto">
+		@if (state() === 'invalid') {
+			<h1 class="title is-4">Invalid Invitation</h1>
+			<p class="subtitle is-6">
+				This invitation link is invalid or has expired. Please request a new one.
+			</p>
+			<button class="button is-link" (click)="goToHome()">Return Home</button>
+		}
+
+		@if (state() === 'success') {
+			<h1 class="title is-4">Account Created</h1>
+			<p class="subtitle is-6">
+				Your account has been created successfully. You can now log in.
+			</p>
+			<button class="button is-link" (click)="goToHome()">Return Home</button>
+		}
+
+		@if (state() === 'form') {
+			<h1 class="title is-4">Create Your Account</h1>
+			<p class="subtitle is-6">Set a username and password to get started.</p>
+
+			<form (ngSubmit)="onSubmit()" autocomplete="off">
+				<div class="field">
+					<label class="label" for="username">Username</label>
+					<div class="control">
+						<input
+							class="input"
+							type="text"
+							name="username"
+							[(ngModel)]="formData.username"
+							autocomplete="username"
+							required
+						/>
+					</div>
+				</div>
+
+				<div class="field">
+					<label class="label" for="password">Password</label>
+					<div class="control">
+						<input
+							class="input"
+							type="password"
+							name="password"
+							[(ngModel)]="formData.password"
+							autocomplete="new-password"
+							required
+						/>
+					</div>
+				</div>
+
+				<div class="field">
+					<label class="label" for="confirmPassword">Confirm Password</label>
+					<div class="control">
+						<input
+							class="input"
+							type="password"
+							name="confirmPassword"
+							[(ngModel)]="formData.confirmPassword"
+							autocomplete="new-password"
+							required
+						/>
+					</div>
+				</div>
+
+				<button
+					class="button is-link is-fullwidth"
+					type="submit"
+					[disabled]="busy()"
+					[class.is-loading]="busy()"
+				>
+					Create Account
+				</button>
+			</form>
+		}
+	</div>
+</div>

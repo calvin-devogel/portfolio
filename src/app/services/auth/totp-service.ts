@@ -14,13 +14,13 @@ export class TotpService {
 
 	getStatus(): Observable<TotpStatus | null> {
 		return this.http
-			.get<TotpStatus>('/api/admin/totp/status', { withCredentials: true })
+			.get<TotpStatus>('/v1/admin/totp/status', { withCredentials: true })
 			.pipe(catchError(() => of(null)));
 	}
 
 	setup(): Observable<string | null> {
 		return this.http
-			.get<{ otpauth_uri: string }>('/api/admin/totp/setup', { withCredentials: true })
+			.get<{ otpauth_uri: string }>('/v1/admin/totp/setup', { withCredentials: true })
 			.pipe(
 				map((response) => response.otpauth_uri),
 				catchError(() => of(null)),
@@ -30,7 +30,7 @@ export class TotpService {
 	confirm(code: string): Observable<'ok' | 'invalid' | 'already_enabled' | 'error'> {
 		return this.http
 			.post(
-				'/api/admin/totp/confirm',
+				'/v1/admin/totp/confirm',
 				{ code },
 				{
 					observe: 'response',
@@ -50,7 +50,7 @@ export class TotpService {
 	disable(password: string): Observable<'ok' | 'invalid_password' | 'error'> {
 		return this.http
 			.post(
-				'/api/admin/totp/disable',
+				'/v1/admin/totp/disable',
 				{ password },
 				{
 					observe: 'response',

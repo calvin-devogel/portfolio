@@ -1,0 +1,157 @@
+@use 'styles/mixins' as *;
+
+.users-card {
+	max-width: 760px;
+	border-radius: 12px !important;
+	border: 1px solid var(--border-subtle);
+	animation: fade-up 0.2s ease;
+
+	&__header {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.75rem;
+		margin-bottom: 1.25rem;
+
+		i-feather {
+			color: var(--primary);
+			flex-shrink: 0;
+			margin-top: 2px;
+		}
+	}
+
+	&__title {
+		font-weight: 700;
+		font-size: 1rem;
+		margin-bottom: 0.2rem;
+	}
+
+	&__subtle {
+		font-size: 0.875rem;
+		opacity: 0.7;
+	}
+}
+
+.invite-form {
+	animation: fade-up 0.15s ease;
+
+	.pill-button {
+		padding: 0.75rem 1rem;
+		margin-left: 1rem;
+		font-size: 0.875rem;
+		border-radius: 55px;
+	}
+}
+
+.invite-result {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	animation: fade-up 0.15s ease;
+
+	&__label {
+		font-size: 0.875rem;
+		font-weight: 600;
+		opacity: 0.8;
+	}
+}
+
+.users-table-wrap {
+	overflow-x: auto;
+
+	.table {
+		background: transparent;
+		color: var(--text-body);
+
+		thead {
+			border-bottom: 2px solid var(--border-medium);
+
+			th {
+				@include upper-label(0.72rem);
+				border: none;
+				padding: 0.6rem 0.75rem;
+			}
+		}
+
+		tbody {
+			td {
+				border: none;
+				border-bottom: 1px solid var(--border-subtle);
+				background: transparent;
+				vertical-align: middle;
+			}
+
+			tr:last-child td {
+				border-bottom: none;
+			}
+
+			tr:hover:not(.is-updating) td {
+				background: var(--tint-sm);
+				transition: background 0.2s ease;
+			}
+		}
+	}
+
+	.select {
+		&::after {
+			border-color: var(--primary) !important;
+		}
+
+		select {
+			background: transparent;
+			border-color: var(--border-medium);
+			color: var(--text-body);
+
+			&:hover:not(:disabled) {
+				border-color: var(--border-strong);
+			}
+
+			&:focus {
+				border-color: var(--primary);
+				box-shadow: 0 0 0 2px rgba(92, 122, 107, 0.2);
+			}
+
+			&:disabled {
+				opacity: 0.45;
+				cursor: not-allowed;
+			}
+		}
+	}
+
+	.tag.is-success.is-light {
+		background: var(--tint-lg);
+		color: var(--primary);
+	}
+
+	.tag.is-warning.is-light {
+		background: var(--tint-lg);
+		color: var(--warning);
+	}
+}
+
+.user-name {
+	color: var(--text-muted);
+	font-weight: 600;
+	vertical-align: middle;
+}
+
+.user-actions {
+	text-align: right;
+	white-space: nowrap;
+	vertical-align: middle;
+}
+
+tr.is-updating {
+	opacity: 0.55;
+	pointer-events: none;
+}
+
+@keyframes fade-up {
+	from {
+		opacity: 0;
+		transform: translateY(5px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

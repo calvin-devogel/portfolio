@@ -1,0 +1,151 @@
+<div class="container mt-5">
+	<h1 class="title">User Management</h1>
+
+	<div class="users-card box is-shadowless mb-5">
+		<div class="users-card__header">
+			<i-feather name="user-plus" size="20"></i-feather>
+			<div>
+				<p class="users-card__title">Invite User</p>
+				<p class="users-card__subtitle">
+					Generate a one-time invitation link for a new user.
+				</p>
+			</div>
+		</div>
+
+		@if (!inviteLink()) {
+			<form class="invite-form" autocomplete="off" (ngSubmit)="sendInvite()">
+				<div class="field has-addons">
+					<div class="control is-expanded">
+						<input
+							class="input"
+							type="email"
+							placeholder="Enter email address"
+							name="inviteEmail"
+							[(ngModel)]="inviteEmail"
+							[disabled]="inviteBusy()"
+							autocomplete="off"
+							required
+						/>
+					</div>
+					<div class="control">
+						<button
+							type="submit"
+							class="pill-button"
+							[disabled]="inviteBusy() || !inviteEmail.trim()"
+							[class.is-loading]="inviteBusy()"
+						>
+							Generate Link
+						</button>
+					</div>
+				</div>
+			</form>
+		}
+
+		@if (inviteLink()) {
+			<div class="invite-result">
+				<p class="invite-result__label">Share this link with the new user:</p>
+				<div class="field has-addons">
+					<div class="control is-expanded">
+						<input class="input" type="text" [value]="inviteLink()!" readonly />
+					</div>
+					<div class="control">
+						<button class="pill-button" (click)="copyInviteLink()">
+							<i-feather name="copy" size="14"></i-feather>
+							Copy
+						</button>
+					</div>
+				</div>
+				<button class="pill-button mt-2" (click)="clearInviteLink()">
+					<i-feather name="plus" size="14"></i-feather>
+					New Invite
+				</button>
+			</div>
+		}
+	</div>
+
+	<div class="users-card box is-shadowless">
+		<div class="users-card__header">
+			<i-feather name="users" size="20"></i-feather>
+			<div>
+				<p class="users-card__title">All Users</p>
+				<p class="users-card__subtitle">Manage roles and account access.</p>
+			</div>
+		</div>
+
+		@if (status() === 'loading') {
+			<p class="has-text-centered has-text-grey py-5">Loading users...</p>
+		}
+
+		@if (status() === 'error') {
+			<div class="notification is-danger is-light">
+				Failed to load users.
+				<button class="pill-button ml-3" (click)="loadUsers()">Retry</button>
+			</div>
+		}
+
+		@if (status() === 'empty') {
+			<div class="notification is-info is-light">No users found.</div>
+		}
+
+		@if (status() === 'ready') {
+			<div class="users-table-wrap">
+				<table class="table is-fullwidth is-hoverable">
+					<thead>
+						<tr>
+							<th>Username</th>
+							<th>Role</th>
+							<th>Joined</th>
+						</tr>
+					</thead>
+					<tbody>
+						@for (user of users(); track user.user_id) {
+							<tr [class.is-updating]="isRoleUpdating(user.user_id)">
+								<td class="user-name">{{ user.username }}</td>
+								<td>
+									<div class="select is-small">
+										<select
+											[disabled]="isRoleUpdating(user.user_id)"
+											(change)="onRoleChange(user, $event)"
+										>
+											@for (opt of roleOptions; track opt.value) {
+												<option
+													[value]="opt.value"
+													[selected]="opt.value === user.role"
+												>
+													{{ opt.label }}
+												</option>
+											}
+										</select>
+									</div>
+								</td>
+								<td>
+									@if (user.must_change_password) {
+										<span class="tag is-warning is-light"
+											>Password reset pending</span
+										>
+									} @else {
+										<span class="tag is-success is-light">Active</span>
+									}
+								</td>
+								<td class="user-actions">
+									<button
+										class="pill-button is-danger"
+										[disabled]="
+											isResetting(user.user_id) || user.must_change_password
+										"
+										[class.is-loading]="isResetting(user.user_id)"
+										(click)="resetPassword(user)"
+										title="Force password reset on next login"
+									>
+										<i-feather name="key" size="14"></i-feather>
+										Reset Password
+									</button>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		}
+	</div>
+</div>

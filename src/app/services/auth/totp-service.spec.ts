@@ -28,7 +28,7 @@ describe('TotpService', () => {
 			let result: unknown;
 			service.getStatus().subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/admin/totp/status');
+			const req = httpMock.expectOne('/v1/admin/totp/status');
 			expect(req.request.method).toBe('GET');
 			expect(req.request.withCredentials).toBe(true);
 			req.flush({ totp_enabled: true });
@@ -40,7 +40,7 @@ describe('TotpService', () => {
 			let result: unknown = 'not-null';
 			service.getStatus().subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/admin/totp/status');
+			const req = httpMock.expectOne('/v1/admin/totp/status');
 			req.error(new ProgressEvent('network error'));
 
 			expect(result).toBeNull();
@@ -50,7 +50,7 @@ describe('TotpService', () => {
 			let result: unknown = 'not-null';
 			service.getStatus().subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/admin/totp/status');
+			const req = httpMock.expectOne('/v1/admin/totp/status');
 			req.flush({ message: 'Forbidden' }, { status: 403, statusText: 'Forbidden' });
 
 			expect(result).toBeNull();
@@ -63,7 +63,7 @@ describe('TotpService', () => {
 			let result: unknown;
 			service.setup().subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/admin/totp/setup');
+			const req = httpMock.expectOne('/v1/admin/totp/setup');
 			expect(req.request.method).toBe('GET');
 			expect(req.request.withCredentials).toBe(true);
 			req.flush({ otpauth_uri: uri });
@@ -75,7 +75,7 @@ describe('TotpService', () => {
 			let result: unknown = 'not-null';
 			service.setup().subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/admin/totp/setup');
+			const req = httpMock.expectOne('/v1/admin/totp/setup');
 			req.error(new ProgressEvent('network error'));
 
 			expect(result).toBeNull();
@@ -85,7 +85,7 @@ describe('TotpService', () => {
 			let result: unknown = 'not-null';
 			service.setup().subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/admin/totp/setup');
+			const req = httpMock.expectOne('/v1/admin/totp/setup');
 			req.flush({ message: 'Unauthorized' }, { status: 401, statusText: 'Unauthorized' });
 
 			expect(result).toBeNull();
@@ -97,7 +97,7 @@ describe('TotpService', () => {
 			let result: unknown;
 			service.confirm('123456').subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/admin/totp/confirm');
+			const req = httpMock.expectOne('/v1/admin/totp/confirm');
 			expect(req.request.method).toBe('POST');
 			expect(req.request.body).toEqual({ code: '123456' });
 			expect(req.request.withCredentials).toBe(true);
@@ -110,7 +110,7 @@ describe('TotpService', () => {
 			let result: unknown;
 			service.confirm('123456').subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/admin/totp/confirm');
+			const req = httpMock.expectOne('/v1/admin/totp/confirm');
 			req.error(new ProgressEvent('network error'));
 
 			expect(result).toBe('error');
@@ -122,7 +122,7 @@ describe('TotpService', () => {
 			let result: unknown;
 			service.confirm('123456').subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/admin/totp/confirm');
+			const req = httpMock.expectOne('/v1/admin/totp/confirm');
 			req.flush({}, { status: 409, statusText: 'Conflict' });
 
 			expect(result).toBe('error');
@@ -132,7 +132,7 @@ describe('TotpService', () => {
 			let result: unknown;
 			service.confirm('bad-code').subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/admin/totp/confirm');
+			const req = httpMock.expectOne('/v1/admin/totp/confirm');
 			req.flush({}, { status: 422, statusText: 'Unprocessable Entity' });
 
 			expect(result).toBe('error');
@@ -144,7 +144,7 @@ describe('TotpService', () => {
 			let result: unknown;
 			service.disable('mypassword').subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/admin/totp/disable');
+			const req = httpMock.expectOne('/v1/admin/totp/disable');
 			expect(req.request.method).toBe('POST');
 			expect(req.request.body).toEqual({ password: 'mypassword' });
 			expect(req.request.withCredentials).toBe(true);
@@ -157,7 +157,7 @@ describe('TotpService', () => {
 			let result: unknown;
 			service.disable('mypassword').subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/admin/totp/disable');
+			const req = httpMock.expectOne('/v1/admin/totp/disable');
 			req.error(new ProgressEvent('network error'));
 
 			expect(result).toBe('error');
@@ -168,7 +168,7 @@ describe('TotpService', () => {
 			let result: unknown;
 			service.disable('wrongpassword').subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/admin/totp/disable');
+			const req = httpMock.expectOne('/v1/admin/totp/disable');
 			req.flush({}, { status: 401, statusText: 'Unauthorized' });
 
 			expect(result).toBe('error');

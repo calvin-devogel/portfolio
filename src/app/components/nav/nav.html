@@ -41,18 +41,31 @@
 				<i-feather name="book-open" size="32" aria-hidden="true"></i-feather>
 				<p class="mobile-hidden">Blog</p>
 			</a>
+			@if ((authService.isLoggedIn$ | async) && (authService.userRole$ | async) !== 'user') {
+				<a
+					class="navbar-item is-flex-mobile"
+					routerLink="/chat"
+					routerLinkActive="is-active"
+					aria-label="chat"
+				>
+					<i-feather name="message-square" size="32" aria-hidden="true"></i-feather>
+					<p class="mobile-hidden">Chat</p>
+				</a>
+			}
 		</div>
 	</div>
 	@if (authService.isLoggedIn$ | async) {
-		<a
-			class="navbar-item is-flex-mobile"
-			routerLink="/admin"
-			routerLinkActive="is-active"
-			aria-label="admin"
-		>
-			<i-feather name="layout" size="32" aria-hidden="true"></i-feather>
-			<p class="mobile-hidden">Admin</p>
-		</a>
+		@if ((authService.userRole$ | async) === 'admin') {
+			<a
+				class="navbar-item is-flex-mobile"
+				routerLink="/admin"
+				routerLinkActive="is-active"
+				aria-label="admin"
+			>
+				<i-feather name="layout" size="32" aria-hidden="true"></i-feather>
+				<p class="mobile-hidden">Admin</p>
+			</a>
+		}
 		<a
 			class="navbar-item is-flex-mobile"
 			(click)="logout()"
