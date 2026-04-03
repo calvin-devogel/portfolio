@@ -4,7 +4,7 @@
 		"secure": false,
 		"changeOrigin": true
 	},
-	"/chathub": {
+	"/ws/chat": {
 		"target": "http://127.0.0.1:5023",
 		"secure": false,
 		"changeOrigin": true,

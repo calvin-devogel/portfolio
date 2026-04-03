@@ -70,7 +70,7 @@ export class AuthService {
 
 	public refreshAuthStatus(): Observable<boolean> {
 		return this.http
-			.get<string>('/api/check_auth', { observe: 'response', withCredentials: true })
+			.get<string>('/v1/check_auth', { observe: 'response', withCredentials: true })
 			.pipe(
 				map((response) => {
 					return {
@@ -98,7 +98,7 @@ export class AuthService {
 		body.set('password', password);
 
 		return this.http
-			.post('/api/login', body.toString(), {
+			.post('/v1/login', body.toString(), {
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				observe: 'response',
 				withCredentials: true,
@@ -135,7 +135,7 @@ export class AuthService {
 
 		return this.http
 			.post(
-				'/api/verify_totp',
+				'/v1/verify_totp',
 				{ code },
 				{
 					observe: 'response',
@@ -171,7 +171,7 @@ export class AuthService {
 	): Observable<'ok' | 'wrong_password' | 'error'> {
 		return this.http
 			.post(
-				'/api/change_password',
+				'/v1/change_password',
 				{ current_password: currentPassword, new_password: newPassword },
 				{ observe: 'response', withCredentials: true },
 			)
@@ -191,7 +191,7 @@ export class AuthService {
 	): Observable<'ok' | 'invalid' | 'error'> {
 		return this.http
 			.post(
-				'/api/accept', // is this right?
+				'/v1/accept', // is this right?
 				{ token, username, password },
 				{ observe: 'response', withCredentials: true },
 			)
@@ -205,7 +205,7 @@ export class AuthService {
 	}
 
 	logout(): Observable<void> {
-		return this.http.post<void>('/api/logout', {}, { withCredentials: true }).pipe(
+		return this.http.post<void>('/v1/logout', {}, { withCredentials: true }).pipe(
 			finalize(() => {
 				this.isLoggedInSubject.next(false);
 				localStorage.setItem('isLoggedIn', 'false');

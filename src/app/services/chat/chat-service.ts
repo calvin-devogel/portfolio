@@ -35,14 +35,14 @@ export class ChatService implements OnDestroy {
 
 		// get the short-term auth token
 		const { token } = await lastValueFrom(
-			this.http.get<{ token: string }>('/api/chat_token', { withCredentials: true }),
+			this.http.get<{ token: string }>('/v1/chat_token', { withCredentials: true }),
 		).then((res) => res!);
 
 		const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
 		this.currentUser.set({ userId: payload.sub, username: payload.name });
 
 		this.connection = new HubConnectionBuilder()
-			.withUrl('/chathub', { accessTokenFactory: () => token })
+			.withUrl('/ws/chat', { accessTokenFactory: () => token })
 			.withAutomaticReconnect()
 			.configureLogging(LogLevel.Error)
 			.build();

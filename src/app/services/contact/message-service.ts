@@ -28,7 +28,7 @@ export class MessageService {
 		body.set('sender_name', messageData.sender_name);
 		body.set('message_text', messageData.message_text);
 
-		return this.http.post<MessageResponse>('/api/contact', body.toString(), {
+		return this.http.post<MessageResponse>('/v1/contact', body.toString(), {
 			headers,
 			withCredentials: false,
 		});
@@ -36,7 +36,7 @@ export class MessageService {
 
 	getMessages(page = 0, pageSize = 10): Observable<MessagesPageResponse> {
 		return this.http
-			.get<RawMessagesPageResponse>('/api/admin/messages', {
+			.get<RawMessagesPageResponse>('/v1/admin/messages', {
 				params: { page: page.toString(), page_size: pageSize.toString() },
 				withCredentials: true,
 			})
@@ -77,7 +77,7 @@ export class MessageService {
 		});
 
 		return this.http.patch<void>(
-			'/api/admin/messages',
+			'/v1/admin/messages',
 			{ message_id: messageId, read: read },
 			{ headers, withCredentials: true },
 		);

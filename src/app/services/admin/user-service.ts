@@ -18,7 +18,7 @@ export class UserService {
 
 	getUsers(): Observable<UserData[] | null> {
 		return this.http
-			.get<UserData[]>('/api/admin/users', { withCredentials: true })
+			.get<UserData[]>('/v1/admin/users', { withCredentials: true })
 			.pipe(catchError(() => of(null)));
 	}
 	// need to add idempotency key header just like messageService
@@ -29,7 +29,7 @@ export class UserService {
 		});
 		return this.http
 			.post<CreateUserResponse>(
-				'/api/admin/create_user',
+				'/v1/admin/create_user',
 				{ email, role: ROLE_MAP['user'] },
 				{
 					headers,
@@ -42,7 +42,7 @@ export class UserService {
 	setRole(userId: string, role: 'admin' | 'user' | 'chat_user'): Observable<boolean> {
 		return this.http
 			.patch(
-				`/api/admin/users/${userId}/role`,
+				`/v1/admin/users/${userId}/role`,
 				{ role },
 				{ withCredentials: true, observe: 'response' },
 			)
@@ -55,7 +55,7 @@ export class UserService {
 	resetPassword(userId: string): Observable<boolean> {
 		return this.http
 			.post(
-				`/api/admin/users/${userId}/reset_password`,
+				`/v1/admin/users/${userId}/reset_password`,
 				{},
 				{ withCredentials: true, observe: 'response' },
 			)

@@ -30,7 +30,7 @@ export class BlogService {
 		});
 
 		return this.http
-			.get<RawBlogPageResponse>('/api/blog', {
+			.get<RawBlogPageResponse>('/v1/blog', {
 				headers,
 			})
 			.pipe(
@@ -76,7 +76,7 @@ export class BlogService {
 			'Content-Type': 'application/json',
 			'Idempotency-Key': crypto.randomUUID(),
 		});
-		return this.http.post<void>('/api/admin/blog/post', post, {
+		return this.http.post<void>('/v1/admin/blog/post', post, {
 			withCredentials: true,
 			headers,
 		});
@@ -88,7 +88,7 @@ export class BlogService {
 			'Idempotency-Key': crypto.randomUUID(),
 		});
 		return this.http.patch<void>(
-			'/api/admin/blog/publish',
+			'/v1/admin/blog/publish',
 			{ post_id: postId, published },
 			{
 				withCredentials: true,
@@ -103,7 +103,7 @@ export class BlogService {
 			'Idempotency-Key': crypto.randomUUID(),
 		});
 		return this.http.patch<void>(
-			'/api/admin/blog/edit',
+			'/v1/admin/blog/edit',
 			{ post_id: postId, ...edits },
 			{
 				withCredentials: true,
@@ -117,7 +117,7 @@ export class BlogService {
 			'Content-Type': 'application/json',
 			'Idempotency-Key': crypto.randomUUID(),
 		});
-		return this.http.delete<void>('/api/admin/blog/delete', {
+		return this.http.delete<void>('/v1/admin/blog/delete', {
 			body: { post_id: postId },
 			withCredentials: true,
 			headers,
