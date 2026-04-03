@@ -110,10 +110,7 @@ export class AuthService {
 					if (response.status === 200) {
 						this.isLoggedInSubject.next(true);
 						localStorage.setItem('isLoggedIn', 'true');
-						const responseBody =
-							typeof response.body === 'string'
-								? JSON.parse(response.body)
-								: (response.body as unknown as { must_change_password?: boolean });
+						const responseBody = response.body ? JSON.parse(response.body) : {};
 						if (responseBody?.must_change_password) {
 							return 'must_change_password_required' as AuthResult;
 						}
