@@ -28,6 +28,14 @@ export class Chat implements OnInit, AfterViewChecked {
 	private chatService = inject(ChatService);
 	private platformId = inject(PLATFORM_ID);
 
+	private static readonly USER_PALETTE = [
+		'var(--primary)',
+		'var(--secondary)',
+		'var(--accent)',
+		'var(--warning)',
+		'var(--secondary-light)',
+	];
+
 	@ViewChild('messageList') messageList!: ElementRef<HTMLElement>;
 
 	// think about this: a message needs
@@ -84,5 +92,13 @@ export class Chat implements OnInit, AfterViewChecked {
 
 		this.chatService.sendMessage(text);
 		this.newMessage.set('');
+	}
+
+	userColor(userId: string): string {
+		let hash = 0;
+		for (let i = 0; i < userId.length; i++) {
+			hash = (hash * 31 + userId.charCodeAt(i)) & 0xffff;
+		}
+		return Chat.USER_PALETTE[hash % Chat.USER_PALETTE.length];
 	}
 }
