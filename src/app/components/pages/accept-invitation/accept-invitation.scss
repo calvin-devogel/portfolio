@@ -1,0 +1,7 @@
+@use 'styles/mixins' as *;
+
+.invite-box {
+    top: var(--nav-height);
+    max-width: 480px;
+    margin: 0 auto;
+}
