@@ -5,9 +5,9 @@ import { CreateUserResponse, UserData } from '@interfaces/user-data';
 import { generateUUID } from '@utils/uuid';
 
 const ROLE_MAP: Record<'admin' | 'user' | 'chat_user', string> = {
-	admin: 'Admin',
-	user: 'User',
-	chat_user: 'ChatUser',
+	admin: 'admin',
+	user: 'user',
+	chat_user: 'chat_user',
 };
 
 @Injectable({
