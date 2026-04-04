@@ -95,7 +95,7 @@ export class Login implements OnDestroy {
 				if (result === 'success') {
 					this.notificationService.success('Login successful!');
 					this.loginModal.closeModal();
-					this.router.navigate(['/admin']);
+					this.router.navigate(['/']);
 				} else if (result === 'must_change_password_required') {
 					this.loginModal.closeModal();
 					this.router.navigate(['/change_password']);
@@ -113,7 +113,7 @@ export class Login implements OnDestroy {
 			if (result === 'success') {
 				this.notificationService.success('Login successful!');
 				this.loginModal.closeModal();
-				this.router.navigate(['/admin']);
+				this.router.navigate(['/']);
 			} else if (result === 'must_change_password_required') {
 				this.loginModal.closeModal();
 				this.router.navigate(['/change_password']);

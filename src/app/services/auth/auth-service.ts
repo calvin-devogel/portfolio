@@ -114,6 +114,7 @@ export class AuthService {
 						if (responseBody?.must_change_password) {
 							return 'must_change_password_required' as AuthResult;
 						}
+						this.refreshAuthStatus().subscribe();
 						return 'success' as AuthResult;
 					}
 					if (response.status === 202) {
@@ -152,6 +153,7 @@ export class AuthService {
 						if (responseBody?.must_change_password) {
 							return 'must_change_password_required' as AuthResult;
 						}
+						this.refreshAuthStatus().subscribe();
 						return 'success' as AuthResult;
 					}
 					return 'failed' as AuthResult;
@@ -208,7 +210,10 @@ export class AuthService {
 		return this.http.post<void>('/v1/logout', {}, { withCredentials: true }).pipe(
 			finalize(() => {
 				this.isLoggedInSubject.next(false);
+				this.userRoleSubject.next(null);
 				localStorage.setItem('isLoggedIn', 'false');
+				localStorage.removeItem('userRole');
+				sessionStorage.clear();
 			}),
 		);
 	}

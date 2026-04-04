@@ -44,7 +44,7 @@
 			@if (
 				(authService.isLoggedIn$ | async) &&
 				((authService.userRole$ | async) === 'admin' ||
-					(authService.userRole$ | async) === 'user')
+					(authService.userRole$ | async) === 'chat_user')
 			) {
 				<a
 					class="navbar-item is-flex-mobile"
