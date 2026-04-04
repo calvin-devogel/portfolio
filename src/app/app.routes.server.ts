@@ -22,6 +22,18 @@ export const serverRoutes: ServerRoute[] = [
 		renderMode: RenderMode.Client,
 	},
 	{
+		path: 'chat',
+		renderMode: RenderMode.Client,
+	},
+	{
+		path: 'change_password',
+		renderMode: RenderMode.Client,
+	},
+	{
+		path: 'invitation/accept',
+		renderMode: RenderMode.Client,
+	},
+	{
 		path: 'admin',
 		renderMode: RenderMode.Client,
 	},
@@ -30,7 +42,7 @@ export const serverRoutes: ServerRoute[] = [
 		renderMode: RenderMode.Client,
 	},
 	{
-		path: 'admin/account-settings',
+		path: 'admin/account_settings',
 		renderMode: RenderMode.Client,
 	},
 	{

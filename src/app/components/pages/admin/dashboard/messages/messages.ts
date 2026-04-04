@@ -4,7 +4,7 @@ import { MessageService } from '@services/contact/message-service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MessageData } from '@interfaces/message-data';
 import { NotificationService } from '@services/notifications/notification-service';
-import { DashboardStatus } from '../../admin';
+import { DashboardStatus } from '@components/pages/admin/admin';
 import { interval } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 

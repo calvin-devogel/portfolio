@@ -1,6 +1,6 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { signal } from '@angular/core';
 import {
 	BehaviorSubject,
@@ -15,20 +15,31 @@ import {
 	finalize,
 } from 'rxjs';
 
-export type AuthResult = 'success' | 'mfa_required' | 'failed';
+export type AuthResult = 'success' | 'mfa_required' | 'must_change_password_required' | 'failed';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class AuthService {
-	private isLoggedInSubject = new BehaviorSubject<boolean | null>(null);
-	public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 	public isAuthenticating = signal(false);
 	private platformId = inject(PLATFORM_ID);
 	private http = inject(HttpClient);
 
+	private get cachedIsLoggedIn(): boolean | null {
+		if (!isPlatformBrowser(this.platformId)) return null;
+		const cached = localStorage.getItem('isLoggedIn');
+		return cached === null ? null : cached === 'true';
+	}
+
+	private isLoggedInSubject = new BehaviorSubject<boolean | null>(null);
+	public isLoggedIn$ = this.isLoggedInSubject.asObservable();
+	private userRoleSubject = new BehaviorSubject<string | null>(null);
+	public userRole$ = this.userRoleSubject.asObservable();
+
 	constructor() {
 		if (isPlatformBrowser(this.platformId)) {
+			this.isLoggedInSubject.next(this.cachedIsLoggedIn ?? false);
+			this.userRoleSubject.next(localStorage.getItem('userRole'));
 			this.checkAuthStatus();
 			this.setupActivityTracking();
 		}
@@ -59,14 +70,23 @@ export class AuthService {
 
 	public refreshAuthStatus(): Observable<boolean> {
 		return this.http
-			.get('/api/check_auth', { observe: 'response', withCredentials: true })
+			.get<string>('/v1/check_auth', { observe: 'response', withCredentials: true })
 			.pipe(
-				map((response) => response.status === 200),
-				catchError(() => of(false)),
-				tap((isLoggedIn) => {
-					this.isLoggedInSubject.next(isLoggedIn);
-					localStorage.setItem('isLoggedIn', String(isLoggedIn));
+				map((response) => {
+					return {
+						isLoggedIn: response.status === 200,
+						role: response.status === 200 ? (response.body as string) : null,
+					};
 				}),
+				catchError(() => of({ isLoggedIn: false, role: null as string | null })),
+				tap(({ isLoggedIn, role }) => {
+					this.isLoggedInSubject.next(isLoggedIn);
+					this.userRoleSubject.next(role);
+					localStorage.setItem('isLoggedIn', isLoggedIn.toString());
+					if (role) localStorage.setItem('userRole', role);
+					else localStorage.removeItem('userRole');
+				}),
+				map(({ isLoggedIn }) => isLoggedIn),
 			);
 	}
 
@@ -78,10 +98,11 @@ export class AuthService {
 		body.set('password', password);
 
 		return this.http
-			.post('/api/login', body.toString(), {
+			.post('/v1/login', body.toString(), {
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				observe: 'response',
 				withCredentials: true,
+				responseType: 'text',
 			})
 			.pipe(
 				map((response) => {
@@ -89,6 +110,10 @@ export class AuthService {
 					if (response.status === 200) {
 						this.isLoggedInSubject.next(true);
 						localStorage.setItem('isLoggedIn', 'true');
+						const responseBody = response.body ? JSON.parse(response.body) : {};
+						if (responseBody?.must_change_password) {
+							return 'must_change_password_required' as AuthResult;
+						}
 						return 'success' as AuthResult;
 					}
 					if (response.status === 202) {
@@ -105,12 +130,12 @@ export class AuthService {
 			);
 	}
 
-	verifyTotp(code: string): Observable<boolean> {
+	verifyTotp(code: string): Observable<AuthResult> {
 		this.isAuthenticating.set(true);
 
 		return this.http
 			.post(
-				'/api/verify_totp',
+				'/v1/verify_totp',
 				{ code },
 				{
 					observe: 'response',
@@ -120,22 +145,67 @@ export class AuthService {
 			.pipe(
 				map((response) => {
 					this.isAuthenticating.set(false);
-					const success = response.status === 200;
-					if (success) {
+					if (response.status === 200) {
 						this.isLoggedInSubject.next(true);
 						localStorage.setItem('isLoggedIn', 'true');
+						const responseBody = response.body as { must_change_password?: boolean };
+						if (responseBody?.must_change_password) {
+							return 'must_change_password_required' as AuthResult;
+						}
+						return 'success' as AuthResult;
 					}
-					return success;
+					return 'failed' as AuthResult;
 				}),
 				catchError(() => {
 					this.isAuthenticating.set(false);
-					return of(false);
+					this.isLoggedInSubject.next(false);
+					localStorage.setItem('isLoggedIn', 'false');
+					return of('failed' as AuthResult);
+				}),
+			);
+	}
+
+	changePassword(
+		currentPassword: string,
+		newPassword: string,
+	): Observable<'ok' | 'wrong_password' | 'error'> {
+		return this.http
+			.post(
+				'/v1/change_password',
+				{ current_password: currentPassword, new_password: newPassword },
+				{ observe: 'response', withCredentials: true },
+			)
+			.pipe(
+				map((response) => (response.status === 200 ? ('ok' as const) : ('error' as const))),
+				catchError((error: HttpErrorResponse) => {
+					if (error.status === 401) return of('wrong_password' as const);
+					return of('error' as const);
+				}),
+			);
+	}
+
+	acceptInvitation(
+		token: string,
+		username: string,
+		password: string,
+	): Observable<'ok' | 'invalid' | 'error'> {
+		return this.http
+			.post(
+				'/v1/accept',
+				{ token, username, password },
+				{ observe: 'response', withCredentials: true },
+			)
+			.pipe(
+				map((response) => (response.status === 200 ? ('ok' as const) : ('error' as const))),
+				catchError((error: HttpErrorResponse) => {
+					if (error.status === 400) return of('invalid' as const);
+					return of('error' as const);
 				}),
 			);
 	}
 
 	logout(): Observable<void> {
-		return this.http.post<void>('/api/logout', {}, { withCredentials: true }).pipe(
+		return this.http.post<void>('/v1/logout', {}, { withCredentials: true }).pipe(
 			finalize(() => {
 				this.isLoggedInSubject.next(false);
 				localStorage.setItem('isLoggedIn', 'false');

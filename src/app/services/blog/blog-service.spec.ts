@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { BlogService } from './blog-service';
-import { BlogPost, BlogPageResponse, CreateBlogPost } from '../../interfaces/blog-data';
+import { BlogPost, BlogPageResponse, CreateBlogPost } from '@interfaces/blog-data';
 
 const mockPost: BlogPost = {
 	post_id: 'abc-123',
@@ -40,7 +40,7 @@ describe('BlogService', () => {
 		it('should send correct default headers', () => {
 			service.getPosts().subscribe();
 
-			const req = httpMock.expectOne('/api/blog');
+			const req = httpMock.expectOne('/v1/blog');
 			expect(req.request.method).toBe('GET');
 			expect(req.request.headers.get('BlogPost-Page')).toBe('0');
 			expect(req.request.headers.get('BlogPost-Page-Size')).toBe('10');
@@ -52,7 +52,7 @@ describe('BlogService', () => {
 		it('should send custom page and pageSize headers', () => {
 			service.getPosts(2, 5).subscribe();
 
-			const req = httpMock.expectOne('/api/blog');
+			const req = httpMock.expectOne('/v1/blog');
 			expect(req.request.headers.get('BlogPost-Page')).toBe('2');
 			expect(req.request.headers.get('BlogPost-Page-Size')).toBe('5');
 			req.flush({ data: [], page: 2, page_size: 5, total_items: 0 });
@@ -61,7 +61,7 @@ describe('BlogService', () => {
 		it('should send the onPublished header when true', () => {
 			service.getPosts(0, 10, true).subscribe();
 
-			const req = httpMock.expectOne('/api/blog');
+			const req = httpMock.expectOne('/v1/blog');
 			expect(req.request.headers.get('BlogPost-OnPublished')).toBe('true');
 			req.flush({ data: [] });
 		});
@@ -69,7 +69,7 @@ describe('BlogService', () => {
 		it('should include the slug header when a slug is provided', () => {
 			service.getPosts(0, 10, false, 'my-post').subscribe();
 
-			const req = httpMock.expectOne('/api/blog');
+			const req = httpMock.expectOne('/v1/blog');
 			expect(req.request.headers.get('BlogPost-Slug')).toBe('my-post');
 			req.flush({ data: [mockPost], total_items: 1 });
 		});
@@ -77,7 +77,7 @@ describe('BlogService', () => {
 		it('should omit the slug header when no slug is provided', () => {
 			service.getPosts(0, 10, false).subscribe();
 
-			const req = httpMock.expectOne('/api/blog');
+			const req = httpMock.expectOne('/v1/blog');
 			expect(req.request.headers.get('BlogPost-Slug')).toBeNull();
 			req.flush({ data: [] });
 		});
@@ -86,7 +86,7 @@ describe('BlogService', () => {
 			let result: BlogPageResponse | undefined;
 			service.getPosts(1, 5).subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/blog');
+			const req = httpMock.expectOne('/v1/blog');
 			req.flush({ data: [mockPost], page: 1, page_size: 5, total_items: 25 });
 
 			expect(result).toEqual({
@@ -104,7 +104,7 @@ describe('BlogService', () => {
 			let result: BlogPageResponse | undefined;
 			service.getPosts().subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/blog');
+			const req = httpMock.expectOne('/v1/blog');
 			req.flush({ data: null, total_items: 0 });
 
 			expect(result!.data).toEqual([]);
@@ -114,7 +114,7 @@ describe('BlogService', () => {
 			let result: BlogPageResponse | undefined;
 			service.getPosts(0, 10).subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/blog');
+			const req = httpMock.expectOne('/v1/blog');
 			req.flush({ data: [mockPost], total_count: 42 });
 
 			expect(result!.pagination.total_items).toBe(42);
@@ -124,7 +124,7 @@ describe('BlogService', () => {
 			let result: BlogPageResponse | undefined;
 			service.getPosts(0, 10).subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/blog');
+			const req = httpMock.expectOne('/v1/blog');
 			req.flush({ data: [mockPost], total: 7 });
 
 			expect(result!.pagination.total_items).toBe(7);
@@ -134,7 +134,7 @@ describe('BlogService', () => {
 			let result: BlogPageResponse | undefined;
 			service.getPosts(0, 10).subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/blog');
+			const req = httpMock.expectOne('/v1/blog');
 			req.flush({ data: [mockPost, mockPost] });
 
 			expect(result!.pagination.total_items).toBe(2);
@@ -144,7 +144,7 @@ describe('BlogService', () => {
 			let result: BlogPageResponse | undefined;
 			service.getPosts(0, 10).subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/blog');
+			const req = httpMock.expectOne('/v1/blog');
 			req.flush({ data: [], total_items: 23, page_size: 10 });
 
 			expect(result!.pagination.total_pages).toBe(3);
@@ -154,7 +154,7 @@ describe('BlogService', () => {
 			let result: BlogPageResponse | undefined;
 			service.getPosts(3, 10).subscribe((r) => (result = r));
 
-			const req = httpMock.expectOne('/api/blog');
+			const req = httpMock.expectOne('/v1/blog');
 			req.flush({ data: [], total_items: 0 });
 
 			expect(result!.pagination.page).toBe(3);
@@ -172,7 +172,7 @@ describe('BlogService', () => {
 
 			service.createPost(newPost).subscribe();
 
-			const req = httpMock.expectOne('/api/admin/blog/post');
+			const req = httpMock.expectOne('/v1/admin/blog/post');
 			expect(req.request.method).toBe('POST');
 			expect(req.request.body).toEqual(newPost);
 			expect(req.request.withCredentials).toBe(true);
@@ -185,7 +185,7 @@ describe('BlogService', () => {
 		it('should PATCH to the correct URL with post_id and published flag', () => {
 			service.publishPost('post-id-1', true).subscribe();
 
-			const req = httpMock.expectOne('/api/admin/blog/publish');
+			const req = httpMock.expectOne('/v1/admin/blog/publish');
 			expect(req.request.method).toBe('PATCH');
 			expect(req.request.body).toEqual({ post_id: 'post-id-1', published: true });
 			expect(req.request.withCredentials).toBe(true);
@@ -196,7 +196,7 @@ describe('BlogService', () => {
 		it('should send published: false when unpublishing', () => {
 			service.publishPost('post-id-1', false).subscribe();
 
-			const req = httpMock.expectOne('/api/admin/blog/publish');
+			const req = httpMock.expectOne('/v1/admin/blog/publish');
 			expect(req.request.body).toEqual({ post_id: 'post-id-1', published: false });
 			req.flush(null);
 		});
@@ -208,7 +208,7 @@ describe('BlogService', () => {
 				.editPost('post-id-1', { title: 'Updated Title', excerpt: 'new excerpt' })
 				.subscribe();
 
-			const req = httpMock.expectOne('/api/admin/blog/edit');
+			const req = httpMock.expectOne('/v1/admin/blog/edit');
 			expect(req.request.method).toBe('PATCH');
 			expect(req.request.body).toEqual({
 				post_id: 'post-id-1',
@@ -225,7 +225,7 @@ describe('BlogService', () => {
 		it('should DELETE to the correct URL with post_id in the body', () => {
 			service.deletePost('post-id-1').subscribe();
 
-			const req = httpMock.expectOne('/api/admin/blog/delete');
+			const req = httpMock.expectOne('/v1/admin/blog/delete');
 			expect(req.request.method).toBe('DELETE');
 			expect(req.request.body).toEqual({ post_id: 'post-id-1' });
 			expect(req.request.withCredentials).toBe(true);

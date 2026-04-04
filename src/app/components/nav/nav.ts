@@ -1,6 +1,6 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { AuthService } from '../../services/auth/auth-service';
+import { AuthService } from '@services/auth/auth-service';
 import { AsyncPipe } from '@angular/common';
 import { FeatherModule } from 'angular-feather';
 import { Login } from '@components/modals/login/login';

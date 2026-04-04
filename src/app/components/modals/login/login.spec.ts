@@ -28,7 +28,7 @@ describe('Login', () => {
 	beforeEach(async () => {
 		mockAuthService = {
 			authenticate: vi.fn().mockReturnValue(of('mfa_required')),
-			verifyTotp: vi.fn().mockReturnValue(of(true)),
+			verifyTotp: vi.fn().mockReturnValue(of('success')),
 			isAuthenticating: signal(false),
 		};
 		mockNotificationService = {
@@ -115,11 +115,24 @@ describe('Login', () => {
 			expect(closeModalSpy).toHaveBeenCalled();
 			expect(navigateSpy).toHaveBeenCalledWith(['/admin']);
 		});
+
+		it('should close modal and navigate to /change_password on must_change_password_required result', () => {
+			mockAuthService.authenticate.mockReturnValue(of('must_change_password_required'));
+			component.openModal();
+			fillValidForm();
+			const closeModalSpy = vi.spyOn(component.loginModal, 'closeModal');
+
+			component.onSubmit();
+
+			expect(closeModalSpy).toHaveBeenCalled();
+			expect(mockRouter.navigate).toHaveBeenCalledWith(['/change_password']);
+			expect(mockNotificationService.success).not.toHaveBeenCalled();
+		});
 	});
 
 	describe('submitTotp', () => {
 		it('should show error message on unsuccessful totp verification', () => {
-			mockAuthService.verifyTotp.mockReturnValue(of(false));
+			mockAuthService.verifyTotp.mockReturnValue(of('failed'));
 			component.openModal();
 			fillValidForm();
 			component.onSubmit(); // submit credentials first to switch to totp step
@@ -127,13 +140,13 @@ describe('Login', () => {
 			component.onSubmit(); // submit totp
 
 			expect(mockNotificationService.error).toHaveBeenLastCalledWith(
-				'Invalid TOTP code. Please try again.',
+				'Error or invalid TOTP code. Please try again.',
 			);
 			expect(component.totpDigits).toEqual(['', '', '', '', '', '']);
 		});
 
 		it('should show success message, close, and navigate on successful totp verification', () => {
-			mockAuthService.verifyTotp.mockReturnValue(of(true));
+			mockAuthService.verifyTotp.mockReturnValue(of('success'));
 			const closeModalSpy = vi.spyOn(component.loginModal, 'closeModal');
 			const navigateSpy = mockRouter.navigate;
 			component.openModal();

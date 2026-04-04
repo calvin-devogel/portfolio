@@ -1,0 +1,109 @@
+<div class="chat-outer">
+	<div class="chat-inner">
+		<div class="chat-page px-4">
+			<div class="box chat-container">
+				<div class="chat-header">
+					<h2 class="gradient-title title is-4 mb-0">Live Chat</h2>
+					<span
+						class="online-count-badge"
+						[attr.aria-label]="activeUsers().length + ' users online'"
+					>
+						<span class="presence-dot"></span>
+						{{ activeUsers().length }}
+					</span>
+				</div>
+
+				<div class="message-list" #messageList>
+					@if (loadingMessages()) {
+						<div class="empty-state">
+							<i-feather
+								name="loader"
+								class="spin-icon"
+								size="28"
+								aria-hidden="true"
+							/>
+							<p>Connecting...</p>
+						</div>
+					} @else if (messages().length === 0) {
+						<div class="empty-state">
+							<i-feather
+								name="message-circle"
+								class="empty-icon"
+								size="36"
+								aria-hidden="true"
+							/>
+							<p>No messages yet - say hi!</p>
+						</div>
+					} @else {
+						@for (message of messages(); track message.timestamp) {
+							<div
+								class="chat-message"
+								[class.is-mine]="message.userId === currentUser()?.userId"
+							>
+								<div class="message-meta">
+									<span
+										class="username"
+										[style.color]="userColor(message.userId)"
+										>{{ message.username }}</span
+									>
+									<span class="timestamp">
+										{{ message.timestamp | date: 'shortTime' }}
+									</span>
+								</div>
+								<div class="text">{{ message.text }}</div>
+							</div>
+						}
+					}
+				</div>
+
+				<div class="chat-input">
+					<input
+						class="input"
+						type="text"
+						placeholder="Type a message..."
+						[(ngModel)]="newMessage"
+						(keydown.enter)="send()"
+						[disabled]="loadingMessages()"
+					/>
+					<button
+						class="pill-button is-primary"
+						(click)="send()"
+						[disabled]="!newMessage().trim() || loadingMessages()"
+					>
+						<i-feather
+							name="send"
+							class="icon is-small mr-1"
+							size="16"
+							aria-hidden="true"
+						/>
+						Send
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<aside class="chat-sidebar">
+			<div class="box active-users-panel">
+				<p class="sidebar-label">
+					<i-feather name="users" size="13" aria-hidden="true" />
+					Online ({{ activeUsers().length }})
+				</p>
+				@if (activeUsers().length === 0) {
+					<p class="no-users">No one here right now...</p>
+				} @else {
+					@for (user of activeUsers(); track user.userId) {
+						<div class="user-pill">
+							<span class="presence-dot"></span>
+							<span class="user-pill-name" [style.color]="userColor(user.userId)">{{
+								user.username
+							}}</span>
+							@if (user.userId === currentUser()?.userId) {
+								<span class="you-badge">you</span>
+							}
+						</div>
+					}
+				}
+			</div>
+		</aside>
+	</div>
+</div>

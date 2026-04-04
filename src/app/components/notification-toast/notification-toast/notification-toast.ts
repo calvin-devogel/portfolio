@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { NotificationService } from '../../../services/notifications/notification-service';
+import { NotificationService } from '@services/notifications/notification-service';
 import { FeatherModule } from 'angular-feather';
 
 @Component({

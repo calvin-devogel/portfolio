@@ -34,14 +34,14 @@ describe('MessageService', () => {
 			message_text: 'This is a test message.',
 		};
 
-		it('should POST to /api/contact with correct body', () => {
+		it('should POST to /v1/contact with correct body', () => {
 			const mockResponse = { message: 'sent', message_id: 'abc-123' };
 
 			service.sendMessage(mockMessage).subscribe((response) => {
 				expect(response).toEqual(mockResponse);
 			});
 
-			const req = httpMock.expectOne('/api/contact');
+			const req = httpMock.expectOne('/v1/contact');
 			expect(req.request.method).toBe('POST');
 			expect(req.request.body).toContain('email=fake%40email.com');
 			expect(req.request.body).toContain('sender_name=John+Doe');
@@ -52,14 +52,14 @@ describe('MessageService', () => {
 		it('should include a valid Idempotency-Key header', () => {
 			service.sendMessage(mockMessage).subscribe();
 
-			const req = httpMock.expectOne('/api/contact');
+			const req = httpMock.expectOne('/v1/contact');
 			expect(req.request.headers.get('Idempotency-Key')).toMatch(idempotencyKeyRegex);
 			req.flush({ message: 'sent', message_id: 'abc-123' });
 		});
 	});
 
 	describe('getMessages', () => {
-		it('should GET /api/admin/messages with default params and normalize response', () => {
+		it('should GET /v1/admin/messages with default params and normalize response', () => {
 			const mockRaw = {
 				messages: [
 					{
@@ -82,7 +82,7 @@ describe('MessageService', () => {
 				expect(response.total_items).toBe(1);
 			});
 
-			const req = httpMock.expectOne((r) => r.url === '/api/admin/messages');
+			const req = httpMock.expectOne((r) => r.url === '/v1/admin/messages');
 			expect(req.request.method).toBe('GET');
 			expect(req.request.params.get('page')).toBe('0');
 			expect(req.request.params.get('page_size')).toBe('10');
@@ -106,16 +106,16 @@ describe('MessageService', () => {
 				expect(response.total_items).toBe(1);
 			});
 
-			const req = httpMock.expectOne((r) => r.url === '/api/admin/messages');
+			const req = httpMock.expectOne((r) => r.url === '/v1/admin/messages');
 			req.flush(mockRaw);
 		});
 	});
 
 	describe('patchMessage', () => {
-		it('should PATCH /api/admin/messages with correct body and Idempotency-Key header', () => {
+		it('should PATCH /v1/admin/messages with correct body and Idempotency-Key header', () => {
 			service.patchMessage('msg-123', true).subscribe();
 
-			const req = httpMock.expectOne('/api/admin/messages');
+			const req = httpMock.expectOne('/v1/admin/messages');
 			expect(req.request.method).toBe('PATCH');
 			expect(req.request.body).toEqual({ message_id: 'msg-123', read: true });
 			expect(req.request.headers.get('Idempotency-Key')).toMatch(idempotencyKeyRegex);
