@@ -51,7 +51,7 @@ RUN npm run build
 ################################################################################
 # Create a new stage to run the application with minimal runtime dependencies
 # where the necessary files are copied from the build stage.
-FROM nginx:1.28-alpine3.23 AS runner
+FROM nginx:1.28-alpine-slim AS runner
 
 RUN apk add --no-cache gettext
 

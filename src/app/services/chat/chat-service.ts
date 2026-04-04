@@ -21,6 +21,7 @@ export interface ChatUser {
 	providedIn: 'root',
 })
 export class ChatService implements OnDestroy {
+	private static readonly MAX_MESSAGE_LENGTH = 500;
 	private platformId = inject(PLATFORM_ID);
 	private http = inject(HttpClient);
 	private connection: HubConnection | null = null;
@@ -89,8 +90,25 @@ export class ChatService implements OnDestroy {
 		await this.connection.start();
 	}
 
+	private validateMessage(text: string): string {
+		const trimmed = text.trim();
+		if (!trimmed) {
+			throw new Error('Message cannot be empty');
+		}
+
+		if (trimmed.length > ChatService.MAX_MESSAGE_LENGTH) {
+			throw new Error(`Message exceeds ${ChatService.MAX_MESSAGE_LENGTH} character limit`);
+		}
+
+		return trimmed
+			.replace(/\r\n|\r/g, '\n')
+			// eslint-disable-next-line no-control-regex
+			.replace(/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/g, '');
+	}
+
 	async sendMessage(text: string): Promise<void> {
-		await this.connection?.invoke('SendMessage', text);
+		const validated = this.validateMessage(text);
+		await this.connection?.invoke('SendMessage', validated);
 	}
 
 	async disconnect(): Promise<void> {
