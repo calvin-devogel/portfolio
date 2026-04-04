@@ -191,7 +191,7 @@ export class AuthService {
 	): Observable<'ok' | 'invalid' | 'error'> {
 		return this.http
 			.post(
-				'/v1/accept', // is this right?
+				'/v1/accept',
 				{ token, username, password },
 				{ observe: 'response', withCredentials: true },
 			)

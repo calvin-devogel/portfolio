@@ -1,5 +1,5 @@
 export function generateUUID(): string {
-	if (crypto && crypto.randomUUID) {
+	if (typeof crypto !== 'undefined' && crypto.randomUUID) {
 		return crypto.randomUUID();
 	} else {
 		// Fallback for environments without crypto.randomUUID

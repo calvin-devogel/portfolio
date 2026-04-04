@@ -79,6 +79,8 @@ export class Chat implements OnInit {
 		this.loadingMessages.set(true);
 		this.chatService.connect().then(() => {
 			this.loadingMessages.set(false);
+		}).catch((err) => {
+			this.loadingMessages.set(false);
 		});
 	}
 

@@ -265,7 +265,7 @@ describe('AuthService', () => {
 	});
 
 	describe('changePassword', () => {
-		it('should return ok on 202', () => {
+		it('should return ok on 200', () => {
 			httpMock.expectOne('/v1/check_auth');
 
 			let capturedResult: string | undefined;

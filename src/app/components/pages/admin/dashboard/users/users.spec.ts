@@ -166,7 +166,7 @@ describe('Users', () => {
 
 		afterEach(() => vi.restoreAllMocks());
 
-		it('should write the invitelink to clipboard and show success notification', async () => {
+		it('should write the invite link to clipboard and show success notification', async () => {
 			component.state.update((s) => ({
 				...s,
 				inviteLink: 'https://example.com/invite/token',
@@ -194,7 +194,7 @@ describe('Users', () => {
 			);
 		});
 
-		it('should show an error notification when there is no invie link', async () => {
+		it('should show an error notification when there is no invite link', async () => {
 			component.copyInviteLink();
 
 			expect(writeTextMock).not.toHaveBeenCalled();

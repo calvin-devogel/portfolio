@@ -116,7 +116,7 @@ describe('Login', () => {
 			expect(navigateSpy).toHaveBeenCalledWith(['/admin']);
 		});
 
-		it('should close modal and naviate to /change_password on must_change_password_required result', () => {
+		it('should close modal and navigate to /change_password on must_change_password_required result', () => {
 			mockAuthService.authenticate.mockReturnValue(of('must_change_password_required'));
 			component.openModal();
 			fillValidForm();

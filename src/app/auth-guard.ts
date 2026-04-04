@@ -11,7 +11,6 @@ export const authGuard: CanActivateFn = (route, state) => {
 	const platformId = inject(PLATFORM_ID);
 
 	if (!isPlatformBrowser(platformId)) {
-		// sus
 		return of(false);
 	}
 

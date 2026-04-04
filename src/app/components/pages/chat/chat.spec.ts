@@ -67,12 +67,12 @@ describe('Chat', () => {
 			expect(component.loadingMessages()).toBe(true);
 		});
 
-		it('shows connecting indicatior in the DOM', () => {
+		it('shows connecting indicator in the DOM', () => {
 			const element = fixture.nativeElement as HTMLElement;
 			expect(element.textContent).toContain('Connecting');
 		});
 
-		it('disables the text input while conecting', () => {
+		it('disables the text input while connecting', () => {
 			const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
 			expect(input.disabled).toBe(true);
 		});

@@ -26,6 +26,14 @@ export const serverRoutes: ServerRoute[] = [
 		renderMode: RenderMode.Client,
 	},
 	{
+		path: 'change_password',
+		renderMode: RenderMode.Client,
+	},
+	{
+		path: 'invitation/accept',
+		renderMode: RenderMode.Client,
+	},
+	{
 		path: 'admin',
 		renderMode: RenderMode.Client,
 	},
