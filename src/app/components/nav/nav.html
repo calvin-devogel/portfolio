@@ -2,62 +2,112 @@
 
 <nav class="navbar has-shadow is-fixed-top" role="navigation" aria-label="Main navigation">
 	<div class="navbar-brand">
-		<a class="navbar-item" routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }"
-			aria-label="home">
+		<a
+			class="navbar-item"
+			routerLink="/"
+			routerLinkActive="is-active"
+			[routerLinkActiveOptions]="{ exact: true }"
+			aria-label="home"
+		>
 			<i-feather name="home" size="32" aria-hidden="true"></i-feather>
 		</a>
 	</div>
 	<div class="navbar-menu is-inline-flex-mobile">
 		<div class="navbar-start">
-			<a class="navbar-item is-flex-mobile" routerLink="/resume" routerLinkActive="is-active" aria-label="resume">
+			<a
+				class="navbar-item is-flex-mobile"
+				routerLink="/resume"
+				routerLinkActive="is-active"
+				aria-label="resume"
+			>
 				<i-feather name="file-text" size="32" aria-hidden="true"></i-feather>
 				<p class="mobile-hidden">Resume</p>
 			</a>
-			<a class="navbar-item is-flex-mobile" routerLink="/projects" routerLinkActive="is-active"
-				aria-label="projects">
+			<a
+				class="navbar-item is-flex-mobile"
+				routerLink="/projects"
+				routerLinkActive="is-active"
+				aria-label="projects"
+			>
 				<i-feather name="codepen" size="32" aria-hidden="true"></i-feather>
 				<p class="mobile-hidden">Projects</p>
 			</a>
-			<a class="navbar-item is-flex-mobile" routerLink="/blog" routerLinkActive="is-active" aria-label="blog">
+			<a
+				class="navbar-item is-flex-mobile"
+				routerLink="/blog"
+				routerLinkActive="is-active"
+				aria-label="blog"
+			>
 				<i-feather name="book-open" size="32" aria-hidden="true"></i-feather>
 				<p class="mobile-hidden">Blog</p>
 			</a>
-			@if ((authService.isLoggedIn$ | async) && ((authService.userRole$ | async) == 'admin' ||
-			(authService.userRole$ | async) == 'user')) {
-			<a class="navbar-item is-flex-mobile" routerLink="/chat" routerLinkActive="is-active" aria-label="chat">
-				<i-feather name="message-square" size="32" aria-hidden="true"></i-feather>
-				<p class="mobile-hidden">Chat</p>
-			</a>
+			@if (
+				(authService.isLoggedIn$ | async) &&
+				((authService.userRole$ | async) === 'admin' ||
+					(authService.userRole$ | async) === 'user')
+			) {
+				<a
+					class="navbar-item is-flex-mobile"
+					routerLink="/chat"
+					routerLinkActive="is-active"
+					aria-label="chat"
+				>
+					<i-feather name="message-square" size="32" aria-hidden="true"></i-feather>
+					<p class="mobile-hidden">Chat</p>
+				</a>
 			}
 		</div>
 	</div>
 	@if (authService.isLoggedIn$ | async) {
-	@if ((authService.userRole$ | async) === 'admin') {
-	<a class="navbar-item is-flex-mobile" routerLink="/admin" routerLinkActive="is-active" aria-label="admin">
-		<i-feather name="layout" size="32" aria-hidden="true"></i-feather>
-		<p class="mobile-hidden">Admin</p>
-	</a>
-	}
-	<a class="navbar-item is-flex-mobile" (click)="logout()" (keypress.enter)="logout()" tabindex="0"
-		aria-label="logout">
-		<i-feather name="log-out" size="32" aria-hidden="true"></i-feather>
-		<p class="mobile-hidden">Logout</p>
-	</a>
+		@if ((authService.userRole$ | async) === 'admin') {
+			<a
+				class="navbar-item is-flex-mobile"
+				routerLink="/admin"
+				routerLinkActive="is-active"
+				aria-label="admin"
+			>
+				<i-feather name="layout" size="32" aria-hidden="true"></i-feather>
+				<p class="mobile-hidden">Admin</p>
+			</a>
+		}
+		<a
+			class="navbar-item is-flex-mobile"
+			(click)="logout()"
+			(keypress.enter)="logout()"
+			tabindex="0"
+			aria-label="logout"
+		>
+			<i-feather name="log-out" size="32" aria-hidden="true"></i-feather>
+			<p class="mobile-hidden">Logout</p>
+		</a>
 	} @else {
-	<a class="navbar-item is-flex-mobile mobile-hidden" (click)="openLogin()" (keypress.enter)="openLogin()"
-		tabindex="1" aria-label="login">
-		<i-feather class="mobile-hidden" name="log-in" size="32" aria-hidden="true"></i-feather>
-		<p class="mobile-hidden">Login</p>
-	</a>
+		<a
+			class="navbar-item is-flex-mobile mobile-hidden"
+			(click)="openLogin()"
+			(keypress.enter)="openLogin()"
+			tabindex="1"
+			aria-label="login"
+		>
+			<i-feather class="mobile-hidden" name="log-in" size="32" aria-hidden="true"></i-feather>
+			<p class="mobile-hidden">Login</p>
+		</a>
 	}
 	<div class="navbar-end is-inline-flex-mobile">
-		<a class="navbar-item is-flex-mobile" target="_blank" href="https://github.com/calvin-devogel"
-			aria-label="GitHub profile (opens in new tab)">
+		<a
+			class="navbar-item is-flex-mobile"
+			target="_blank"
+			href="https://github.com/calvin-devogel"
+			aria-label="GitHub profile (opens in new tab)"
+		>
 			<i-feather name="github" size="32" aria-hidden="true"></i-feather>
 			<p class="mobile-hidden">GitHub</p>
 		</a>
-		<a class="navbar-item is-flex-mobile" target="_blank" href="https://linkedin.com/in/calvin-devogel"
-			aria-label="LinkedIn profile (opens in new tab)">
+		<a
+			class="navbar-item is-flex-mobile"
+			target="_blank"
+			href="https://linkedin.com/in/calvin-devogel"
+			aria-label="LinkedIn profile (opens in new tab)"
+		>
 			<i-feather name="linkedin" size="32" aria-hidden="true"></i-feather>
 			<p class="mobile-hidden">LinkedIn</p>
 		</a>

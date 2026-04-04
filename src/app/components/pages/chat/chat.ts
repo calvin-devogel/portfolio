@@ -77,11 +77,14 @@ export class Chat implements OnInit {
 		if (!isPlatformBrowser(this.platformId)) return;
 
 		this.loadingMessages.set(true);
-		this.chatService.connect().then(() => {
-			this.loadingMessages.set(false);
-		}).catch((err) => {
-			this.loadingMessages.set(false);
-		});
+		this.chatService
+			.connect()
+			.then(() => {
+				this.loadingMessages.set(false);
+			})
+			.catch(() => {
+				this.loadingMessages.set(false);
+			});
 	}
 
 	send(): void {

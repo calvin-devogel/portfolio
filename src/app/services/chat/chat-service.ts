@@ -37,7 +37,7 @@ export class ChatService implements OnDestroy {
 		const { token } = await lastValueFrom(
 			this.http.get<{ token: string }>('/v1/chat_token', { withCredentials: true }),
 		).then((res) => res!);
-		let payload: { sub?: unknown, name?: unknown };
+		let payload: { sub?: unknown; name?: unknown };
 		try {
 			payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
 		} catch {
@@ -47,7 +47,7 @@ export class ChatService implements OnDestroy {
 		const userId = payload.sub;
 		const username = payload.name;
 
-		if (typeof userId !== 'string' || !userId || typeof username !== 'string' || !username ) {
+		if (typeof userId !== 'string' || !userId || typeof username !== 'string' || !username) {
 			throw new Error('Failed to parse chat token: missing sub or name claim');
 		}
 
