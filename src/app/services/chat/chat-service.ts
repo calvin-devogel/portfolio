@@ -116,6 +116,8 @@ export class ChatService implements OnDestroy {
 	async disconnect(): Promise<void> {
 		await this.connection?.stop();
 		this.connection = null;
+		this.activeUsers$.next([]);
+		this.currentUser.set(null);
 	}
 
 	ngOnDestroy(): void {
