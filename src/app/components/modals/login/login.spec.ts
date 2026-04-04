@@ -104,7 +104,7 @@ describe('Login', () => {
 			expect(mockNotificationService.success).toHaveBeenCalledWith('Login successful!');
 		});
 
-		it('should close modal and navigate to /admin on successful login', () => {
+		it('should close modal and navigate to / on successful login', () => {
 			mockAuthService.authenticate.mockReturnValue(of('success'));
 			component.openModal();
 			fillValidForm();
@@ -113,7 +113,7 @@ describe('Login', () => {
 			component.onSubmit();
 
 			expect(closeModalSpy).toHaveBeenCalled();
-			expect(navigateSpy).toHaveBeenCalledWith(['/admin']);
+			expect(navigateSpy).toHaveBeenCalledWith(['/']);
 		});
 
 		it('should close modal and navigate to /change_password on must_change_password_required result', () => {
@@ -157,7 +157,7 @@ describe('Login', () => {
 
 			expect(mockNotificationService.success).toHaveBeenLastCalledWith('Login successful!');
 			expect(closeModalSpy).toHaveBeenCalled();
-			expect(navigateSpy).toHaveBeenCalledWith(['/admin']);
+			expect(navigateSpy).toHaveBeenCalledWith(['/']);
 		});
 
 		it('should call authService.login with totp code on totp submit', () => {

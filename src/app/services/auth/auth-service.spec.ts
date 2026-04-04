@@ -58,6 +58,7 @@ describe('AuthService', () => {
 		expect(req.request.method).toBe('POST');
 		expect(req.request.body).toContain('username=user&password=pass');
 		req.flush({}, { status: 200, statusText: 'OK' });
+		httpMock.expectOne('/v1/check_auth').flush({}, { status: 200, statusText: 'OK' });
 	});
 
 	it('should handle authentication failure', () => {
@@ -134,6 +135,7 @@ describe('AuthService', () => {
 		req.flush({}, { status: 200, statusText: 'OK' });
 
 		expect(service.isAuthenticating()).toBeFalsy();
+		httpMock.expectOne('/v1/check_auth').flush({}, { status: 200, statusText: 'OK' });
 	});
 
 	it('should reset isAuthenticating to false on authentication failure', () => {
@@ -168,6 +170,7 @@ describe('AuthService', () => {
 				expect(status).toBeTruthy();
 			}
 		});
+		httpMock.expectOne('/v1/check_auth').flush({}, { status: 200, statusText: 'OK' });
 	});
 
 	it('should return failed when verifyTotp receives an error response', () => {
@@ -208,6 +211,7 @@ describe('AuthService', () => {
 		req.flush({}, { status: 200, statusText: 'OK' });
 
 		expect(service.isAuthenticating()).toBeFalsy();
+		httpMock.expectOne('/v1/check_auth').flush({}, { status: 200, statusText: 'OK' });
 	});
 
 	it('should update localStorage to false on logout', () => {
@@ -261,6 +265,7 @@ describe('AuthService', () => {
 			req.flush({}, { status: 200, statusText: 'OK' });
 
 			expect(capturedResult).toBe('success');
+			httpMock.expectOne('/v1/check_auth').flush({}, { status: 200, statusText: 'OK' });
 		});
 	});
 
