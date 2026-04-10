@@ -1,0 +1,32 @@
+<div class="notification-container">
+	@for (notif of notificationService.notifications$(); track notif.id) {
+		<div
+			class="notification is-{{ notif.type }} animate-scale"
+			style="
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+				padding: 1rem 1.25rem;
+				margin: 0;
+			"
+		>
+			<span class="icon" style="flex-shrink: 0">
+				@if (notif.type === 'error' || notif.type === 'warning') {
+					<i-feather name="alert-triangle" size="18"></i-feather>
+				} @else if (notif.type === 'success') {
+					<i-feather name="check-circle" size="18"></i-feather>
+				} @else {
+					<i-feather name="info" size="18"></i-feather>
+				}
+			</span>
+			<span style="flex: 1; font-weight: 500">{{ notif.message }}</span>
+			<button
+				class="notification-dismiss"
+				(click)="notificationService.dismiss(notif.id)"
+				aria-label="Dismiss notification"
+			>
+				<i-feather name="x" size="14"></i-feather>
+			</button>
+		</div>
+	}
+</div>

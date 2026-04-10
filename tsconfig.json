@@ -16,12 +16,8 @@
 		"module": "esnext",
 		"moduleResolution": "bundler",
 		"paths": {
-			"@services/*": ["./src/app/services/*"],
-			"@interfaces/*": ["./src/app/interfaces/*"],
-			"@components/*": ["./src/app/components/*"],
-			"@styles/*": ["./src/styles/*"],
-			"@modules/*": ["./src/app/modules/*"],
-			"@utils/*": ["./src/app/utils/*"]
+			"@app/*": ["./src/app/*"],
+			"@styles/*": ["./src/styles/*"]
 		}
 	},
 	"angularCompilerOptions": {

@@ -1,0 +1,114 @@
+@use 'styles/mixins' as *;
+
+.modal-overlay {
+	@include flex-center;
+	position: fixed;
+	inset: 0;
+	z-index: 5000;
+	background: rgba(0, 0, 0, 0.55);
+	backdrop-filter: blur(4px);
+	padding: 1.5rem;
+	animation: fadeIn 0.2s ease-in-out;
+
+	&.is-closing {
+		animation: fadeOut 0.2s ease-in-out forwards;
+	}
+}
+
+.modal-base {
+	@include scroll-column;
+	width: 100%;
+	background: var(--surface-card);
+	border-radius: 16px;
+	border: 1px solid var(--border-subtle);
+	box-shadow: 0 24px 80px rgba(0, 0, 0, 0.22);
+	overflow: hidden;
+	animation: slideUp 0.2s ease-in-out;
+
+	&.is-closing {
+		animation: slideDown 0.2s ease-in-out forwards;
+	}
+}
+
+.modal-header {
+	@include flex-between;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+	padding: 0.9rem 1.25rem;
+	border-bottom: 1px solid var(--border-subtle);
+	flex-shrink: 0;
+}
+
+.modal-title {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.88rem;
+	font-weight: 700;
+	color: var(--primary);
+
+	span:first-of-type {
+		max-width: 300px;
+		@include truncate;
+	}
+}
+
+.modal-header-actions {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+}
+
+.modal-body {
+	flex: 1;
+	min-height: 0;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes slideUp {
+	from {
+		opacity: 0;
+		transform: translateY(16px) scale(0.985);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+@keyframes slideDown {
+	from {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+
+	to {
+		opacity: 0;
+		transform: translateY(16px) scale(0.985);
+	}
+}
