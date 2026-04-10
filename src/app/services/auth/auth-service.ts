@@ -90,10 +90,12 @@ export class AuthService {
 					else localStorage.removeItem('userRole');
 				}),
 				map(({ isLoggedIn }) => isLoggedIn),
-				finalize(() => { this.pendingAuthCheck$ = null; }),
+				finalize(() => {
+					this.pendingAuthCheck$ = null;
+				}),
 				shareReplay(1),
 			);
-			
+
 		return this.pendingAuthCheck$;
 	}
 
