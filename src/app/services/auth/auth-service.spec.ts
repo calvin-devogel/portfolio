@@ -48,7 +48,7 @@ describe('AuthService', () => {
 
 	it('should authenticate user successfully', () => {
 		// clear initial checkAuthStatus call
-		httpMock.expectOne('/v1/check_auth');
+		httpMock.expectOne('/v1/check_auth').flush({}, { status: 200, statusText: 'OK' });
 
 		service.authenticate('user', 'pass').subscribe((result) => {
 			expect(result).toBeTruthy();
@@ -124,7 +124,7 @@ describe('AuthService', () => {
 	});
 
 	it('should set isAuthenticating to true while authenticating and reset on success', () => {
-		httpMock.expectOne('/v1/check_auth');
+		httpMock.expectOne('/v1/check_auth').flush({}, { status: 200, statusText: 'OK' });
 
 		expect(service.isAuthenticating()).toBeFalsy();
 
@@ -151,7 +151,7 @@ describe('AuthService', () => {
 	});
 
 	it('should verify TOTP successfully and update login state', () => {
-		httpMock.expectOne('/v1/check_auth');
+		httpMock.expectOne('/v1/check_auth').flush({}, { status: 200, statusText: 'OK' });
 
 		let capturedResult: string | undefined;
 		service.verifyTotp('123456').subscribe((result) => {
@@ -202,7 +202,7 @@ describe('AuthService', () => {
 	});
 
 	it('should set isAuthenticating to true while verifying TOTP and reset on success', () => {
-		httpMock.expectOne('/v1/check_auth');
+		httpMock.expectOne('/v1/check_auth').flush({}, { status: 200, statusText: 'OK' });
 
 		service.verifyTotp('123456').subscribe();
 		expect(service.isAuthenticating()).toBeTruthy();
@@ -225,7 +225,7 @@ describe('AuthService', () => {
 	});
 
 	it('should return true from refreshAuthStatus on network error', () => {
-		httpMock.expectOne('/v1/check_auth');
+		httpMock.expectOne('/v1/check_auth').flush({}, { status: 200, statusText: 'OK' });
 
 		let capturedResult: boolean | undefined;
 		service.refreshAuthStatus().subscribe((result) => {
@@ -254,7 +254,7 @@ describe('AuthService', () => {
 		});
 
 		it('should return success when 200 body does not contain the flag', () => {
-			httpMock.expectOne('/v1/check_auth');
+			httpMock.expectOne('/v1/check_auth').flush({}, { status: 200, statusText: 'OK' });
 
 			let capturedResult: string | undefined;
 			service.authenticate('user', 'pass').subscribe((result) => {
