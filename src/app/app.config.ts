@@ -14,7 +14,13 @@ import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideHttpClient, withFetch, withXsrfConfiguration } from '@angular/common/http';
+import {
+	provideHttpClient,
+	withFetch,
+	withInterceptors,
+	withXsrfConfiguration,
+} from '@angular/common/http';
+import { errorInterceptor } from '@app/shared/interceptors/error.interceptor';
 import { provideMarkdown } from 'ngx-markdown';
 
 export const appConfig: ApplicationConfig = {
@@ -35,6 +41,7 @@ export const appConfig: ApplicationConfig = {
 				cookieName: 'XSRF-TOKEN',
 				headerName: 'X-XSRF-TOKEN',
 			}),
+			withInterceptors([errorInterceptor]),
 		),
 		importProvidersFrom(FeatherModule.pick(allIcons)),
 		provideMarkdown(),

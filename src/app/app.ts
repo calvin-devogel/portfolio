@@ -1,7 +1,7 @@
 import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet, Router, NavigationStart, NavigationEnd } from '@angular/router';
-import { Nav } from './components/nav/nav';
-import { NotificationToast } from './components/notification-toast/notification-toast/notification-toast';
+import { Nav } from '@app/shared/components/nav/nav';
+import { NotificationToast } from '@app/shared/components/notification-toast/notification-toast/notification-toast';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({

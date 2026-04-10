@@ -1,0 +1,27 @@
+.notification-container {
+	position: fixed;
+	top: calc(3.25rem + 12px);
+	right: 16px;
+	z-index: 10000;
+	max-width: 380px;
+	width: calc(100vw - 32px);
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.notification-dismiss {
+	display: flex;
+	align-items: center;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	padding: 0.1rem;
+	color: inherit;
+	opacity: 0.6;
+	flex-shrink: 0;
+
+	&:hover {
+		opacity: 1;
+	}
+}
