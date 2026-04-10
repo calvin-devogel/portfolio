@@ -1,8 +1,7 @@
 import { inject, PLATFORM_ID } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
-import { catchError, map, of, switchMap, take } from 'rxjs';
-import { timeout } from 'rxjs/operators';
+import { map, of, switchMap, take } from 'rxjs';
 import { AuthService } from './services/auth/auth-service';
 
 export const authGuard: CanActivateFn = (route, state) => {
@@ -17,8 +16,9 @@ export const authGuard: CanActivateFn = (route, state) => {
 	const requiredRoles = route.data?.['roles'] as string[] | undefined;
 	const redirect = router.createUrlTree(['/'], { queryParams: { returnUrl: state.url } });
 
-	return authService.refreshAuthStatus().pipe(
-		timeout(5000),
+	return authService.isLoggedIn$.pipe(
+		// resolves from cache value synchronously
+		take(1),
 		switchMap((isLoggedIn) => {
 			if (!isLoggedIn) return of(redirect);
 			if (!requiredRoles) return of(true as const);
@@ -27,8 +27,5 @@ export const authGuard: CanActivateFn = (route, state) => {
 				map((role) => (role && requiredRoles.includes(role) ? true : redirect)),
 			);
 		}),
-		catchError(() =>
-			of(router.createUrlTree(['/'], { queryParams: { returnUrl: state.url } })),
-		),
 	);
 };

@@ -10,6 +10,7 @@ import {
 	afterEveryRender,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { scan } from 'rxjs/operators';
@@ -26,6 +27,7 @@ import { FeatherModule } from 'angular-feather';
 export class Chat implements OnInit {
 	private chatService = inject(ChatService);
 	private platformId = inject(PLATFORM_ID);
+	private router = inject(Router);
 	private lastMessageCount = 0;
 
 	private static readonly USER_PALETTE = [
@@ -84,6 +86,7 @@ export class Chat implements OnInit {
 			})
 			.catch(() => {
 				this.loadingMessages.set(false);
+				this.router.navigate(['/'], { queryParams: { returnUrl: '/chat' } });
 			});
 	}
 

@@ -7,12 +7,17 @@ import { AuthService } from './services/auth/auth-service';
 import { authGuard } from './auth-guard';
 
 describe('authGuard', () => {
-	let authServiceMock: { refreshAuthStatus: Mock; userRole$: Observable<string | null> };
+	let authServiceMock: {
+		refreshAuthStatus: Mock;
+		isLoggedIn$: Observable<boolean>;
+		userRole$: Observable<string | null>;
+	};
 	let routerMock: { createUrlTree: Mock };
 
 	beforeEach(() => {
 		authServiceMock = {
 			refreshAuthStatus: vi.fn(() => of(false)),
+			isLoggedIn$: of(false),
 			userRole$: of(null),
 		};
 
@@ -30,7 +35,7 @@ describe('authGuard', () => {
 
 	it('should allow access if the user is logged in', () =>
 		new Promise<void>((done) => {
-			authServiceMock.refreshAuthStatus.mockReturnValue(of(true));
+			authServiceMock.isLoggedIn$ = of(true);
 
 			TestBed.runInInjectionContext(() => {
 				const result = authGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot);
@@ -46,7 +51,7 @@ describe('authGuard', () => {
 		new Promise<void>((done) => {
 			const dummyUrlTree = {} as UrlTree;
 			routerMock.createUrlTree.mockReturnValue(dummyUrlTree);
-			authServiceMock.refreshAuthStatus.mockReturnValue(of(false));
+			authServiceMock.isLoggedIn$ = of(false);
 
 			TestBed.runInInjectionContext(() => {
 				const result = authGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot);
