@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/auth/services/auth-service';
 import { NotificationService } from '@app/shared/services/notification-service';
-import { Subscription } from 'rxjs';
+import { Subscription, noop } from 'rxjs';
 import { ModalTemplate } from '@app/shared/components/modal-template/modal-template';
 
 @Component({
@@ -91,7 +91,27 @@ export class Login implements OnDestroy {
 	private submitCredentials() {
 		const sub = this.authService
 			.authenticate(this.loginData.username, this.loginData.password)
-			.subscribe((result) => {
+			.subscribe({
+				next: (result) => {
+					if (result === 'success') {
+						this.notificationService.success('Login successful!');
+						this.loginModal.closeModal();
+						this.router.navigate(['/']);
+					} else if (result === 'must_change_password_required') {
+						this.loginModal.closeModal();
+						this.router.navigate(['/change_password']);
+					} else if (result === 'mfa_required') {
+						this.step.set('totp');
+					}
+				},
+				error: noop,
+			});
+		this.subscription.add(sub);
+	}
+
+	private submitTotp() {
+		const sub = this.authService.verifyTotp(this.totpCode).subscribe({
+			next: (result) => {
 				if (result === 'success') {
 					this.notificationService.success('Login successful!');
 					this.loginModal.closeModal();
@@ -99,29 +119,12 @@ export class Login implements OnDestroy {
 				} else if (result === 'must_change_password_required') {
 					this.loginModal.closeModal();
 					this.router.navigate(['/change_password']);
-				} else if (result === 'mfa_required') {
-					this.step.set('totp');
-				} else {
-					this.notificationService.error('Login failed. Please check your credentials.');
 				}
-			});
-		this.subscription.add(sub);
-	}
-
-	private submitTotp() {
-		const sub = this.authService.verifyTotp(this.totpCode).subscribe((result) => {
-			if (result === 'success') {
-				this.notificationService.success('Login successful!');
-				this.loginModal.closeModal();
-				this.router.navigate(['/']);
-			} else if (result === 'must_change_password_required') {
-				this.loginModal.closeModal();
-				this.router.navigate(['/change_password']);
-			} else {
-				this.notificationService.error('Error or invalid TOTP code. Please try again.');
+			},
+			error: () => {
 				this.totpDigits = Array(6).fill('');
 				this.totpDigitInputs.get(0)?.nativeElement.focus();
-			}
+			},
 		});
 		this.subscription.add(sub);
 	}

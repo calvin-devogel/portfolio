@@ -1,18 +1,19 @@
 import { Routes } from '@angular/router';
 import { Home } from '@app/home/components/home/home';
-import { Resume } from '@app/resume/components/resume/resume';
-import { Projects } from '@app/projects/components/projects/projects';
-import { AccountSettings } from '@app/admin/components/account-settings/account-settings';
-import { authGuard } from '@app/auth/auth-guard'
-import { Messages } from '@app/admin/components/messages/messages';
-import { Blog as AdminBlog } from '@app/admin/components/blog/blog';
-import { Users } from '@app/admin/components/users/users';
+import { authGuard } from '@app/auth/auth-guard';
 
 export const routes: Routes = [
 	{ path: '', component: Home, pathMatch: 'full' },
-	{ path: 'resume', component: Resume },
-	{ path: 'projects', component: Projects },
 	{ path: 'health_check', redirectTo: '' },
+	{
+		path: 'resume',
+		loadComponent: () => import('@app/resume/components/resume/resume').then((m) => m.Resume),
+	},
+	{
+		path: 'projects',
+		loadComponent: () =>
+			import('@app/projects/components/projects/projects').then((m) => m.Projects),
+	},
 	{
 		path: 'blog',
 		loadComponent: () => import('@app/blog/components/blog/blog').then((m) => m.Blog),
@@ -52,13 +53,7 @@ export const routes: Routes = [
 		canActivate: [authGuard],
 		canActivateChild: [authGuard],
 		data: { roles: ['admin'] },
-		children: [
-			{ path: '', redirectTo: 'messages', pathMatch: 'full' },
-			{ path: 'messages', component: Messages },
-			{ path: 'blog', component: AdminBlog },
-			{ path: 'account_settings', component: AccountSettings },
-			{ path: 'users', component: Users },
-		],
+		loadChildren: () => import('@app/admin/admin.routes').then((m) => m.adminRoutes),
 	},
 	{ path: '**', redirectTo: '', pathMatch: 'full' },
 ];

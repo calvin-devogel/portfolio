@@ -71,7 +71,7 @@ describe('Users', () => {
 			component.loadUsers();
 			await fixture.whenStable();
 
-			expect(component.status()).toBe('error');
+			expect(component.status()).toBe('empty');
 		});
 	});
 
@@ -113,27 +113,26 @@ describe('Users', () => {
 			);
 		});
 
-		it('should show the response message when success is false', async () => {
-			userServiceMock.createUser.mockReturnValue(
-				of({ success: false, message: 'User already exists', link: '' }),
-			);
-			component.inviteEmail = 'existing@example.com';
-			component.sendInvite();
+		it('should set status to error on HTTP failure', async () => {
+			const { throwError } = await import('rxjs');
+			userServiceMock.getUsers.mockReturnValue(throwError(() => new Error('Network error')));
+			component.loadUsers();
 			await fixture.whenStable();
 
-			expect(component.inviteLink()).toBeNull();
-			expect(notificationServiceMock.error).toHaveBeenCalledWith('User already exists');
+			expect(component.status()).toBe('error');
 		});
 
-		it('should show a generic error notification when createUser returns null', async () => {
-			userServiceMock.createUser.mockReturnValue(of(null));
+		it('should handle HTTP errors gracefully when createUsers fails', async () => {
+			const { throwError } = await import('rxjs');
+			userServiceMock.createUser.mockReturnValue(
+				throwError(() => new Error('Network error')),
+			);
 			component.inviteEmail = 'test@example.com';
 			component.sendInvite();
 			await fixture.whenStable();
 
-			expect(notificationServiceMock.error).toHaveBeenCalledWith(
-				'Failed to create invitation',
-			);
+			expect(component.inviteBusy()).toBe(false);
+			expect(component.inviteLink()).toBeNull();
 		});
 	});
 
@@ -204,7 +203,7 @@ describe('Users', () => {
 
 	describe('onRoleChange', () => {
 		it('should update the user role and show a success notification', async () => {
-			userServiceMock.setRole.mockReturnValue(of(true));
+			userServiceMock.setRole.mockReturnValue(of(undefined));
 			const user = mockUsers[1];
 			const event = { target: { value: 'chat_user' } } as unknown as Event;
 
@@ -218,8 +217,9 @@ describe('Users', () => {
 			);
 		});
 
-		it('should revert the user role and show an error notification on failure', async () => {
-			userServiceMock.setRole.mockReturnValue(of(false));
+		it('should revert the user role on HTTP failure', async () => {
+			const { throwError } = await import('rxjs');
+			userServiceMock.setRole.mockReturnValue(throwError(() => new Error('Server error')));
 			const user = mockUsers[1];
 			const event = { target: { value: 'admin' } } as unknown as Event;
 
@@ -228,9 +228,6 @@ describe('Users', () => {
 
 			const updatedUser = component.users()?.find((u) => u.user_id === user.user_id);
 			expect(updatedUser?.role).toBe('user');
-			expect(notificationServiceMock.error).toHaveBeenCalledWith(
-				'Failed to update role to admin',
-			);
 		});
 
 		it('should do nothing when the selected role matches the current role', () => {
@@ -244,7 +241,7 @@ describe('Users', () => {
 
 	describe('resetPassword', () => {
 		it('should mark the user as must_change_password and show a success notification', async () => {
-			userServiceMock.resetPassword.mockReturnValue(of(true));
+			userServiceMock.resetPassword.mockReturnValue(of(undefined));
 			const user = mockUsers[0];
 
 			component.resetPassword(user);
@@ -254,18 +251,6 @@ describe('Users', () => {
 			expect(updatedUser?.must_change_password).toBe(true);
 			expect(notificationServiceMock.success).toHaveBeenCalledWith(
 				`Password reset for ${user.username}.`,
-			);
-		});
-
-		it('should show an error notification on failure', async () => {
-			userServiceMock.resetPassword.mockReturnValue(of(false));
-			const user = mockUsers[0];
-
-			component.resetPassword(user);
-			await fixture.whenStable();
-
-			expect(notificationServiceMock.error).toHaveBeenCalledWith(
-				`Failed to reset password for ${user.username}.`,
 			);
 		});
 	});

@@ -4,10 +4,7 @@ import { RouterLink } from '@angular/router';
 import { FeatherModule } from 'angular-feather';
 import { SeoService } from '@app/shared/services/seo-service';
 import { Contact } from '@app/contact/components/contact/contact';
-import {
-	homeSchema,
-	personSchema,
-} from '@app/shared/schemas/structured-data.schemas';
+import { homeSchema, personSchema } from '@app/shared/schemas/structured-data.schemas';
 
 @Component({
 	selector: 'app-home',

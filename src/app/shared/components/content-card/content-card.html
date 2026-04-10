@@ -1,0 +1,9 @@
+<section class="animate-section" [attr.aria-labelledby]="ariaLabelledBy">
+	<div class="box is-shadowless" [ngClass]="boxClasses">
+		<h2 [id]="ariaLabelledBy" class="gradient-title" [ngClass]="titleClasses">
+			{{ title }}
+		</h2>
+		<!-- The HTML in the middle gets rendered here -->
+		<ng-content></ng-content>
+	</div>
+</section>

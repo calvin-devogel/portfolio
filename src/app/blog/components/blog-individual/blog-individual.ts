@@ -7,10 +7,7 @@ import { MarkdownComponent, provideMarkdown } from 'ngx-markdown';
 import { Carousel } from '@app/shared/components/carousel/carousel';
 import { PageLayout } from '@app/shared/components/page-layout/page-layout';
 import { SeoService } from '@app/shared/services/seo-service';
-import {
-	blogPostingSchema,
-	breadCrumbSchema,
-} from '@app/shared/schemas/structured-data.schemas';
+import { blogPostingSchema, breadCrumbSchema } from '@app/shared/schemas/structured-data.schemas';
 
 @Component({
 	selector: 'app-blog-individual',

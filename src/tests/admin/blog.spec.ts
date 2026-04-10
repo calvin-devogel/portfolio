@@ -122,28 +122,12 @@ describe('Blog', () => {
 			expect(component.loadingPosts()).toBe(false);
 		});
 
-		it('should clear listError on success', () => {
-			component.listError.set('previous error');
-			mockBlogService.getPosts.mockReturnValue(of(mockPageResponse([])));
-			component.loadPosts();
-			expect(component.listError()).toBeNull();
-		});
-
 		it('should set listError on failure', () => {
 			mockBlogService.getPosts.mockReturnValue(
 				throwError(() => ({ message: 'Network error' })),
 			);
 			component.loadPosts();
-			expect(component.listError()).toBe('Failed to load posts: Network error');
 			expect(component.loadingPosts()).toBe(false);
-		});
-
-		it('should include error.error.error detail in listError when available', () => {
-			mockBlogService.getPosts.mockReturnValue(
-				throwError(() => ({ error: { error: 'Unauthorized' } })),
-			);
-			component.loadPosts();
-			expect(component.listError()).toContain('Unauthorized');
 		});
 	});
 
@@ -546,22 +530,6 @@ describe('Blog', () => {
 			expect(component.saving()).toBe(false);
 		});
 
-		it('should set editorError on failure', () => {
-			mockBlogService.createPost.mockReturnValue(
-				throwError(() => ({ message: 'Server error' })),
-			);
-			component.savePost();
-			expect(component.editorError()).toContain('Server error');
-		});
-
-		it('should include error.error.error in the error message when available', () => {
-			mockBlogService.createPost.mockReturnValue(
-				throwError(() => ({ error: { error: 'Validation failed' } })),
-			);
-			component.savePost();
-			expect(component.editorError()).toContain('Validation failed');
-		});
-
 		it('should set saving to false on failure', () => {
 			mockBlogService.createPost.mockReturnValue(throwError(() => ({})));
 			component.savePost();
@@ -645,15 +613,6 @@ describe('Blog', () => {
 			expect(component.saving()).toBe(false);
 		});
 
-		it('should set editorError on failure', () => {
-			component.formTitle.set('Changed title');
-			mockBlogService.editPost.mockReturnValue(
-				throwError(() => ({ message: 'Server error' })),
-			);
-			component.savePost();
-			expect(component.editorError()).toContain('Server error');
-		});
-
 		it('should set saving to false on failure', () => {
 			component.formTitle.set('Changed title');
 			mockBlogService.editPost.mockReturnValue(throwError(() => ({})));
@@ -699,13 +658,6 @@ describe('Blog', () => {
 			component.selectPost(mockPost({ published: true }));
 			component.togglePublish();
 			expect(component.editorSuccess()).toContain('unpublished');
-		});
-
-		it('should set editorError on failure', () => {
-			mockBlogService.publishPost.mockReturnValue(throwError(() => ({})));
-			component.selectedPost.set(mockPost());
-			component.togglePublish();
-			expect(component.editorError()).toContain('Failed to update publish status');
 		});
 
 		it('hould set saving to false on failure', () => {
@@ -781,14 +733,6 @@ describe('Blog', () => {
 			expect(component.editorSuccess()).toContain('deleted');
 		});
 
-		it('should set editorError on failure', () => {
-			vi.spyOn(window, 'confirm').mockReturnValue(true);
-			mockBlogService.deletePost.mockReturnValue(throwError(() => ({})));
-			component.selectedPost.set(mockPost());
-			component.deletePost();
-			expect(component.editorError()).toContain('Failed to delete post.');
-		});
-
 		it('should set deleting to false on failure', () => {
 			vi.spyOn(window, 'confirm').mockReturnValue(true);
 			mockBlogService.deletePost.mockReturnValue(throwError(() => ({})));
@@ -824,39 +768,11 @@ describe('Blog', () => {
 		});
 	});
 
-	describe('setError', () => {
-		it('should set editorError to the provided message', () => {
-			component.setError('Something went wrong');
-			expect(component.editorError()).toBe('Something went wrong');
-		});
-
-		it('should auto-clear editorError after the given duration', () => {
-			vi.useFakeTimers();
-			component.setError('Temp error', 300);
-			vi.advanceTimersByTime(300);
-			expect(component.editorError()).toBeNull();
-			vi.useRealTimers();
-		});
-
-		it('should reset the timer when called a second time before it fires', () => {
-			vi.useFakeTimers();
-			component.setError('First error', 400);
-			component.setError('Second error', 800);
-			vi.advanceTimersByTime(400);
-			expect(component.editorError()).toBe('Second error');
-			vi.advanceTimersByTime(400);
-			expect(component.editorError()).toBeNull();
-			vi.useRealTimers();
-		});
-	});
-
 	describe('clearMessages', () => {
 		it('should immediately clear both success and error messages', () => {
 			component.editorSuccess.set('Success message');
-			component.editorError.set('Error message');
 			component.clearMessages();
 			expect(component.editorSuccess()).toBeNull();
-			expect(component.editorError()).toBeNull();
 		});
 
 		it('should cancel pending auto-clear timers', () => {
@@ -914,28 +830,9 @@ describe('Blog', () => {
 				expect(fixture.nativeElement.querySelector('.list-loading')).toBeFalsy();
 			});
 
-			it('should render the list error when listError is set', () => {
-				component.listError.set('Failed to load');
-				fixture.detectChanges();
-				const errorElement = fixture.nativeElement.querySelector(
-					'.notification.is-danger.is-small',
-				);
-				expect(errorElement).toBeTruthy();
-				expect(errorElement.textContent).toContain('Failed to load');
-			});
-
-			it('should remove the list error when listError is cleared', () => {
-				component.listError.set(null);
-				fixture.detectChanges();
-				expect(
-					fixture.nativeElement.querySelector('.notification.is-danger.is-small'),
-				).toBeFalsy();
-			});
-
 			it('should show the empty-state message when there are no posts, no loading, and no error', () => {
 				component.posts.set([]);
 				component.loadingPosts.set(false);
-				component.listError.set(null);
 				fixture.detectChanges();
 				expect(fixture.nativeElement.querySelector('.list-empty')).toBeTruthy();
 			});
@@ -943,14 +840,6 @@ describe('Blog', () => {
 			it('should suppress the empty-state message while loading', () => {
 				component.posts.set([]);
 				component.loadingPosts.set(true);
-				fixture.detectChanges();
-				expect(fixture.nativeElement.querySelector('.list-empty')).toBeFalsy();
-			});
-
-			it('should suppress the empty-state message when there is an error', () => {
-				component.posts.set([]);
-				component.loadingPosts.set(false);
-				component.listError.set('Failed to load');
 				fixture.detectChanges();
 				expect(fixture.nativeElement.querySelector('.list-empty')).toBeFalsy();
 			});
@@ -1388,38 +1277,6 @@ describe('Blog', () => {
 					.querySelector('.editor-notification.is-success .notification-close')
 					.click();
 				expect(component.editorSuccess()).toBeNull();
-			});
-
-			it('should add is-visible to the error notification when editorError is set', () => {
-				component.editorError.set('Something went wrong');
-				fixture.detectChanges();
-				const el = fixture.nativeElement.querySelector('.editor-notification.is-danger');
-				expect(el.classList).toContain('is-visible');
-			});
-
-			it('should remove is-visible from the error notification when editorError is null', () => {
-				component.editorError.set(null);
-				fixture.detectChanges();
-				const el = fixture.nativeElement.querySelector('.editor-notification.is-danger');
-				expect(el.classList).not.toContain('is-visible');
-			});
-
-			it('should render the error message text', () => {
-				component.editorError.set('Failed to save post');
-				fixture.detectChanges();
-				const span = fixture.nativeElement.querySelector(
-					'.editor-notification.is-danger span',
-				);
-				expect(span.textContent).toContain('Failed to save post');
-			});
-
-			it('should clear editorError when the dismiss button is clicked', () => {
-				component.editorError.set('Error!');
-				fixture.detectChanges();
-				fixture.nativeElement
-					.querySelector('.editor-notification.is-danger .notification-close')
-					.click();
-				expect(component.editorError()).toBeNull();
 			});
 		});
 

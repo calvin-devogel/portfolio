@@ -177,6 +177,8 @@
 // notifications
 
 .editor-notification {
+	display: flex;
+	align-items: center;
 	gap: 0.5rem;
 	font-size: 0.82rem;
 	margin: 0;
@@ -194,8 +196,8 @@
 		padding 200ms ease;
 
 	&.is-visible {
-		max-height: 120px !important;
-		padding: 0.65rem 1rem !important;
+		max-height: 152px !important;
+		padding: 0.5rem 1rem !important;
 		opacity: 1 !important;
 		pointer-events: auto;
 	}

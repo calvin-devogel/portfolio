@@ -4,7 +4,7 @@ import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 import { Login } from '@app/auth/components/login/login';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { AuthService } from '@app/auth/services/auth-service';
 import { NotificationService } from '@app/shared/services/notification-service';
 import { Router } from '@angular/router';
@@ -84,15 +84,15 @@ describe('Login', () => {
 	});
 
 	describe('submitCredentials', () => {
-		it('should show generic error message on unsuccessful login', () => {
-			mockAuthService.authenticate.mockReturnValue(of(''));
+		it('should handle HTTP error on unsuccessful login', () => {
+			mockAuthService.authenticate.mockReturnValue(
+				throwError(() => new Error('Unauthorized')),
+			);
 			component.openModal();
 			fillValidForm();
 			component.onSubmit();
 
-			expect(mockNotificationService.error).toHaveBeenCalledWith(
-				'Login failed. Please check your credentials.',
-			);
+			expect(mockNotificationService.success).not.toHaveBeenCalled();
 		});
 
 		it('should show success message on successful login', () => {
@@ -131,17 +131,14 @@ describe('Login', () => {
 	});
 
 	describe('submitTotp', () => {
-		it('should show error message on unsuccessful totp verification', () => {
-			mockAuthService.verifyTotp.mockReturnValue(of('failed'));
+		it('should reset totpDigits on unsuccessful totp verification', () => {
+			mockAuthService.verifyTotp.mockReturnValue(throwError(() => new Error('Unauthorized')));
 			component.openModal();
 			fillValidForm();
 			component.onSubmit(); // submit credentials first to switch to totp step
 			fillTotpDigits();
 			component.onSubmit(); // submit totp
 
-			expect(mockNotificationService.error).toHaveBeenLastCalledWith(
-				'Error or invalid TOTP code. Please try again.',
-			);
 			expect(component.totpDigits).toEqual(['', '', '', '', '', '']);
 		});
 

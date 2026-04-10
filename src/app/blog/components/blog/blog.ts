@@ -19,10 +19,7 @@ import { BlogService } from '@app/blog/services/blog-service';
 import { BlogPost } from '@app/blog/interfaces/blog-data';
 import { PageLayout } from '@app/shared/components/page-layout/page-layout';
 import { SeoService } from '@app/shared/services/seo-service';
-import {
-	blogListSchema,
-	personSchema,
-} from '@app/shared/schemas/structured-data.schemas';
+import { blogListSchema, personSchema } from '@app/shared/schemas/structured-data.schemas';
 
 @Component({
 	selector: 'app-blog',

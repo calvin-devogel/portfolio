@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { AuthService } from '@app/auth/services/auth-service';
+import { noop } from 'rxjs';
 
 describe('AuthService', () => {
 	let service: AuthService;
@@ -65,12 +66,17 @@ describe('AuthService', () => {
 		// clear initial checkAuthStatus call
 		httpMock.expectOne('/v1/check_auth');
 
-		service.authenticate('user', 'wrongpass').subscribe((result) => {
-			expect(result).toBe('failed');
+		let errored = false;
+		service.authenticate('user', 'wrongpass').subscribe({
+			next: noop,
+			error: () => {
+				errored = true;
+			},
 		});
 
 		const req = httpMock.expectOne('/v1/login');
 		req.flush({}, { status: 401, statusText: 'Unauthorized' });
+		expect(errored).toBeTruthy();
 	});
 
 	it('should logout and update state', () => {
@@ -106,16 +112,14 @@ describe('AuthService', () => {
 	it('should return failed and clear login state on network error during authenticate', () => {
 		httpMock.expectOne('/v1/check_auth');
 
-		let capturedResult: string | undefined;
-		service.authenticate('user', 'pass').subscribe((result) => {
-			capturedResult = result;
+		service.authenticate('user', 'pass').subscribe({
+			next: noop,
+			error: noop,
 		});
 
 		const req = httpMock.expectOne('/v1/login');
-		// deprecated method, can still simulate network error
 		req.error(new ProgressEvent('Network error'));
 
-		expect(capturedResult).toBe('failed');
 		service.isLoggedIn$.subscribe((status) => {
 			if (status !== null) {
 				expect(status).toBeFalsy();
@@ -141,7 +145,10 @@ describe('AuthService', () => {
 	it('should reset isAuthenticating to false on authentication failure', () => {
 		httpMock.expectOne('/v1/check_auth');
 
-		service.authenticate('user', 'pass').subscribe();
+		service.authenticate('user', 'pass').subscribe({
+			next: noop,
+			error: noop,
+		});
 		expect(service.isAuthenticating()).toBeTruthy();
 
 		const req = httpMock.expectOne('/v1/login');
@@ -173,32 +180,38 @@ describe('AuthService', () => {
 		httpMock.expectOne('/v1/check_auth').flush({}, { status: 200, statusText: 'OK' });
 	});
 
-	it('should return failed when verifyTotp receives an error response', () => {
+	it('should propagate error when verifyTotp receives an error response', () => {
 		httpMock.expectOne('/v1/check_auth');
 
-		let capturedResult: string | undefined;
-		service.verifyTotp('bad-code').subscribe((result) => {
-			capturedResult = result;
+		let errored = false;
+		service.verifyTotp('bad-code').subscribe({
+			next: noop,
+			error: () => {
+				errored = true;
+			},
 		});
 
 		const req = httpMock.expectOne('/v1/verify_totp');
 		req.flush({ message: 'Unauthorized' }, { status: 401, statusText: 'Unauthorized' });
 
-		expect(capturedResult).toBe('failed');
+		expect(errored).toBe(true);
 	});
 
-	it('should return failed when verifyTotp encounters a network error', () => {
+	it('should propagate error when verifyTotp encounters a network error', () => {
 		httpMock.expectOne('/v1/check_auth');
 
-		let capturedResult: string | undefined;
-		service.verifyTotp('123456').subscribe((result) => {
-			capturedResult = result;
+		let errored = false;
+		service.verifyTotp('123456').subscribe({
+			next: noop,
+			error: () => {
+				errored = true;
+			},
 		});
 
 		const req = httpMock.expectOne('/v1/verify_totp');
 		req.error(new ProgressEvent('Network error'));
 
-		expect(capturedResult).toBe('failed');
+		expect(errored).toBe(true);
 	});
 
 	it('should set isAuthenticating to true while verifying TOTP and reset on success', () => {
@@ -300,18 +313,21 @@ describe('AuthService', () => {
 			expect(capturedResult).toBe('wrong_password');
 		});
 
-		it('should return error on 500', () => {
+		it('should propagate error on 500', () => {
 			httpMock.expectOne('/v1/check_auth');
 
-			let capturedResult: string | undefined;
-			service.changePassword('old', 'new').subscribe((result) => {
-				capturedResult = result;
+			let errored = false;
+			service.changePassword('old', 'new').subscribe({
+				next: noop,
+				error: () => {
+					errored = true;
+				},
 			});
 
 			const req = httpMock.expectOne('/v1/change_password');
 			req.flush('Server error', { status: 500, statusText: 'Internal Server Error' });
 
-			expect(capturedResult).toBe('error');
+			expect(errored).toBe(true);
 		});
 	});
 
@@ -352,15 +368,18 @@ describe('AuthService', () => {
 		it('should return error on 500', () => {
 			httpMock.expectOne('/v1/check_auth');
 
-			let capturedResult: string | undefined;
-			service.acceptInvitation('token', 'user', 'pass').subscribe((result) => {
-				capturedResult = result;
+			let errored = false;
+			service.acceptInvitation('token', 'user', 'pass').subscribe({
+				next: noop,
+				error: () => {
+					errored = true;
+				},
 			});
 
 			const req = httpMock.expectOne('/v1/accept');
 			req.flush('Server error', { status: 500, statusText: 'Internal Server Error' });
 
-			expect(capturedResult).toBe('error');
+			expect(errored).toBe(true);
 		});
 	});
 });

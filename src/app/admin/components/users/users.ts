@@ -67,11 +67,7 @@ export class Users {
 			.pipe(takeUntilDestroyed(this.destroyRef))
 			.subscribe({
 				next: (users) => {
-					if (users === null) {
-						this.patchState({ status: 'error', errorText: 'Failed to load users' });
-						return;
-					}
-					this.patchState({ status: users.length ? 'ready' : 'empty', users });
+					this.patchState({ status: users?.length ? 'ready' : 'empty', users });
 				},
 				error: () => {
 					this.patchState({ status: 'error', errorText: 'Failed to load users' });
@@ -92,19 +88,11 @@ export class Users {
 			.pipe(takeUntilDestroyed(this.destroyRef))
 			.subscribe({
 				next: (response) => {
-					if (!response?.success) {
-						this.notificationService.error(
-							response?.message || 'Failed to create invitation',
-						);
-						this.patchState({ inviteBusy: false });
-						return;
-					}
 					this.inviteEmail = '';
-					this.patchState({ inviteBusy: false, inviteLink: response.link });
+					this.patchState({ inviteBusy: false, inviteLink: response?.link });
 					this.notificationService.success('Invitation created successfully');
 				},
 				error: () => {
-					this.notificationService.error('Failed to create invitation');
 					this.patchState({ inviteBusy: false });
 				},
 			});
@@ -156,13 +144,16 @@ export class Users {
 		this.userService
 			.setRole(user.user_id, role)
 			.pipe(takeUntilDestroyed(this.destroyRef))
-			.subscribe((success) => {
-				const nextIds = new Set(this.state().updatingRoleIds);
-				nextIds.delete(user.user_id);
-				if (success) {
+			.subscribe({
+				next: () => {
+					const nextIds = new Set(this.state().updatingRoleIds);
+					nextIds.delete(user.user_id);
 					this.patchState({ updatingRoleIds: nextIds });
 					this.notificationService.success(`Role updated to ${role} successfully`);
-				} else {
+				},
+				error: () => {
+					const nextIds = new Set(this.state().updatingRoleIds);
+					nextIds.delete(user.user_id);
 					this.patchState({
 						updatingRoleIds: nextIds,
 						users:
@@ -170,8 +161,7 @@ export class Users {
 								u.user_id === user.user_id ? { ...u, role: prev } : u,
 							) ?? null,
 					});
-					this.notificationService.error(`Failed to update role to ${role}`);
-				}
+				},
 			});
 	}
 
@@ -185,22 +175,23 @@ export class Users {
 		this.userService
 			.resetPassword(user.user_id)
 			.pipe(takeUntilDestroyed(this.destroyRef))
-			.subscribe((success) => {
-				const nextIds = new Set(this.state().resettingIds);
-				nextIds.delete(user.user_id);
-				this.patchState({ resettingIds: nextIds });
-				if (success) {
+			.subscribe({
+				next: () => {
+					const nextIds = new Set(this.state().resettingIds);
+					nextIds.delete(user.user_id);
+					this.patchState({ resettingIds: nextIds });
 					this.notificationService.success(`Password reset for ${user.username}.`);
 					this.patchState({
 						users: this.state().users?.map((u) =>
 							u.user_id === user.user_id ? { ...u, must_change_password: true } : u,
 						),
 					});
-				} else {
-					this.notificationService.error(
-						`Failed to reset password for ${user.username}.`,
-					);
-				}
+				},
+				error: () => {
+					const nextIds = new Set(this.state().resettingIds);
+					nextIds.delete(user.user_id);
+					this.patchState({ resettingIds: nextIds });
+				},
 			});
 	}
 }

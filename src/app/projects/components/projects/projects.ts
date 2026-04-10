@@ -2,14 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { PageLayout } from '@app/shared/components/page-layout/page-layout';
 import { FeatherModule } from 'angular-feather';
 import { SeoService } from '@app/shared/services/seo-service';
-import {
-	projectsSchema,
-	personSchema,
-} from '@app/shared/schemas/structured-data.schemas';
+import { projectsSchema, personSchema } from '@app/shared/schemas/structured-data.schemas';
+import { ContentCard } from '@app/shared/components/content-card/content-card';
 
 @Component({
 	selector: 'app-projects',
-	imports: [PageLayout, FeatherModule],
+	imports: [PageLayout, FeatherModule, ContentCard],
 	templateUrl: './projects.html',
 	styleUrls: ['./projects.scss'],
 })

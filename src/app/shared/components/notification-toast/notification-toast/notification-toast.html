@@ -21,10 +21,12 @@
 			</span>
 			<span style="flex: 1; font-weight: 500">{{ notif.message }}</span>
 			<button
-				class="delete is-small"
+				class="notification-dismiss"
 				(click)="notificationService.dismiss(notif.id)"
 				aria-label="Dismiss notification"
-			></button>
+			>
+				<i-feather name="x" size="14"></i-feather>
+			</button>
 		</div>
 	}
 </div>

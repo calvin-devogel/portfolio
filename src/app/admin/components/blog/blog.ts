@@ -26,7 +26,6 @@ export class Blog implements OnInit, OnDestroy {
 	// post list
 	posts = signal<BlogPost[]>([]);
 	loadingPosts = signal(false);
-	listError = signal<string | null>(null);
 	splitModalOpen = signal(false);
 
 	// pagination
@@ -39,7 +38,6 @@ export class Blog implements OnInit, OnDestroy {
 	editorMode = signal<EditorMode>('create');
 	saving = signal(false);
 	deleting = signal(false);
-	editorError = signal<string | null>(null);
 	editorSuccess = signal<string | null>(null);
 
 	// form fields
@@ -159,17 +157,13 @@ export class Blog implements OnInit, OnDestroy {
 	// list actions
 	loadPosts() {
 		this.loadingPosts.set(true);
-		this.listError.set(null);
 		this.blogService.getPosts(this.currentPage(), this.pageSize(), false).subscribe({
 			next: (response) => {
 				this.posts.set(response.data);
 				this.totalPages.set(response.pagination.total_pages);
 				this.loadingPosts.set(false);
 			},
-			error: (err) => {
-				this.listError.set(
-					'Failed to load posts: ' + (err.error?.error || err.message || 'Unknown error'),
-				);
+			error: () => {
 				this.loadingPosts.set(false);
 			},
 		});
@@ -251,11 +245,7 @@ export class Blog implements OnInit, OnDestroy {
 					this.setSuccess(`Post "${updated.title}" updated successfully`);
 					this.saving.set(false);
 				},
-				error: (err) => {
-					this.setError(
-						'Failed to update post: ' +
-							(err.error?.error || err.message || 'Unknown error'),
-					);
+				error: () => {
 					this.saving.set(false);
 				},
 			});
@@ -274,11 +264,7 @@ export class Blog implements OnInit, OnDestroy {
 					this.newPost();
 					this.setSuccess(`Post "${payload.title}" created successfully`);
 				},
-				error: (err) => {
-					this.setError(
-						'Failed to create post: ' +
-							(err.error?.error || err.message || 'Unknown error'),
-					);
+				error: () => {
 					this.saving.set(false);
 				},
 			});
@@ -301,7 +287,6 @@ export class Blog implements OnInit, OnDestroy {
 				this.saving.set(false);
 			},
 			error: () => {
-				this.setError('Failed to update publish status.');
 				this.saving.set(false);
 			},
 		});
@@ -321,7 +306,6 @@ export class Blog implements OnInit, OnDestroy {
 				this.setSuccess(`Post "${post.title}" deleted successfully.`);
 			},
 			error: () => {
-				this.setError('Failed to delete post.');
 				this.deleting.set(false);
 			},
 		});
@@ -347,16 +331,9 @@ export class Blog implements OnInit, OnDestroy {
 		this.successTimeout = setTimeout(() => this.editorSuccess.set(null), duration);
 	}
 
-	setError(message: string, duration = 6000): void {
-		if (this.errorTimeout) clearTimeout(this.errorTimeout);
-		this.editorError.set(message);
-		this.errorTimeout = setTimeout(() => this.editorError.set(null), duration);
-	}
-
 	clearMessages(): void {
 		if (this.successTimeout) clearTimeout(this.successTimeout);
 		if (this.errorTimeout) clearTimeout(this.errorTimeout);
-		this.editorError.set(null);
 		this.editorSuccess.set(null);
 	}
 

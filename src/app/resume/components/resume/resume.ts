@@ -7,14 +7,12 @@ import { catchError, map, of, tap } from 'rxjs';
 import { NotificationService } from '@app/shared/services/notification-service';
 import { FeatherModule } from 'angular-feather';
 import { SeoService } from '@app/shared/services/seo-service';
-import {
-	resumeSchema,
-	personSchema,
-} from '@app/shared/schemas/structured-data.schemas';
+import { resumeSchema, personSchema } from '@app/shared/schemas/structured-data.schemas';
+import { ContentCard } from '@app/shared/components/content-card/content-card';
 
 @Component({
 	selector: 'app-resume',
-	imports: [PageLayout, FeatherModule],
+	imports: [PageLayout, FeatherModule, ContentCard],
 	templateUrl: './resume.html',
 	styleUrls: ['./resume.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,7 +32,6 @@ export class Resume implements OnInit {
 			catchError((error) => {
 				this.isLoading.set(false);
 				this.hasError.set(true);
-				this.notificationService.error('Failed to load resume data.');
 				console.error('Error fetching resume data:', error);
 				return of(null);
 			}),

@@ -115,7 +115,6 @@ export class AuthService {
 			})
 			.pipe(
 				map((response) => {
-					this.isAuthenticating.set(false);
 					if (response.status === 200) {
 						this.isLoggedInSubject.next(true);
 						localStorage.setItem('isLoggedIn', 'true');
@@ -131,12 +130,13 @@ export class AuthService {
 					}
 					return 'failed' as AuthResult;
 				}),
-				catchError(() => {
-					this.isAuthenticating.set(false);
-					this.isLoggedInSubject.next(false);
-					localStorage.setItem('isLoggedIn', 'false');
-					return of('failed' as AuthResult);
+				tap({
+					error: () => {
+						this.isLoggedInSubject.next(false);
+						localStorage.setItem('isLoggedIn', 'false');
+					},
 				}),
+				finalize(() => this.isAuthenticating.set(false)),
 			);
 	}
 
@@ -154,7 +154,6 @@ export class AuthService {
 			)
 			.pipe(
 				map((response) => {
-					this.isAuthenticating.set(false);
 					if (response.status === 200) {
 						this.isLoggedInSubject.next(true);
 						localStorage.setItem('isLoggedIn', 'true');
@@ -167,12 +166,13 @@ export class AuthService {
 					}
 					return 'failed' as AuthResult;
 				}),
-				catchError(() => {
-					this.isAuthenticating.set(false);
-					this.isLoggedInSubject.next(false);
-					localStorage.setItem('isLoggedIn', 'false');
-					return of('failed' as AuthResult);
+				tap({
+					error: () => {
+						this.isLoggedInSubject.next(false);
+						localStorage.setItem('isLoggedIn', 'false');
+					},
 				}),
+				finalize(() => this.isAuthenticating.set(false)),
 			);
 	}
 
@@ -190,7 +190,7 @@ export class AuthService {
 				map((response) => (response.status === 200 ? ('ok' as const) : ('error' as const))),
 				catchError((error: HttpErrorResponse) => {
 					if (error.status === 401) return of('wrong_password' as const);
-					return of('error' as const);
+					throw error;
 				}),
 			);
 	}
@@ -210,7 +210,7 @@ export class AuthService {
 				map((response) => (response.status === 200 ? ('ok' as const) : ('error' as const))),
 				catchError((error: HttpErrorResponse) => {
 					if (error.status === 400) return of('invalid' as const);
-					return of('error' as const);
+					throw error;
 				}),
 			);
 	}

@@ -15,11 +15,7 @@
 			</div>
 		}
 
-		@if (listError()) {
-			<div class="notification is-danger is-light is-small">{{ listError() }}</div>
-		}
-
-		@if (!loadingPosts() && posts().length === 0 && !listError()) {
+		@if (!loadingPosts() && posts().length === 0) {
 			<div class="list-empty">No posts yet. Create one!</div>
 		}
 
@@ -133,16 +129,6 @@
 				(click)="editorSuccess.set(null)"
 				aria-label="Dismiss"
 			>
-				<i-feather name="x" size="13"></i-feather>
-			</button>
-		</div>
-		<div
-			class="editor-notification notification is-danger is-light"
-			[class.is-visible]="editorError()"
-		>
-			<i-feather name="alert-circle" size="14"></i-feather>
-			<span>{{ editorError() }}</span>
-			<button class="notification-close" (click)="editorError.set(null)" aria-label="Dismiss">
 				<i-feather name="x" size="13"></i-feather>
 			</button>
 		</div>
@@ -295,16 +281,6 @@
 		<i-feather name="check-circle" size="14"></i-feather>
 		<span>{{ editorSuccess() }}</span>
 		<button class="notification-close" (click)="editorSuccess.set(null)">
-			<i-feather name="x" size="13"></i-feather>
-		</button>
-	</div>
-	<div
-		class="editor-notification notification is-danger is-light"
-		[class.is-visible]="editorError()"
-	>
-		<i-feather name="alert-circle" size="14"></i-feather>
-		<span>{{ editorError() }}</span>
-		<button class="notification-close" (click)="editorError.set(null)">
 			<i-feather name="x" size="13"></i-feather>
 		</button>
 	</div>
