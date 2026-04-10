@@ -13,6 +13,7 @@ import {
 	merge,
 	throttleTime,
 	finalize,
+	shareReplay,
 } from 'rxjs';
 
 export type AuthResult = 'success' | 'mfa_required' | 'must_change_password_required' | 'failed';
@@ -35,6 +36,7 @@ export class AuthService {
 	public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 	private userRoleSubject = new BehaviorSubject<string | null>(null);
 	public userRole$ = this.userRoleSubject.asObservable();
+	private pendingAuthCheck$: Observable<boolean> | null = null;
 
 	constructor() {
 		if (isPlatformBrowser(this.platformId)) {
@@ -69,7 +71,8 @@ export class AuthService {
 	}
 
 	public refreshAuthStatus(): Observable<boolean> {
-		return this.http
+		if (this.pendingAuthCheck$) return this.pendingAuthCheck$;
+		this.pendingAuthCheck$ = this.http
 			.get<string>('/v1/check_auth', { observe: 'response', withCredentials: true })
 			.pipe(
 				map((response) => {
@@ -87,7 +90,11 @@ export class AuthService {
 					else localStorage.removeItem('userRole');
 				}),
 				map(({ isLoggedIn }) => isLoggedIn),
+				finalize(() => { this.pendingAuthCheck$ = null; }),
+				shareReplay(1),
 			);
+			
+		return this.pendingAuthCheck$;
 	}
 
 	authenticate(username: string, password: string): Observable<AuthResult> {
