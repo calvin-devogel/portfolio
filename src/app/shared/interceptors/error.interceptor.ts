@@ -4,7 +4,7 @@ import { catchError, throwError } from 'rxjs';
 import { NotificationService } from '@app/shared/services/notification-service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
-    const silentUrls = ['/v1/check_auth'];
+    const silentUrls = ['/v1/check_auth', '/v1/web_vitals'];
     if (silentUrls.some((url) => req.url.includes(url))) {
         return next(req);
     }
